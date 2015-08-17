@@ -14,7 +14,17 @@ var isArray = require('lodash/lang/isArray');
 
 /**
  * Query class
- *
+ * @example
+ * var query = new Query();
+
+ * query
+ *   .filter('cor', ['azul', 'amarelo'])
+ *   .and()
+ *   .taxonony(['marcas', 'camisetas'])
+ *   .or()
+ *   .taxonomy(['promocao'])
+ *   .and()
+ *   .price(15, 25)
  */
 
 var Query = (function () {
@@ -52,7 +62,7 @@ var Query = (function () {
         name: name,
         values: values,
         field: field,
-        type: fixed,
+        type: type,
         execution: execution
       };
 
@@ -9595,7 +9605,8 @@ var _libYebo_sdkQuery = require('../../lib/yebo_sdk/query');
 var _libYebo_sdkQuery2 = _interopRequireDefault(_libYebo_sdkQuery);
 
 //
-var expect = require('chai').expect,
+var assert = require('chai').assert,
+    expect = require('chai').expect,
     should = require('chai').should();
 
 module.exports = function () {
@@ -9606,8 +9617,20 @@ module.exports = function () {
     // });
 
     //
-    it('should appear', function (done) {
-      done();
+    it('should format the filter correctly', function () {
+      // Create new query
+      var query = new _libYebo_sdkQuery2['default']();
+
+      var formatted = query._format('color', ['blue', 'red']);
+
+      console.log(formatted);
+
+      // Assertions
+      expect(formatted).to.have.property('name');
+      expect(formatted).to.have.property('values');
+      expect(formatted).to.have.property('field');
+      expect(formatted).to.have.property('type');
+      expect(formatted).to.have.property('execution');
     });
   });
 };

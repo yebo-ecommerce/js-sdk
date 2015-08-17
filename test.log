@@ -750,3 +750,114 @@ XMLHttpRequest cannot load http://vivreshop.yebo.me:3000/v3. Origin file:// is n
 
   2 passing (74ms)
 
+
+
+  Request
+[2K[0G    ✓ should make a VALID request (1103ms)
+
+  Query
+[2K[0G    1) should format the filter correctly
+
+
+  1 passing (1s)
+  1 failing
+
+  1) Query should format the filter correctly:
+     AssertionError: expected { Object (name, values, ...) } to equal { Object (name, values, ...) }
+      at yebo_sdk-tests.js:386
+      at yebo_sdk-tests.js:2322
+      at yebo_sdk-tests.js:9632
+
+
+
+
+
+  Request
+[2K[0G    ✓ should make a VALID request (75ms)
+
+  Query
+{"name":"color","values":["blue","red"],"field":"","type":"fixed","execution":"and"}
+[2K[0G    1) should format the filter correctly
+
+
+  1 passing (82ms)
+  1 failing
+
+  1) Query should format the filter correctly:
+     AssertionError: expected { Object (name, values, ...) } to equal { Object (name, values, ...) }
+      at yebo_sdk-tests.js:386
+      at yebo_sdk-tests.js:2322
+      at yebo_sdk-tests.js:9634
+
+
+
+
+
+  Request
+[2K[0G    ✓ should make a VALID request (93ms)
+
+  Query
+{"name":"color","values":["blue","red"],"field":"","type":"fixed","execution":"and"}
+[2K[0G    ✓ should format the filter correctly
+
+
+  2 passing (99ms)
+
+
+
+  Request
+[2K[0G    ✓ should make a VALID request (68ms)
+
+  Query
+{"name":"color","values":["blue","red"],"field":"","type":"fixed","execution":"and"}
+[2K[0G    1) should format the filter correctly
+
+
+  1 passing (75ms)
+  1 failing
+
+  1) Query should format the filter correctly:
+     AssertionError: expected { Object (name, values, ...) } to have a property 'fixed'
+      at yebo_sdk-tests.js:386
+      at yebo_sdk-tests.js:1337
+      at yebo_sdk-tests.js:3924
+      at yebo_sdk-tests.js:9632
+
+
+
+
+
+  Request
+[2K[0G    ✓ should make a VALID request (72ms)
+
+  Query
+{"name":"color","values":["blue","red"],"field":"","type":"fixed","execution":"and"}
+[2K[0G    ✓ should format the filter correctly
+
+
+  2 passing (79ms)
+
+
+
+  Request
+[2K[0G    ✓ should make a VALID request (74ms)
+
+  Query
+{"name":"color","values":["blue","red"],"field":"","type":"fixed","execution":"and"}
+[2K[0G    ✓ should format the filter correctly
+
+
+  2 passing (81ms)
+
+
+
+  Request
+[2K[0G    ✓ should make a VALID request (86ms)
+
+  Query
+{"name":"color","values":["blue","red"],"field":"","type":"fixed","execution":"and"}
+[2K[0G    ✓ should format the filter correctly
+
+
+  2 passing (93ms)
+
