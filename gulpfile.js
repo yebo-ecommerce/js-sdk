@@ -28,7 +28,7 @@ gulp.task('buildTests', function() {
 // Run the tests
 gulp.task('test', ['buildTests'], function() {
   gulp.src(['tests/index.html'])
-      .pipe(mochaPhantomJS({  dump: 'test.log' }));
+      .pipe(mochaPhantomJS());
 });
 
 gulp.task('watch', function() {

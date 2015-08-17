@@ -9621,9 +9621,8 @@ module.exports = function () {
       // Create new query
       var query = new _libYebo_sdkQuery2['default']();
 
+      // Format
       var formatted = query._format('color', ['blue', 'red']);
-
-      console.log(formatted);
 
       // Assertions
       expect(formatted).to.have.property('name');
