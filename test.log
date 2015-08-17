@@ -1,0 +1,752 @@
+
+
+  Request
+[2K[0G    ✓ should make a VALID request
+XMLHttpRequest cannot load http://www.google.com.br/. Origin file:// is not allowed by Access-Control-Allow-Origin.
+[2K[0G    ✓ should make an INVALID request (193ms)
+
+
+  2 passing (199ms)
+
+
+
+  Request
+[2K[0G    ✓ should make a VALID request
+[2K[0G    1) should make an INVALID request
+
+
+  1 passing (9ms)
+  1 failing
+
+  1) Request should make an INVALID request:
+     AssertionError: expected { Object (_id, _label, ...) } to be a function
+      at yebo_sdk-tests.js:295
+      at an (yebo_sdk-tests.js:539)
+      at assert (yebo_sdk-tests.js:3763)
+      at assertThrows (yebo_sdk-tests.js:1611)
+      at yebo_sdk-tests.js:3833
+      at yebo_sdk-tests.js:3648
+      at yebo_sdk-tests.js:9535
+
+
+
+
+
+  Request
+[2K[0G    ✓ should make a VALID request
+[2K[0G    1) should make an INVALID request
+
+
+  1 passing (9ms)
+  1 failing
+
+  1) Request should make an INVALID request:
+     AssertionError: expected { Object (_id, _label, ...) } to be a function
+      at yebo_sdk-tests.js:295
+      at an (yebo_sdk-tests.js:539)
+      at assert (yebo_sdk-tests.js:3763)
+      at assertThrows (yebo_sdk-tests.js:1611)
+      at yebo_sdk-tests.js:3833
+      at yebo_sdk-tests.js:3648
+      at yebo_sdk-tests.js:9534
+
+
+
+
+
+  Request
+[2K[0G    ✓ should make a VALID request
+[2K[0G    1) should make an INVALID request
+
+
+  1 passing (10ms)
+  1 failing
+
+  1) Request should make an INVALID request:
+     AssertionError: expected { Object (_id, _label, ...) } to be a function
+      at yebo_sdk-tests.js:295
+      at an (yebo_sdk-tests.js:539)
+      at assert (yebo_sdk-tests.js:3763)
+      at assertThrows (yebo_sdk-tests.js:1611)
+      at yebo_sdk-tests.js:3833
+      at yebo_sdk-tests.js:3648
+      at yebo_sdk-tests.js:9535
+
+
+
+
+
+  Request
+[2K[0G    ✓ should make a VALID request
+[2K[0G    1) should make an INVALID request
+
+
+  1 passing (10ms)
+  1 failing
+
+  1) Request should make an INVALID request:
+     AssertionError: expected { Object (_id, _label, ...) } to be a function
+      at yebo_sdk-tests.js:295
+      at an (yebo_sdk-tests.js:539)
+      at assert (yebo_sdk-tests.js:3763)
+      at assertThrows (yebo_sdk-tests.js:1611)
+      at yebo_sdk-tests.js:3833
+      at yebo_sdk-tests.js:3648
+      at yebo_sdk-tests.js:9537
+
+
+
+
+
+  Request
+[2K[0G    ✓ should make a VALID request
+[2K[0G    1) should make an INVALID request
+
+
+  1 passing (2s)
+  1 failing
+
+  1) Request should make an INVALID request:
+     timeout of 2000ms exceeded. Ensure the done() callback is being called in this test.
+  
+
+
+
+
+
+  Request
+[2K[0G    ✓ should make a VALID request
+XMLHttpRequest cannot load http://www.google.com.br/. Origin file:// is not allowed by Access-Control-Allow-Origin.
+[2K[0G    ✓ should make an INVALID request (190ms)
+
+
+  2 passing (196ms)
+
+
+
+  Request
+[2K[0G    ✓ should make a VALID request
+[2K[0G    ✓ should make an INVALID request
+
+
+  2 passing (8ms)
+
+
+
+  Request
+[2K[0G    ✓ should make a VALID request
+[2K[0G    ✓ should make an INVALID request
+
+
+  2 passing (8ms)
+
+
+
+  Request
+[2K[0G    1) should make a VALID request
+[2K[0G    ✓ should make an INVALID request
+
+
+  1 passing (2s)
+  1 failing
+
+  1) Request should make a VALID request:
+     timeout of 2000ms exceeded. Ensure the done() callback is being called in this test.
+  
+
+
+
+
+
+  Request
+[2K[0G    1) should make a VALID request
+[2K[0G    ✓ should make an INVALID request (525ms)
+
+
+  1 passing (3s)
+  1 failing
+
+  1) Request should make a VALID request:
+     timeout of 2000ms exceeded. Ensure the done() callback is being called in this test.
+  
+
+
+
+
+
+  Request
+[2K[0G    1) should make a VALID request
+[2K[0G    2) should make an INVALID request
+
+
+  0 passing (5ms)
+  2 failing
+
+  1) Request should make a VALID request:
+     TypeError: Cannot call a class as a function
+      at _classCallCheck (file:///Users/gabrielcorado/Code/azclick/yebo_sdk/tests/yebo_sdk-tests.js:10)
+      at Request (file:///Users/gabrielcorado/Code/azclick/yebo_sdk/tests/yebo_sdk-tests.js:34)
+      at file:///Users/gabrielcorado/Code/azclick/yebo_sdk/tests/yebo_sdk-tests.js:9510
+      at file:///Users/gabrielcorado/Code/azclick/yebo_sdk/node_modules/mocha/mocha.js:4539
+      at file:///Users/gabrielcorado/Code/azclick/yebo_sdk/node_modules/mocha/mocha.js:4974
+      at file:///Users/gabrielcorado/Code/azclick/yebo_sdk/node_modules/mocha/mocha.js:5079
+      at next (file:///Users/gabrielcorado/Code/azclick/yebo_sdk/node_modules/mocha/mocha.js:4899)
+      at file:///Users/gabrielcorado/Code/azclick/yebo_sdk/node_modules/mocha/mocha.js:4909
+      at next (file:///Users/gabrielcorado/Code/azclick/yebo_sdk/node_modules/mocha/mocha.js:4844)
+      at file:///Users/gabrielcorado/Code/azclick/yebo_sdk/node_modules/mocha/mocha.js:4876
+      at timeslice (file:///Users/gabrielcorado/Code/azclick/yebo_sdk/node_modules/mocha/mocha.js:6483)
+
+  2) Request should make an INVALID request:
+     TypeError: Cannot call a class as a function
+      at _classCallCheck (file:///Users/gabrielcorado/Code/azclick/yebo_sdk/tests/yebo_sdk-tests.js:10)
+      at Request (file:///Users/gabrielcorado/Code/azclick/yebo_sdk/tests/yebo_sdk-tests.js:34)
+      at file:///Users/gabrielcorado/Code/azclick/yebo_sdk/tests/yebo_sdk-tests.js:9521
+      at file:///Users/gabrielcorado/Code/azclick/yebo_sdk/node_modules/mocha/mocha.js:4539
+      at file:///Users/gabrielcorado/Code/azclick/yebo_sdk/node_modules/mocha/mocha.js:4974
+      at file:///Users/gabrielcorado/Code/azclick/yebo_sdk/node_modules/mocha/mocha.js:5079
+      at next (file:///Users/gabrielcorado/Code/azclick/yebo_sdk/node_modules/mocha/mocha.js:4899)
+      at file:///Users/gabrielcorado/Code/azclick/yebo_sdk/node_modules/mocha/mocha.js:4909
+      at next (file:///Users/gabrielcorado/Code/azclick/yebo_sdk/node_modules/mocha/mocha.js:4844)
+      at file:///Users/gabrielcorado/Code/azclick/yebo_sdk/node_modules/mocha/mocha.js:4876
+      at timeslice (file:///Users/gabrielcorado/Code/azclick/yebo_sdk/node_modules/mocha/mocha.js:6483)
+
+
+
+
+
+  Request
+[2K[0G    1) should make a VALID request
+[2K[0G    ✓ should make an INVALID request (845ms)
+
+
+  1 passing (3s)
+  1 failing
+
+  1) Request should make a VALID request:
+     timeout of 2000ms exceeded. Ensure the done() callback is being called in this test.
+  
+
+
+
+
+
+  Request
+XMLHttpRequest cannot load http://vivreshop.yebo.me:3000/v3. Origin file:// is not allowed by Access-Control-Allow-Origin.
+[2K[0G    1) should make a VALID request
+[2K[0G    ✓ should make an INVALID request (451ms)
+
+
+  1 passing (2s)
+  1 failing
+
+  1) Request should make a VALID request:
+     timeout of 2000ms exceeded. Ensure the done() callback is being called in this test.
+  
+
+
+
+
+
+  Request
+[2K[0G    ✓ should make a VALID request (40ms)
+{"token":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ2aXZyZXNob3AueWViby5tZTozMDAwMTcyLjE3LjAuMTgiLCJleHAiOjE0Mzk4MzMzMDl9.poP5Dv7LcwxuAcgSLHsoZDbnMy5f0iybeV4Vg3i2vRQ","expire_time":1439833309}
+[2K[0G    ✓ should make an INVALID request (611ms)
+
+
+  2 passing (658ms)
+
+
+
+  Request
+[2K[0G    ✓ should make a VALID request
+
+[2K[0G    ✓ should make an INVALID request
+
+
+  2 passing (39ms)
+
+
+
+  Request
+[2K[0G    ✓ should make a VALID request
+
+[2K[0G    ✓ should make an INVALID request
+
+
+  2 passing (39ms)
+
+
+
+  Request
+[2K[0G    ✓ should make a VALID request
+{"token":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ2aXZyZXNob3AueWViby5tZTozMDAwMTcyLjE3LjAuMTgiLCJleHAiOjE0Mzk4MzMzNjl9.RpZ6TiMfjNGKe1FiIhW_gL1rdj-W4R1bc0S9LZlTjIk","expire_time":1439833369}
+[2K[0G    ✓ should make an INVALID request
+
+
+  2 passing (38ms)
+
+
+
+  Request
+[2K[0G    ✓ should make a VALID request (41ms)
+{"token":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ2aXZyZXNob3AueWViby5tZTozMDAwMTcyLjE3LjAuMTgiLCJleHAiOjE0Mzk4MzM0MDV9.EB90hvUP6mgNtYI6y1pgWhC3vnqrKdqd0FeWN4DVcZ0","expire_time":1439833405} undefined
+[2K[0G    ✓ should make an INVALID request
+
+
+  2 passing (50ms)
+
+
+
+  Request
+[2K[0G    ✓ should make a VALID request (246ms)
+{"token":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ2aXZyZXNob3AueWViby5tZTozMDAwMTcyLjE3LjAuMTgiLCJleHAiOjE0Mzk4MzM0MjF9._uzngEYzJDoByl_Fgnc9QaZzvC6nnQfm7s1Jp2LSQmQ","expire_time":1439833421} undefined
+[2K[0G    ✓ should make an INVALID request
+
+
+  2 passing (255ms)
+
+
+
+  Request
+{"readyState":4,"response":"{\"token\":\"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ2aXZyZXNob3AueWViby5tZTozMDAwMTcyLjE3LjAuMTgiLCJleHAiOjE0Mzk4MzM0NDh9.w0qfw84KGcRhO5w39toCWGBB-0EutBKZiUGOQgTj4Fo\",\"expire_time\":1439833448}","responseXML":null,"onload":null,"onerror":null,"onloadstart":null,"status":200,"onabort":null,"upload":{"onabort":null,"onload":null,"onprogress":null,"onerror":null,"onloadstart":null},"responseType":"","onprogress":null,"withCredentials":false,"responseText":"{\"token\":\"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ2aXZyZXNob3AueWViby5tZTozMDAwMTcyLjE3LjAuMTgiLCJleHAiOjE0Mzk4MzM0NDh9.w0qfw84KGcRhO5w39toCWGBB-0EutBKZiUGOQgTj4Fo\",\"expire_time\":1439833448}","statusText":"OK "}
+[2K[0G    ✓ should make a VALID request (49ms)
+{"token":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ2aXZyZXNob3AueWViby5tZTozMDAwMTcyLjE3LjAuMTgiLCJleHAiOjE0Mzk4MzM0NDh9.w0qfw84KGcRhO5w39toCWGBB-0EutBKZiUGOQgTj4Fo","expire_time":1439833448}
+{"readyState":4,"response":"","responseXML":null,"onload":null,"onerror":null,"onloadstart":null,"status":0,"onabort":null,"upload":{"onabort":null,"onload":null,"onprogress":null,"onerror":null,"onloadstart":null},"responseType":"","onprogress":null,"withCredentials":false,"responseText":"","statusText":""}
+[2K[0G    ✓ should make an INVALID request (442ms)
+
+
+  2 passing (497ms)
+
+
+
+  Request
+[2K[0G    1) should make a VALID request
+[2K[0G    2) should make an INVALID request
+
+
+  0 passing (40ms)
+  2 failing
+
+  1) Request should make a VALID request:
+     Uncaught SyntaxError: Not enough arguments (file:///Users/gabrielcorado/Code/azclick/yebo_sdk/tests/yebo_sdk-tests.js:65)
+  
+
+  2) Request should make an INVALID request:
+     Uncaught SyntaxError: Not enough arguments (file:///Users/gabrielcorado/Code/azclick/yebo_sdk/tests/yebo_sdk-tests.js:65)
+  
+
+
+
+
+
+  Request
+[2K[0G    ✓ should make a VALID request (39ms)
+{"token":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ2aXZyZXNob3AueWViby5tZTozMDAwMTcyLjE3LjAuMTgiLCJleHAiOjE0Mzk4MzM1Njl9.n38wr3Mu4dtG07sEmBoH9aWukWbYSZYm3L6im-tsZ1U","expire_time":1439833569}
+[2K[0G    ✓ should make an INVALID request
+
+
+  2 passing (47ms)
+
+
+
+  Request
+{"readyState":4,"response":"{\"token\":\"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ2aXZyZXNob3AueWViby5tZTozMDAwMTcyLjE3LjAuMTgiLCJleHAiOjE0Mzk4MzM1OTR9.OHeE4mdORUvoLz1i2AkiOyFzXVXQbucdLgeiK9pdXzc\",\"expire_time\":1439833594}","responseXML":null,"onload":null,"onerror":null,"onloadstart":null,"status":200,"onabort":null,"upload":{"onabort":null,"onload":null,"onprogress":null,"onerror":null,"onloadstart":null},"responseType":"","onprogress":null,"withCredentials":false,"responseText":"{\"token\":\"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ2aXZyZXNob3AueWViby5tZTozMDAwMTcyLjE3LjAuMTgiLCJleHAiOjE0Mzk4MzM1OTR9.OHeE4mdORUvoLz1i2AkiOyFzXVXQbucdLgeiK9pdXzc\",\"expire_time\":1439833594}","statusText":"OK "}
+[2K[0G    ✓ should make a VALID request (41ms)
+{"token":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ2aXZyZXNob3AueWViby5tZTozMDAwMTcyLjE3LjAuMTgiLCJleHAiOjE0Mzk4MzM1OTR9.OHeE4mdORUvoLz1i2AkiOyFzXVXQbucdLgeiK9pdXzc","expire_time":1439833594}
+{"readyState":4,"response":"","responseXML":null,"onload":null,"onerror":null,"onloadstart":null,"status":0,"onabort":null,"upload":{"onabort":null,"onload":null,"onprogress":null,"onerror":null,"onloadstart":null},"responseType":"","onprogress":null,"withCredentials":false,"responseText":"","statusText":""}
+[2K[0G    ✓ should make an INVALID request
+
+
+  2 passing (51ms)
+
+
+
+  Request
+{"readyState":4,"response":"{\"token\":\"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ2aXZyZXNob3AueWViby5tZTozMDAwMTcyLjE3LjAuMTgiLCJleHAiOjE0Mzk4MzM2MTh9.MtIgsWzyMIqt9Rie1sg1WHidFKWIlcfcncx_VUTWYF0\",\"expire_time\":1439833618}","responseXML":null,"onload":null,"onerror":null,"onloadstart":null,"status":200,"onabort":null,"upload":{"onabort":null,"onload":null,"onprogress":null,"onerror":null,"onloadstart":null},"responseType":"","onprogress":null,"withCredentials":false,"responseText":"{\"token\":\"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ2aXZyZXNob3AueWViby5tZTozMDAwMTcyLjE3LjAuMTgiLCJleHAiOjE0Mzk4MzM2MTh9.MtIgsWzyMIqt9Rie1sg1WHidFKWIlcfcncx_VUTWYF0\",\"expire_time\":1439833618}","statusText":"OK "}
+[2K[0G    ✓ should make a VALID request (44ms)
+{"token":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ2aXZyZXNob3AueWViby5tZTozMDAwMTcyLjE3LjAuMTgiLCJleHAiOjE0Mzk4MzM2MTh9.MtIgsWzyMIqt9Rie1sg1WHidFKWIlcfcncx_VUTWYF0","expire_time":1439833618}
+
+
+  1 passing (49ms)
+
+
+
+  Request
+[2K[0G    1) should make a VALID request
+
+
+  0 passing (45ms)
+  1 failing
+
+  1) Request should make a VALID request:
+     Uncaught SyntaxError: Not enough arguments (file:///Users/gabrielcorado/Code/azclick/yebo_sdk/tests/yebo_sdk-tests.js:65)
+  
+
+
+
+
+
+  Request
+[2K[0G    1) should make a VALID request
+
+
+  0 passing (32ms)
+  1 failing
+
+  1) Request should make a VALID request:
+     Uncaught TypeError: 'undefined' is not a function (evaluating 'xhr.getAllResponseHeader()') (file:///Users/gabrielcorado/Code/azclick/yebo_sdk/tests/yebo_sdk-tests.js:65)
+  
+
+
+
+
+
+  Request
+{"readyState":4,"response":"{\"token\":\"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ2aXZyZXNob3AueWViby5tZTozMDAwMTcyLjE3LjAuMTgiLCJleHAiOjE0Mzk4MzM2OTR9.mltHBhJXWZE_gSxgTdDsgtc0McWf4mucr7YobbRPZ6s\",\"expire_time\":1439833694}","responseXML":null,"onload":null,"onerror":null,"onloadstart":null,"status":200,"onabort":null,"upload":{"onabort":null,"onload":null,"onprogress":null,"onerror":null,"onloadstart":null},"responseType":"","onprogress":null,"withCredentials":false,"responseText":"{\"token\":\"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ2aXZyZXNob3AueWViby5tZTozMDAwMTcyLjE3LjAuMTgiLCJleHAiOjE0Mzk4MzM2OTR9.mltHBhJXWZE_gSxgTdDsgtc0McWf4mucr7YobbRPZ6s\",\"expire_time\":1439833694}","statusText":"OK "}
+[2K[0G    ✓ should make a VALID request
+{"token":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ2aXZyZXNob3AueWViby5tZTozMDAwMTcyLjE3LjAuMTgiLCJleHAiOjE0Mzk4MzM2OTR9.mltHBhJXWZE_gSxgTdDsgtc0McWf4mucr7YobbRPZ6s","expire_time":1439833694}
+
+
+  1 passing (37ms)
+
+
+
+  Request
+{"reponseType":"json","readyState":4,"response":"{\"token\":\"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ2aXZyZXNob3AueWViby5tZTozMDAwMTcyLjE3LjAuMTgiLCJleHAiOjE0Mzk4MzM4MzR9.A3WNaQtFP4ACNq8DTv8ZQ1R5BD5pgXXD_PrUTqwrYzc\",\"expire_time\":1439833834}","responseXML":null,"onload":null,"onerror":null,"onloadstart":null,"status":200,"onabort":null,"upload":{"onabort":null,"onload":null,"onprogress":null,"onerror":null,"onloadstart":null},"responseType":"","onprogress":null,"withCredentials":false,"responseText":"{\"token\":\"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ2aXZyZXNob3AueWViby5tZTozMDAwMTcyLjE3LjAuMTgiLCJleHAiOjE0Mzk4MzM4MzR9.A3WNaQtFP4ACNq8DTv8ZQ1R5BD5pgXXD_PrUTqwrYzc\",\"expire_time\":1439833834}","statusText":"OK "}
+[2K[0G    ✓ should make a VALID request
+{"token":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ2aXZyZXNob3AueWViby5tZTozMDAwMTcyLjE3LjAuMTgiLCJleHAiOjE0Mzk4MzM4MzR9.A3WNaQtFP4ACNq8DTv8ZQ1R5BD5pgXXD_PrUTqwrYzc","expire_time":1439833834}
+
+
+  1 passing (39ms)
+
+
+
+  Request
+{"reponseType":"json","readyState":4,"response":"{\"token\":\"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ2aXZyZXNob3AueWViby5tZTozMDAwMTcyLjE3LjAuMTgiLCJleHAiOjE0Mzk4MzM5MTZ9.zO6ORT4m7JY03rurPsw1qAU9gKWABofkoxkdTgZw-KA\",\"expire_time\":1439833916}","responseXML":null,"onload":null,"onerror":null,"onloadstart":null,"status":200,"onabort":null,"upload":{"onabort":null,"onload":null,"onprogress":null,"onerror":null,"onloadstart":null},"responseType":"","onprogress":null,"withCredentials":false,"responseText":"{\"token\":\"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ2aXZyZXNob3AueWViby5tZTozMDAwMTcyLjE3LjAuMTgiLCJleHAiOjE0Mzk4MzM5MTZ9.zO6ORT4m7JY03rurPsw1qAU9gKWABofkoxkdTgZw-KA\",\"expire_time\":1439833916}","statusText":"OK "}
+[2K[0G    1) should make a VALID request
+
+
+  0 passing (35ms)
+  1 failing
+
+  1) Request should make a VALID request:
+     Uncaught ReferenceError: Can't find variable: parseResponse (file:///Users/gabrielcorado/Code/azclick/yebo_sdk/tests/yebo_sdk-tests.js:71)
+  
+
+
+
+
+
+  Request
+{"reponseType":"json","readyState":4,"response":"{\"token\":\"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ2aXZyZXNob3AueWViby5tZTozMDAwMTcyLjE3LjAuMTgiLCJleHAiOjE0Mzk4MzM5MzB9.Msq1sOdvyMVx61reT2eGEnA3Btqsaan7N_wdU2NPFIU\",\"expire_time\":1439833930}","responseXML":null,"onload":null,"onerror":null,"onloadstart":null,"status":200,"onabort":null,"upload":{"onabort":null,"onload":null,"onprogress":null,"onerror":null,"onloadstart":null},"responseType":"","onprogress":null,"withCredentials":false,"responseText":"{\"token\":\"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ2aXZyZXNob3AueWViby5tZTozMDAwMTcyLjE3LjAuMTgiLCJleHAiOjE0Mzk4MzM5MzB9.Msq1sOdvyMVx61reT2eGEnA3Btqsaan7N_wdU2NPFIU\",\"expire_time\":1439833930}","statusText":"OK "}
+[2K[0G    ✓ should make a VALID request
+{"token":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ2aXZyZXNob3AueWViby5tZTozMDAwMTcyLjE3LjAuMTgiLCJleHAiOjE0Mzk4MzM5MzB9.Msq1sOdvyMVx61reT2eGEnA3Btqsaan7N_wdU2NPFIU","expire_time":1439833930}
+
+
+  1 passing (38ms)
+
+
+
+  Request
+[2K[0G    ✓ should make a VALID request (40ms)
+{"token":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ2aXZyZXNob3AueWViby5tZTozMDAwMTcyLjE3LjAuMTgiLCJleHAiOjE0Mzk4MzM5NTR9.EDVyf9OE8KUZdn97itJDD9RJCwWdkM_dDeqh-WTSX7E","expire_time":1439833954} 
+
+
+  1 passing (44ms)
+
+
+
+  Request
+[2K[0G    ✓ should make a VALID request
+{"token":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ2aXZyZXNob3AueWViby5tZTozMDAwMTcyLjE3LjAuMTgiLCJleHAiOjE0Mzk4MzM5NjN9.u9EShRFPtOmepi16rMHAbB_TvbYMnBoSUOTxZCFhczM","expire_time":1439833963} 
+
+
+  1 passing (34ms)
+
+
+
+  Request
+[2K[0G    ✓ should make a VALID request (39ms)
+[2K[0G    1) should make an INVALID request
+
+
+  1 passing (47ms)
+  1 failing
+
+  1) Request should make an INVALID request:
+     AssertionError: expected { Object (_id, _label, ...) } to be a function
+      at yebo_sdk-tests.js:308
+      at an (yebo_sdk-tests.js:552)
+      at assert (yebo_sdk-tests.js:3776)
+      at assertThrows (yebo_sdk-tests.js:1624)
+      at yebo_sdk-tests.js:3846
+      at yebo_sdk-tests.js:9549
+
+
+
+
+
+  Request
+[2K[0G    ✓ should make a VALID request (41ms)
+{"_id":2,"_subscribers":[]}
+[2K[0G    1) should make an INVALID request
+
+
+  1 passing (51ms)
+  1 failing
+
+  1) Request should make an INVALID request:
+     AssertionError: expected { Object (_id, _label, ...) } to be a function
+      at yebo_sdk-tests.js:308
+      at an (yebo_sdk-tests.js:552)
+      at assert (yebo_sdk-tests.js:3776)
+      at assertThrows (yebo_sdk-tests.js:1624)
+      at yebo_sdk-tests.js:3846
+      at yebo_sdk-tests.js:9551
+
+
+
+
+
+  Request
+[2K[0G    1) should make a VALID request
+
+
+  0 passing (2s)
+  1 failing
+
+  1) Request should make a VALID request:
+     timeout of 2000ms exceeded. Ensure the done() callback is being called in this test.
+  
+
+
+
+
+
+  Request
+[2K[0G    1) should make a VALID request
+
+
+  0 passing (2s)
+  1 failing
+
+  1) Request should make a VALID request:
+     timeout of 2000ms exceeded. Ensure the done() callback is being called in this test.
+  
+
+
+
+
+
+  Request
+[2K[0G    1) should make a VALID request
+
+
+  0 passing (5ms)
+  1 failing
+
+  1) Request should make a VALID request:
+     the domexception "Error: INVALID_STATE_ERR: DOM Exception 11" was thrown, throw an Error :)
+  
+
+
+
+
+
+  Request
+[2K[0G    1) should make a VALID request
+
+
+  0 passing (5ms)
+  1 failing
+
+  1) Request should make a VALID request:
+     the domexception "Error: INVALID_STATE_ERR: DOM Exception 11" was thrown, throw an Error :)
+  
+
+
+
+
+
+  Request
+[2K[0G    1) should make a VALID request
+
+
+  0 passing (4ms)
+  1 failing
+
+  1) Request should make a VALID request:
+     the domexception "Error: INVALID_STATE_ERR: DOM Exception 11" was thrown, throw an Error :)
+  
+
+
+
+
+
+  Request
+[2K[0G    1) should make a VALID request
+
+
+  0 passing (4ms)
+  1 failing
+
+  1) Request should make a VALID request:
+     the domexception "Error: INVALID_STATE_ERR: DOM Exception 11" was thrown, throw an Error :)
+  
+
+
+
+
+
+  Request
+[2K[0G    1) should make a VALID request
+
+
+  0 passing (5ms)
+  1 failing
+
+  1) Request should make a VALID request:
+     the domexception "Error: INVALID_STATE_ERR: DOM Exception 11" was thrown, throw an Error :)
+  
+
+
+
+
+
+  Request
+[2K[0G    1) should make a VALID request
+
+
+  0 passing (5ms)
+  1 failing
+
+  1) Request should make a VALID request:
+     the domexception "Error: INVALID_STATE_ERR: DOM Exception 11" was thrown, throw an Error :)
+  
+
+
+
+
+
+  Request
+[2K[0G    1) should make a VALID request
+
+
+  0 passing (5ms)
+  1 failing
+
+  1) Request should make a VALID request:
+     the domexception "Error: INVALID_STATE_ERR: DOM Exception 11" was thrown, throw an Error :)
+  
+
+
+
+
+
+  Request
+{"readyState":2,"response":"","responseXML":null,"onload":null,"onerror":null,"onloadstart":null,"status":200,"onabort":null,"upload":{"onabort":null,"onload":null,"onprogress":null,"onerror":null,"onloadstart":null},"responseType":"","onprogress":null,"withCredentials":false,"responseText":"","statusText":"OK "}
+{"readyState":3,"response":"{\"token\":\"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ2aXZyZXNob3AueWViby5tZTozMDAwMTcyLjE3LjAuMTgiLCJleHAiOjE0Mzk4MzQ1Njd9.rC-5-hwx9kkeHGK08nzTkhkQuIkDcn0MANPgkndO6Ao\",\"expire_time\":1439834567}","responseXML":null,"onload":null,"onerror":null,"onloadstart":null,"status":200,"onabort":null,"upload":{"onabort":null,"onload":null,"onprogress":null,"onerror":null,"onloadstart":null},"responseType":"","onprogress":null,"withCredentials":false,"responseText":"{\"token\":\"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ2aXZyZXNob3AueWViby5tZTozMDAwMTcyLjE3LjAuMTgiLCJleHAiOjE0Mzk4MzQ1Njd9.rC-5-hwx9kkeHGK08nzTkhkQuIkDcn0MANPgkndO6Ao\",\"expire_time\":1439834567}","statusText":"OK "}
+{"readyState":4,"response":"{\"token\":\"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ2aXZyZXNob3AueWViby5tZTozMDAwMTcyLjE3LjAuMTgiLCJleHAiOjE0Mzk4MzQ1Njd9.rC-5-hwx9kkeHGK08nzTkhkQuIkDcn0MANPgkndO6Ao\",\"expire_time\":1439834567}","responseXML":null,"onload":null,"onerror":null,"onloadstart":null,"status":200,"onabort":null,"upload":{"onabort":null,"onload":null,"onprogress":null,"onerror":null,"onloadstart":null},"responseType":"","onprogress":null,"withCredentials":false,"responseText":"{\"token\":\"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ2aXZyZXNob3AueWViby5tZTozMDAwMTcyLjE3LjAuMTgiLCJleHAiOjE0Mzk4MzQ1Njd9.rC-5-hwx9kkeHGK08nzTkhkQuIkDcn0MANPgkndO6Ao\",\"expire_time\":1439834567}","statusText":"OK "}
+[2K[0G    ✓ should make a VALID request (540ms)
+
+
+  1 passing (544ms)
+
+
+
+  Request
+{"readyState":2,"response":"","responseXML":null,"onload":null,"onerror":null,"onloadstart":null,"status":200,"onabort":null,"upload":{"onabort":null,"onload":null,"onprogress":null,"onerror":null,"onloadstart":null},"responseType":"","onprogress":null,"withCredentials":false,"responseText":"","statusText":"OK "}
+{"readyState":3,"response":"{\"token\":\"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ2aXZyZXNob3AueWViby5tZTozMDAwMTcyLjE3LjAuMTgiLCJleHAiOjE0Mzk4MzQ2MDh9.rVUfmQNiHdOEWdE1fSoRb33R-3JKB7XdnTGYfGl0Uxc\",\"expire_time\":1439834608}","responseXML":null,"onload":null,"onerror":null,"onloadstart":null,"status":200,"onabort":null,"upload":{"onabort":null,"onload":null,"onprogress":null,"onerror":null,"onloadstart":null},"responseType":"","onprogress":null,"withCredentials":false,"responseText":"{\"token\":\"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ2aXZyZXNob3AueWViby5tZTozMDAwMTcyLjE3LjAuMTgiLCJleHAiOjE0Mzk4MzQ2MDh9.rVUfmQNiHdOEWdE1fSoRb33R-3JKB7XdnTGYfGl0Uxc\",\"expire_time\":1439834608}","statusText":"OK "}
+{"readyState":4,"response":"{\"token\":\"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ2aXZyZXNob3AueWViby5tZTozMDAwMTcyLjE3LjAuMTgiLCJleHAiOjE0Mzk4MzQ2MDh9.rVUfmQNiHdOEWdE1fSoRb33R-3JKB7XdnTGYfGl0Uxc\",\"expire_time\":1439834608}","responseXML":null,"onload":null,"onerror":null,"onloadstart":null,"status":200,"onabort":null,"upload":{"onabort":null,"onload":null,"onprogress":null,"onerror":null,"onloadstart":null},"responseType":"","onprogress":null,"withCredentials":false,"responseText":"{\"token\":\"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ2aXZyZXNob3AueWViby5tZTozMDAwMTcyLjE3LjAuMTgiLCJleHAiOjE0Mzk4MzQ2MDh9.rVUfmQNiHdOEWdE1fSoRb33R-3JKB7XdnTGYfGl0Uxc\",\"expire_time\":1439834608}","statusText":"OK "}
+[2K[0G    ✓ should make a VALID request
+
+
+  1 passing (37ms)
+
+
+
+  Request
+[2K[0G    ✓ should make a VALID request
+
+
+  1 passing (34ms)
+
+
+
+  Request
+[2K[0G    ✓ should make a VALID request
+
+
+  1 passing (37ms)
+
+
+
+  Request
+[2K[0G    ✓ should make a VALID request (95ms)
+
+
+  1 passing (99ms)
+
+
+
+  Request
+[2K[0G    ✓ should make a VALID request (84ms)
+
+
+  1 passing (88ms)
+
+
+
+  Request
+[2K[0G    ✓ should make a VALID request (80ms)
+
+
+  1 passing (84ms)
+
+
+
+  Request
+[2K[0G    ✓ should make a VALID request (99ms)
+
+
+  1 passing (104ms)
+
+
+
+  Request
+[2K[0G    ✓ should make a VALID request (72ms)
+
+
+  1 passing (77ms)
+
+
+
+  0 passing (0ms)
+
+
+
+  Request
+[2K[0G    ✓ should make a VALID request (91ms)
+
+
+  1 passing (96ms)
+
+
+
+  Request
+[2K[0G    ✓ should make a VALID request (80ms)
+
+
+  1 passing (84ms)
+
+
+
+  Request
+[2K[0G    ✓ should make a VALID request (68ms)
+
+  Query
+[2K[0G    ✓ should appear
+
+
+  2 passing (74ms)
+

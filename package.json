@@ -1,0 +1,29 @@
+{
+  "name": "yebo_sdk",
+  "version": "0.0.0-alpha",
+  "description": "A bridge between the Yebo e-commerce and your website",
+  "main": "index.js",
+  "scripts": {
+    "test": "./node_modules/gulp/bin/gulp.js test",
+    "docs": "./node_modules/esdoc/out/src/ESDocCLI.js -c esdoc.json",
+    "build": "./node_modules/gulp/bin/gulp.js build"
+  },
+  "author": "AZClick",
+  "license": "ISC",
+  "devDependencies": {
+    "babel": "^5.8.21",
+    "babelify": "^6.1.3",
+    "chai": "^3.2.0",
+    "esdoc": "^0.2.1",
+    "gulp": "^3.9.0",
+    "gulp-babel": "^5.2.0",
+    "gulp-browserify": "^0.5.1",
+    "gulp-concat": "^2.6.0",
+    "gulp-mocha-phantomjs": "^0.8.1",
+    "mocha": "^2.2.5"
+  },
+  "dependencies": {
+    "lodash": "^3.10.1",
+    "rsvp": "^3.0.21"
+  }
+}
