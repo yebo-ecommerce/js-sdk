@@ -1,5 +1,17 @@
 window.esdocSearchIndex = [
   [
+    "yebo_sdk/lib/yebo_sdk/query.js~query",
+    "class/lib/yebo_sdk/query.js~Query.html",
+    "<span>Query</span> <span class=\"search-result-import-path\">yebo_sdk/lib/yebo_sdk/query.js</span>",
+    "class"
+  ],
+  [
+    "yebo_sdk/lib/yebo_sdk/request.js~request",
+    "class/lib/yebo_sdk/request.js~Request.html",
+    "<span>Request</span> <span class=\"search-result-import-path\">yebo_sdk/lib/yebo_sdk/request.js</span>",
+    "class"
+  ],
+  [
     "builtinexternal/ecmascriptexternal.js~array",
     "external/index.html",
     "BuiltinExternal/ECMAScriptExternal.js~Array",
@@ -330,9 +342,93 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
+    "lib/yebo_sdk/query.js",
+    "file/lib/yebo_sdk/query.js.html",
+    "lib/yebo_sdk/query.js",
+    "file"
+  ],
+  [
+    "lib/yebo_sdk/query.js~query#and",
+    "class/lib/yebo_sdk/query.js~Query.html#instance-method-and",
+    "lib/yebo_sdk/query.js~Query#and",
+    "method"
+  ],
+  [
+    "lib/yebo_sdk/query.js~query#build",
+    "class/lib/yebo_sdk/query.js~Query.html#instance-method-build",
+    "lib/yebo_sdk/query.js~Query#build",
+    "method"
+  ],
+  [
+    "lib/yebo_sdk/query.js~query#constructor",
+    "class/lib/yebo_sdk/query.js~Query.html#instance-constructor-constructor",
+    "lib/yebo_sdk/query.js~Query#constructor",
+    "method"
+  ],
+  [
+    "lib/yebo_sdk/query.js~query#filter",
+    "class/lib/yebo_sdk/query.js~Query.html#instance-method-filter",
+    "lib/yebo_sdk/query.js~Query#filter",
+    "method"
+  ],
+  [
+    "lib/yebo_sdk/query.js~query#or",
+    "class/lib/yebo_sdk/query.js~Query.html#instance-method-or",
+    "lib/yebo_sdk/query.js~Query#or",
+    "method"
+  ],
+  [
+    "lib/yebo_sdk/query.js~query#page",
+    "class/lib/yebo_sdk/query.js~Query.html#instance-method-page",
+    "lib/yebo_sdk/query.js~Query#page",
+    "method"
+  ],
+  [
+    "lib/yebo_sdk/query.js~query#perpage",
+    "class/lib/yebo_sdk/query.js~Query.html#instance-method-perPage",
+    "lib/yebo_sdk/query.js~Query#perPage",
+    "method"
+  ],
+  [
+    "lib/yebo_sdk/query.js~query#price",
+    "class/lib/yebo_sdk/query.js~Query.html#instance-method-price",
+    "lib/yebo_sdk/query.js~Query#price",
+    "method"
+  ],
+  [
+    "lib/yebo_sdk/query.js~query#search",
+    "class/lib/yebo_sdk/query.js~Query.html#instance-method-search",
+    "lib/yebo_sdk/query.js~Query#search",
+    "method"
+  ],
+  [
+    "lib/yebo_sdk/query.js~query#sort",
+    "class/lib/yebo_sdk/query.js~Query.html#instance-method-sort",
+    "lib/yebo_sdk/query.js~Query#sort",
+    "method"
+  ],
+  [
+    "lib/yebo_sdk/query.js~query#taxonomy",
+    "class/lib/yebo_sdk/query.js~Query.html#instance-method-taxonomy",
+    "lib/yebo_sdk/query.js~Query#taxonomy",
+    "method"
+  ],
+  [
     "lib/yebo_sdk/request.js",
     "file/lib/yebo_sdk/request.js.html",
     "lib/yebo_sdk/request.js",
     "file"
+  ],
+  [
+    "lib/yebo_sdk/request.js~request#constructor",
+    "class/lib/yebo_sdk/request.js~Request.html#instance-constructor-constructor",
+    "lib/yebo_sdk/request.js~Request#constructor",
+    "method"
+  ],
+  [
+    "lib/yebo_sdk/request.js~request#parseresponse",
+    "class/lib/yebo_sdk/request.js~Request.html#instance-method-parseResponse",
+    "lib/yebo_sdk/request.js~Request#parseResponse",
+    "method"
   ]
 ]

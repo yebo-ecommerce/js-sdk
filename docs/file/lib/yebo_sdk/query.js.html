@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../">
+  <title data-ice="title">lib/yebo_sdk/query.js | API Document</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  
+  
+</head>
+<body class="layout-container">
+
+<header>
+  <a href="./">Home</a>
+  <a href="identifiers.html">Identifier</a>
+  <a href="source.html">Source</a>
+  
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div data-ice="classWrap">
+  <h2>Class</h2>
+  <ul>
+    
+  <li data-ice="classDoc"><span><a href="class/lib/yebo_sdk/query.js~Query.html">Query</a></span></li>
+<li data-ice="classDoc"><span><a href="class/lib/yebo_sdk/request.js~Request.html">Request</a></span></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">lib/yebo_sdk/query.js</h1>
+<pre class="source-code line-number"><code class="prettyprint linenums" data-ice="content">//
+var isArray = require(&apos;lodash/lang/isArray&apos;),
+    isEmpty = require(&apos;lodash/lang/isEmpty&apos;);
+
+/**
+ * Query class
+ * @example
+ * var query = new Query();
+
+ * query
+ *   .search(&apos;camiseta&apos;)
+ *   .filter(&apos;cor&apos;, [&apos;azul&apos;, &apos;amarelo&apos;])
+ *   .and()
+ *   .taxonony([&apos;marcas&apos;, &apos;camisetas&apos;])
+ *   .or()
+ *   .taxonomy([&apos;promocao&apos;])
+ *   .and()
+ *   .price(15, 25)
+ *   .run(function(err, result) {
+ *    console.log(err, result);
+ *   })
+ */
+export default class Query {
+  /**
+   * @todo Create a new query based in other
+   */
+  constructor() {
+    // Initialize
+    this._search = &apos;&apos;;
+    this._filter = {
+      and: [],
+      or: []
+    };
+    this._sort = {};
+
+    this._page = 1;
+    this._perPage = 15;
+
+    this._currentOperator = &apos;or&apos;;
+  }
+
+  /**
+   * Price range filter
+   * @example
+   * query.price(0, 15);
+   * // or...
+   * query.price(15, 30);
+   * // or...
+   * query.price(30);
+   */
+  price(...values) {
+    if( values.length &gt; 2 )
+      throw &apos;price range just accept two values&apos;;
+
+    // Generate the filter
+    this._generateFilter(
+      this._format(&apos;price&apos;, values, &apos;&apos;, &apos;range&apos;)
+    );
+
+    // Return the instance
+    return this;
+  }
+
+  /**
+   * Make an query in the taxonomies
+   * @param {array} values Array that will be searched
+   * @param {string} field The field that the values will match
+   * @param {string} execution The execution value
+   * @example
+   * query.taxonomy([&apos;camisetas&apos;, &apos;promocao&apos;]);
+   */
+  taxonomy(values, field = &apos;permalink&apos;, execution = &apos;and&apos;) {
+    // Generate the filter
+    this._generateFilter(
+      this._format(&apos;taxonomy&apos;, values, field, &apos;fixed&apos;, execution)
+    );
+
+    // Return the instance
+    return this;
+  }
+
+  /**
+   * Make an query in Yebo Filters
+   * @param {string} name Filter name
+   * @param {array} values Array with the values that will be searched
+   * @param {string} execution The execution value
+   * @example
+   * query.filter(&apos;cor&apos;, [&apos;azul&apos;, &apos;amarelo&apos;]);
+   */
+  filter(name, values, execution = &apos;and&apos;) {
+    // Generate the filter
+    this._generateFilter(
+      this._format(name, values, &apos;&apos;, &apos;fixed&apos;, execution)
+    );
+
+    // Return the instance
+    return this;
+  }
+
+  /**
+   * Set the search page
+   * @param {integer} page Page number
+   */
+  page(page) {
+    //
+    this._page = page;
+
+    // Return the instance
+    return this;
+  }
+
+  /**
+   * Set the per page results
+   * @param {integer} perPage Per page number
+   */
+  perPage(perPage) {
+    //
+    this._perPage = perPage;
+
+    // Return the instance
+    return this;
+  }
+
+  /**
+   * Change the current operator to `or`
+   */
+  or() {
+    // Set the current operator
+    this._currentOperator = &apos;or&apos;;
+
+    // Return the instance
+    return this;
+  }
+
+  /**
+   * Change the current operator to `and`
+   */
+  and() {
+    // Set the current operator
+    this._currentOperator = &apos;and&apos;;
+
+    // Return the instance
+    return this;
+  }
+
+  /**
+   * Search products by the name
+   * @param {string} name Name that will be searched
+   * @example
+   * query.search(&apos;product-name&apos;);
+   */
+  search(name) {
+    // Set the search
+    this._search = name;
+
+    // Return the instance
+    return this;
+  }
+
+  /**
+   * Sort the search by a specific field and order
+   * @param {string} field Field that will be used to order. Suported: `name`, `price`
+   * @param {string} order `asc` or `desc`
+   * @example
+   * query.sort(&apos;price&apos;, &apos;asc&apos;);
+   */
+  sort(field, order = &apos;asc&apos;) {
+    // Set sort
+    this._sort = {
+      field: field,
+      order: order
+    };
+
+    // Return the instance
+    return this;
+  }
+
+  /**
+   * Will generate the object that will be sent to Yebo
+   * @example
+   * query.build();
+   */
+  build() {
+    // Create result
+    let result = {
+      page: this._page,
+      per_page: this._perPage,
+      filters: this._filter
+    };
+
+    //
+    if( this._search !== &apos;&apos; )
+      result.name = this._search;
+
+    //
+    if( !isEmpty(this._sort) )
+      result.sort = this._sort;
+
+    // Return the result
+    return result;
+  }
+
+  /**
+   * Generate the filter with the _currentOperator
+   */
+  _generateFilter(filter) {
+    this._filter[this._currentOperator].push(filter);
+  }
+
+  /**
+   * Generate an API like data structure
+   * @param {string} name The name of the filter
+   * @param {array} values The group of values
+   * @param {string} field The field that will be searched
+   * @param {string} execution How the `values` are related. `or` `and`
+   */
+  _format(name, values, field = &apos;&apos;, type = &apos;fixed&apos;, execution = &apos;and&apos;) {
+    // Checks the
+    if( !isArray(values) )
+      throw &apos;values must be an array&apos;;
+
+    let result = {
+      name: name,
+      values: values,
+      field: field,
+      type: type,
+      execution: execution
+    };
+
+    //
+    return result;
+  }
+}
+</code></pre>
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(0.2.1)</span></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

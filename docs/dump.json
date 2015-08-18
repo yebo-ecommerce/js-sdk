@@ -3,30 +3,50 @@
     "kind": "file",
     "static": true,
     "variation": null,
-    "name": "lib/yebo_sdk/request.js",
+    "name": "lib/yebo_sdk/query.js",
     "memberof": null,
-    "longname": "lib/yebo_sdk/request.js",
+    "longname": "lib/yebo_sdk/query.js",
     "access": null,
     "description": null,
-    "lineNumber": 6,
-    "content": "/**\n * this is MyClass description.\n * @example\n * let myClass = new MyClass();\n */\nclass MyClass {\n  /**\n   * this is constructor description.\n   * @param {number} arg1 this is arg1 description.\n   * @param {string[]} arg2 this is arg2 description.\n   */\n  constructor(arg1, arg2) {\n    console.log('Hello');\n  }\n}\n"
+    "lineNumber": 2,
+    "content": "//\nvar isArray = require('lodash/lang/isArray'),\n    isEmpty = require('lodash/lang/isEmpty');\n\n/**\n * Query class\n * @example\n * var query = new Query();\n\n * query\n *   .search('camiseta')\n *   .filter('cor', ['azul', 'amarelo'])\n *   .and()\n *   .taxonony(['marcas', 'camisetas'])\n *   .or()\n *   .taxonomy(['promocao'])\n *   .and()\n *   .price(15, 25)\n *   .run(function(err, result) {\n *    console.log(err, result);\n *   })\n */\nexport default class Query {\n  /**\n   * @todo Create a new query based in other\n   */\n  constructor() {\n    // Initialize\n    this._search = '';\n    this._filter = {\n      and: [],\n      or: []\n    };\n    this._sort = {};\n\n    this._page = 1;\n    this._perPage = 15;\n\n    this._currentOperator = 'or';\n  }\n\n  /**\n   * Price range filter\n   * @example\n   * query.price(0, 15);\n   * // or...\n   * query.price(15, 30);\n   * // or...\n   * query.price(30);\n   */\n  price(...values) {\n    if( values.length > 2 )\n      throw 'price range just accept two values';\n\n    // Generate the filter\n    this._generateFilter(\n      this._format('price', values, '', 'range')\n    );\n\n    // Return the instance\n    return this;\n  }\n\n  /**\n   * Make an query in the taxonomies\n   * @param {array} values Array that will be searched\n   * @param {string} field The field that the values will match\n   * @param {string} execution The execution value\n   * @example\n   * query.taxonomy(['camisetas', 'promocao']);\n   */\n  taxonomy(values, field = 'permalink', execution = 'and') {\n    // Generate the filter\n    this._generateFilter(\n      this._format('taxonomy', values, field, 'fixed', execution)\n    );\n\n    // Return the instance\n    return this;\n  }\n\n  /**\n   * Make an query in Yebo Filters\n   * @param {string} name Filter name\n   * @param {array} values Array with the values that will be searched\n   * @param {string} execution The execution value\n   * @example\n   * query.filter('cor', ['azul', 'amarelo']);\n   */\n  filter(name, values, execution = 'and') {\n    // Generate the filter\n    this._generateFilter(\n      this._format(name, values, '', 'fixed', execution)\n    );\n\n    // Return the instance\n    return this;\n  }\n\n  /**\n   * Set the search page\n   * @param {integer} page Page number\n   */\n  page(page) {\n    //\n    this._page = page;\n\n    // Return the instance\n    return this;\n  }\n\n  /**\n   * Set the per page results\n   * @param {integer} perPage Per page number\n   */\n  perPage(perPage) {\n    //\n    this._perPage = perPage;\n\n    // Return the instance\n    return this;\n  }\n\n  /**\n   * Change the current operator to `or`\n   */\n  or() {\n    // Set the current operator\n    this._currentOperator = 'or';\n\n    // Return the instance\n    return this;\n  }\n\n  /**\n   * Change the current operator to `and`\n   */\n  and() {\n    // Set the current operator\n    this._currentOperator = 'and';\n\n    // Return the instance\n    return this;\n  }\n\n  /**\n   * Search products by the name\n   * @param {string} name Name that will be searched\n   * @example\n   * query.search('product-name');\n   */\n  search(name) {\n    // Set the search\n    this._search = name;\n\n    // Return the instance\n    return this;\n  }\n\n  /**\n   * Sort the search by a specific field and order\n   * @param {string} field Field that will be used to order. Suported: `name`, `price`\n   * @param {string} order `asc` or `desc`\n   * @example\n   * query.sort('price', 'asc');\n   */\n  sort(field, order = 'asc') {\n    // Set sort\n    this._sort = {\n      field: field,\n      order: order\n    };\n\n    // Return the instance\n    return this;\n  }\n\n  /**\n   * Will generate the object that will be sent to Yebo\n   * @example\n   * query.build();\n   */\n  build() {\n    // Create result\n    let result = {\n      page: this._page,\n      per_page: this._perPage,\n      filters: this._filter\n    };\n\n    //\n    if( this._search !== '' )\n      result.name = this._search;\n\n    //\n    if( !isEmpty(this._sort) )\n      result.sort = this._sort;\n\n    // Return the result\n    return result;\n  }\n\n  /**\n   * Generate the filter with the _currentOperator\n   */\n  _generateFilter(filter) {\n    this._filter[this._currentOperator].push(filter);\n  }\n\n  /**\n   * Generate an API like data structure\n   * @param {string} name The name of the filter\n   * @param {array} values The group of values\n   * @param {string} field The field that will be searched\n   * @param {string} execution How the `values` are related. `or` `and`\n   */\n  _format(name, values, field = '', type = 'fixed', execution = 'and') {\n    // Checks the\n    if( !isArray(values) )\n      throw 'values must be an array';\n\n    let result = {\n      name: name,\n      values: values,\n      field: field,\n      type: type,\n      execution: execution\n    };\n\n    //\n    return result;\n  }\n}\n"
+  },
+  {
+    "kind": "variable",
+    "static": true,
+    "variation": null,
+    "name": "isArray",
+    "memberof": "lib/yebo_sdk/query.js",
+    "longname": "lib/yebo_sdk/query.js~isArray",
+    "access": null,
+    "export": false,
+    "importPath": "yebo_sdk/lib/yebo_sdk/query.js",
+    "importStyle": null,
+    "description": null,
+    "lineNumber": 2,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
   },
   {
     "kind": "class",
     "static": true,
     "variation": null,
-    "name": "MyClass",
-    "memberof": "lib/yebo_sdk/request.js",
-    "longname": "lib/yebo_sdk/request.js~MyClass",
+    "name": "Query",
+    "memberof": "lib/yebo_sdk/query.js",
+    "longname": "lib/yebo_sdk/query.js~Query",
     "access": null,
-    "export": false,
-    "importPath": "yebo_sdk/lib/yebo_sdk/request.js",
-    "importStyle": null,
-    "description": "this is MyClass description.",
+    "export": true,
+    "importPath": "yebo_sdk/lib/yebo_sdk/query.js",
+    "importStyle": "Query",
+    "description": "Query class",
     "examples": [
-      "let myClass = new MyClass();"
+      "var query = new Query();\nquery\n  .search('camiseta')\n  .filter('cor', ['azul', 'amarelo'])\n  .and()\n  .taxonony(['marcas', 'camisetas'])\n  .or()\n  .taxonomy(['promocao'])\n  .and()\n  .price(15, 25)\n  .run(function(err, result) {\n   console.log(err, result);\n  })"
     ],
-    "lineNumber": 6,
+    "lineNumber": 23,
     "interface": false
   },
   {
@@ -34,21 +54,692 @@
     "static": false,
     "variation": null,
     "name": "constructor",
-    "memberof": "lib/yebo_sdk/request.js~MyClass",
-    "longname": "lib/yebo_sdk/request.js~MyClass#constructor",
+    "memberof": "lib/yebo_sdk/query.js~Query",
+    "longname": "lib/yebo_sdk/query.js~Query#constructor",
     "access": null,
-    "description": "this is constructor description.",
-    "lineNumber": 12,
+    "description": null,
+    "lineNumber": 27,
+    "todo": [
+      "Create a new query based in other"
+    ],
+    "params": [],
+    "generator": false
+  },
+  {
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_search",
+    "memberof": "lib/yebo_sdk/query.js~Query",
+    "longname": "lib/yebo_sdk/query.js~Query#_search",
+    "access": null,
+    "description": null,
+    "lineNumber": 29,
+    "undocument": true,
+    "type": {
+      "types": [
+        "string"
+      ]
+    }
+  },
+  {
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_filter",
+    "memberof": "lib/yebo_sdk/query.js~Query",
+    "longname": "lib/yebo_sdk/query.js~Query#_filter",
+    "access": null,
+    "description": null,
+    "lineNumber": 30,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_sort",
+    "memberof": "lib/yebo_sdk/query.js~Query",
+    "longname": "lib/yebo_sdk/query.js~Query#_sort",
+    "access": null,
+    "description": null,
+    "lineNumber": 34,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_page",
+    "memberof": "lib/yebo_sdk/query.js~Query",
+    "longname": "lib/yebo_sdk/query.js~Query#_page",
+    "access": null,
+    "description": null,
+    "lineNumber": 36,
+    "undocument": true,
+    "type": {
+      "types": [
+        "number"
+      ]
+    }
+  },
+  {
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_perPage",
+    "memberof": "lib/yebo_sdk/query.js~Query",
+    "longname": "lib/yebo_sdk/query.js~Query#_perPage",
+    "access": null,
+    "description": null,
+    "lineNumber": 37,
+    "undocument": true,
+    "type": {
+      "types": [
+        "number"
+      ]
+    }
+  },
+  {
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_currentOperator",
+    "memberof": "lib/yebo_sdk/query.js~Query",
+    "longname": "lib/yebo_sdk/query.js~Query#_currentOperator",
+    "access": null,
+    "description": null,
+    "lineNumber": 39,
+    "undocument": true,
+    "type": {
+      "types": [
+        "string"
+      ]
+    }
+  },
+  {
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "price",
+    "memberof": "lib/yebo_sdk/query.js~Query",
+    "longname": "lib/yebo_sdk/query.js~Query#price",
+    "access": null,
+    "description": "Price range filter",
+    "examples": [
+      "query.price(0, 15);\n// or...\nquery.price(15, 30);\n// or...\nquery.price(30);"
+    ],
+    "lineNumber": 51,
+    "params": [
+      {
+        "name": "values",
+        "types": [
+          "...*"
+        ],
+        "spread": true
+      }
+    ],
+    "return": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "taxonomy",
+    "memberof": "lib/yebo_sdk/query.js~Query",
+    "longname": "lib/yebo_sdk/query.js~Query#taxonomy",
+    "access": null,
+    "description": "Make an query in the taxonomies",
+    "examples": [
+      "query.taxonomy(['camisetas', 'promocao']);"
+    ],
+    "lineNumber": 72,
     "params": [
       {
         "nullable": null,
         "types": [
-          "number"
+          "array"
         ],
         "spread": false,
         "optional": false,
-        "name": "arg1",
-        "description": "this is arg1 description."
+        "name": "values",
+        "description": "Array that will be searched"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "string"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "field",
+        "description": "The field that the values will match"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "string"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "execution",
+        "description": "The execution value"
+      }
+    ],
+    "return": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "filter",
+    "memberof": "lib/yebo_sdk/query.js~Query",
+    "longname": "lib/yebo_sdk/query.js~Query#filter",
+    "access": null,
+    "description": "Make an query in Yebo Filters",
+    "examples": [
+      "query.filter('cor', ['azul', 'amarelo']);"
+    ],
+    "lineNumber": 90,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "string"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "name",
+        "description": "Filter name"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "array"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "values",
+        "description": "Array with the values that will be searched"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "string"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "execution",
+        "description": "The execution value"
+      }
+    ],
+    "return": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "page",
+    "memberof": "lib/yebo_sdk/query.js~Query",
+    "longname": "lib/yebo_sdk/query.js~Query#page",
+    "access": null,
+    "description": "Set the search page",
+    "lineNumber": 104,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "integer"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "page",
+        "description": "Page number"
+      }
+    ],
+    "return": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_page",
+    "memberof": "lib/yebo_sdk/query.js~Query",
+    "longname": "lib/yebo_sdk/query.js~Query#_page",
+    "access": null,
+    "description": null,
+    "lineNumber": 106,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "perPage",
+    "memberof": "lib/yebo_sdk/query.js~Query",
+    "longname": "lib/yebo_sdk/query.js~Query#perPage",
+    "access": null,
+    "description": "Set the per page results",
+    "lineNumber": 116,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "integer"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "perPage",
+        "description": "Per page number"
+      }
+    ],
+    "return": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_perPage",
+    "memberof": "lib/yebo_sdk/query.js~Query",
+    "longname": "lib/yebo_sdk/query.js~Query#_perPage",
+    "access": null,
+    "description": null,
+    "lineNumber": 118,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "or",
+    "memberof": "lib/yebo_sdk/query.js~Query",
+    "longname": "lib/yebo_sdk/query.js~Query#or",
+    "access": null,
+    "description": "Change the current operator to `or`",
+    "lineNumber": 127,
+    "params": [],
+    "return": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_currentOperator",
+    "memberof": "lib/yebo_sdk/query.js~Query",
+    "longname": "lib/yebo_sdk/query.js~Query#_currentOperator",
+    "access": null,
+    "description": null,
+    "lineNumber": 129,
+    "undocument": true,
+    "type": {
+      "types": [
+        "string"
+      ]
+    }
+  },
+  {
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "and",
+    "memberof": "lib/yebo_sdk/query.js~Query",
+    "longname": "lib/yebo_sdk/query.js~Query#and",
+    "access": null,
+    "description": "Change the current operator to `and`",
+    "lineNumber": 138,
+    "params": [],
+    "return": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_currentOperator",
+    "memberof": "lib/yebo_sdk/query.js~Query",
+    "longname": "lib/yebo_sdk/query.js~Query#_currentOperator",
+    "access": null,
+    "description": null,
+    "lineNumber": 140,
+    "undocument": true,
+    "type": {
+      "types": [
+        "string"
+      ]
+    }
+  },
+  {
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "search",
+    "memberof": "lib/yebo_sdk/query.js~Query",
+    "longname": "lib/yebo_sdk/query.js~Query#search",
+    "access": null,
+    "description": "Search products by the name",
+    "examples": [
+      "query.search('product-name');"
+    ],
+    "lineNumber": 152,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "string"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "name",
+        "description": "Name that will be searched"
+      }
+    ],
+    "return": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_search",
+    "memberof": "lib/yebo_sdk/query.js~Query",
+    "longname": "lib/yebo_sdk/query.js~Query#_search",
+    "access": null,
+    "description": null,
+    "lineNumber": 154,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "sort",
+    "memberof": "lib/yebo_sdk/query.js~Query",
+    "longname": "lib/yebo_sdk/query.js~Query#sort",
+    "access": null,
+    "description": "Sort the search by a specific field and order",
+    "examples": [
+      "query.sort('price', 'asc');"
+    ],
+    "lineNumber": 167,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "string"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "field",
+        "description": "Field that will be used to order. Suported: `name`, `price`"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "string"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "order",
+        "description": "`asc` or `desc`"
+      }
+    ],
+    "return": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_sort",
+    "memberof": "lib/yebo_sdk/query.js~Query",
+    "longname": "lib/yebo_sdk/query.js~Query#_sort",
+    "access": null,
+    "description": null,
+    "lineNumber": 169,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "build",
+    "memberof": "lib/yebo_sdk/query.js~Query",
+    "longname": "lib/yebo_sdk/query.js~Query#build",
+    "access": null,
+    "description": "Will generate the object that will be sent to Yebo",
+    "examples": [
+      "query.build();"
+    ],
+    "lineNumber": 183,
+    "params": [],
+    "return": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "_generateFilter",
+    "memberof": "lib/yebo_sdk/query.js~Query",
+    "longname": "lib/yebo_sdk/query.js~Query#_generateFilter",
+    "access": null,
+    "description": "Generate the filter with the _currentOperator",
+    "lineNumber": 206,
+    "params": [
+      {
+        "name": "filter",
+        "types": [
+          "*"
+        ]
+      }
+    ],
+    "generator": false
+  },
+  {
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "_format",
+    "memberof": "lib/yebo_sdk/query.js~Query",
+    "longname": "lib/yebo_sdk/query.js~Query#_format",
+    "access": null,
+    "description": "Generate an API like data structure",
+    "lineNumber": 217,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "string"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "name",
+        "description": "The name of the filter"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "array"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "values",
+        "description": "The group of values"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "string"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "field",
+        "description": "The field that will be searched"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "string"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "execution",
+        "description": "How the `values` are related. `or` `and`"
+      }
+    ],
+    "return": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "kind": "file",
+    "static": true,
+    "variation": null,
+    "name": "lib/yebo_sdk/request.js",
+    "memberof": null,
+    "longname": "lib/yebo_sdk/request.js",
+    "access": null,
+    "description": null,
+    "lineNumber": 3,
+    "content": "// Variables\n// var chunk = require('lodash');\nvar assign = require('lodash/object/assign'),\n    RSVP = require('rsvp');\n\n/**\n * Request class\n * @example\n * let myClass = new Request('http://google.com');\n */\nexport default class Request {\n  /**\n   * This method make a request\n   * @param {string[]} url The url that will be requested\n   * @param {string[]} method Method used to request\n   * @param {object} data The content that will be sended\n   * @param {object} header Request headers\n   * @return {RVSP.Promise} Request promise\n   */\n  constructor(url, method = 'GET', data = {}, header = {}) {\n    // Setting the class\n    let xhrClass = XMLHttpRequest || ActiveXObject;\n\n    // XHR Object\n    let xhr = new xhrClass('MSXML2.XMLHTTP.3.0');\n\n    // Define the headers\n    let headers = assign({\n      'X-Requested-With': 'XMLHttpRequest',\n      'Content-type': 'application/x-www-form-urlencoded'\n    }, header);\n\n    // Return a Promise\n    return new RSVP.Promise((resolve, reject) => {\n      // Open the URL\n      xhr.open(method, url, 1);\n\n      // Set the headers\n      for( let h in headers ) {\n        xhr.setRequestHeader(h, headers[h]);\n      }\n\n      // Define the callback\n      xhr.onreadystatechange = () => {\n        // Checks if the ajax has ended\n        if( xhr.readyState > 3 ) {\n          // Check the request status\n          if( xhr.status === 200 )\n            resolve(this.parseResponse(xhr), xhr);\n          else\n            reject(xhr);\n        }\n      };\n\n      // Send the data\n      xhr.send(data);\n    });\n  }\n\n  /**\n   * Parse the XHR response according to the type\n   * @param {XMLHttpRequest} xhr A request object\n   * @return {object/string} The response foratted\n   */\n  parseResponse(xhr) {\n    return JSON.parse(xhr.responseText);\n  }\n}\n"
+  },
+  {
+    "kind": "variable",
+    "static": true,
+    "variation": null,
+    "name": "assign",
+    "memberof": "lib/yebo_sdk/request.js",
+    "longname": "lib/yebo_sdk/request.js~assign",
+    "access": null,
+    "export": false,
+    "importPath": "yebo_sdk/lib/yebo_sdk/request.js",
+    "importStyle": null,
+    "description": null,
+    "lineNumber": 3,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "kind": "class",
+    "static": true,
+    "variation": null,
+    "name": "Request",
+    "memberof": "lib/yebo_sdk/request.js",
+    "longname": "lib/yebo_sdk/request.js~Request",
+    "access": null,
+    "export": true,
+    "importPath": "yebo_sdk/lib/yebo_sdk/request.js",
+    "importStyle": "Request",
+    "description": "Request class",
+    "examples": [
+      "let myClass = new Request('http://google.com');"
+    ],
+    "lineNumber": 11,
+    "interface": false
+  },
+  {
+    "kind": "constructor",
+    "static": false,
+    "variation": null,
+    "name": "constructor",
+    "memberof": "lib/yebo_sdk/request.js~Request",
+    "longname": "lib/yebo_sdk/request.js~Request#constructor",
+    "access": null,
+    "description": "This method make a request",
+    "lineNumber": 20,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "string[]"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "url",
+        "description": "The url that will be requested"
       },
       {
         "nullable": null,
@@ -57,10 +748,70 @@
         ],
         "spread": false,
         "optional": false,
-        "name": "arg2",
-        "description": "this is arg2 description."
+        "name": "method",
+        "description": "Method used to request"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "object"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "data",
+        "description": "The content that will be sended"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "object"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "header",
+        "description": "Request headers"
       }
     ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "RVSP.Promise"
+      ],
+      "spread": false,
+      "description": "Request promise"
+    },
+    "generator": false
+  },
+  {
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "parseResponse",
+    "memberof": "lib/yebo_sdk/request.js~Request",
+    "longname": "lib/yebo_sdk/request.js~Request#parseResponse",
+    "access": null,
+    "description": "Parse the XHR response according to the type",
+    "lineNumber": 65,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "XMLHttpRequest"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "xhr",
+        "description": "A request object"
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "object/string"
+      ],
+      "spread": false,
+      "description": "The response foratted"
+    },
     "generator": false
   },
   {
@@ -72,8 +823,8 @@
     "longname": "lib/yebo_sdk.js",
     "access": null,
     "description": null,
-    "lineNumber": 0,
-    "content": ""
+    "lineNumber": 2,
+    "content": "//\n"
   },
   {
     "kind": "external",

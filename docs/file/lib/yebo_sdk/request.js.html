@@ -27,7 +27,14 @@
   </div>
 </header>
 
-<nav class="navigation" data-ice="nav">
+<nav class="navigation" data-ice="nav"><div data-ice="classWrap">
+  <h2>Class</h2>
+  <ul>
+    
+  <li data-ice="classDoc"><span><a href="class/lib/yebo_sdk/query.js~Query.html">Query</a></span></li>
+<li data-ice="classDoc"><span><a href="class/lib/yebo_sdk/request.js~Request.html">Request</a></span></li>
+</ul>
+</div>
 
 
 
@@ -41,19 +48,72 @@
 </nav>
 
 <div class="content" data-ice="content"><h1 data-ice="title">lib/yebo_sdk/request.js</h1>
-<pre class="source-code line-number"><code class="prettyprint linenums" data-ice="content">/**
- * this is MyClass description.
+<pre class="source-code line-number"><code class="prettyprint linenums" data-ice="content">// Variables
+// var chunk = require(&apos;lodash&apos;);
+var assign = require(&apos;lodash/object/assign&apos;),
+    RSVP = require(&apos;rsvp&apos;);
+
+/**
+ * Request class
  * @example
- * let myClass = new MyClass();
+ * let myClass = new Request(&apos;http://google.com&apos;);
  */
-class MyClass {
+export default class Request {
   /**
-   * this is constructor description.
-   * @param {number} arg1 this is arg1 description.
-   * @param {string[]} arg2 this is arg2 description.
+   * This method make a request
+   * @param {string[]} url The url that will be requested
+   * @param {string[]} method Method used to request
+   * @param {object} data The content that will be sended
+   * @param {object} header Request headers
+   * @return {RVSP.Promise} Request promise
    */
-  constructor(arg1, arg2) {
-    console.log(&apos;Hello&apos;);
+  constructor(url, method = &apos;GET&apos;, data = {}, header = {}) {
+    // Setting the class
+    let xhrClass = XMLHttpRequest || ActiveXObject;
+
+    // XHR Object
+    let xhr = new xhrClass(&apos;MSXML2.XMLHTTP.3.0&apos;);
+
+    // Define the headers
+    let headers = assign({
+      &apos;X-Requested-With&apos;: &apos;XMLHttpRequest&apos;,
+      &apos;Content-type&apos;: &apos;application/x-www-form-urlencoded&apos;
+    }, header);
+
+    // Return a Promise
+    return new RSVP.Promise((resolve, reject) =&gt; {
+      // Open the URL
+      xhr.open(method, url, 1);
+
+      // Set the headers
+      for( let h in headers ) {
+        xhr.setRequestHeader(h, headers[h]);
+      }
+
+      // Define the callback
+      xhr.onreadystatechange = () =&gt; {
+        // Checks if the ajax has ended
+        if( xhr.readyState &gt; 3 ) {
+          // Check the request status
+          if( xhr.status === 200 )
+            resolve(this.parseResponse(xhr), xhr);
+          else
+            reject(xhr);
+        }
+      };
+
+      // Send the data
+      xhr.send(data);
+    });
+  }
+
+  /**
+   * Parse the XHR response according to the type
+   * @param {XMLHttpRequest} xhr A request object
+   * @return {object/string} The response foratted
+   */
+  parseResponse(xhr) {
+    return JSON.parse(xhr.responseText);
   }
 }
 </code></pre>
