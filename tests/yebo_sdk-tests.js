@@ -34,7 +34,7 @@ var isArray = require('lodash/lang/isArray'),
 
 var Query = (function () {
   /**
-   *
+   * @todo Create a new query based in other
    */
 
   function Query() {
@@ -10059,10 +10059,12 @@ module.exports = function () {
       var query = new _libYebo_sdkQuery2['default']();
 
       // Do the query
-      query.search('product-name').and().taxonomy(['camisetas', 'promocao']).and().filter('color', ['blue', 'red']).and().price(0, 30);
+      query.search('product-name').and().taxonomy(['camisetas', 'promocao']).and().filter('color', ['blue', 'red']).and().sort('price', 'asc').price(0, 30).page(1).perPage(15);
 
       // Build it
       var build = query.build();
+
+      console.log(build);
 
       // Assertions
       expect(build).to.have.property('page');

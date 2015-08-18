@@ -182,7 +182,10 @@ module.exports = function() {
         .and()
         .filter('color', ['blue', 'red'])
         .and()
-        .price(0, 30);
+        .sort('price', 'asc')
+        .price(0, 30)
+        .page(1)
+        .perPage(15);
 
       // Build it
       let build = query.build();
