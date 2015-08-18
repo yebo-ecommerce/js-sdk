@@ -10,7 +10,8 @@ var _createClass = (function () { function defineProperties(target, props) { for
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-var isArray = require('lodash/lang/isArray');
+var isArray = require('lodash/lang/isArray'),
+    isEmpty = require('lodash/lang/isEmpty');
 
 /**
  * Query class
@@ -18,6 +19,7 @@ var isArray = require('lodash/lang/isArray');
  * var query = new Query();
 
  * query
+ *   .search('camiseta')
  *   .filter('cor', ['azul', 'amarelo'])
  *   .and()
  *   .taxonony(['marcas', 'camisetas'])
@@ -25,21 +27,225 @@ var isArray = require('lodash/lang/isArray');
  *   .taxonomy(['promocao'])
  *   .and()
  *   .price(15, 25)
+ *   .run(function(err, result) {
+ *    console.log(err, result);
+ *   })
  */
 
 var Query = (function () {
+  /**
+   *
+   */
+
   function Query() {
     _classCallCheck(this, Query);
+
+    // Initialize
+    this._search = '';
+    this._filter = {
+      and: [],
+      or: []
+    };
+    this._sort = {};
+
+    this._page = 1;
+    this._perPage = 15;
+
+    this._currentOperator = 'or';
   }
 
+  /**
+   * Price range filter
+   * @example
+   * query.price(0, 15);
+   * // or...
+   * query.price(15, 30);
+   * // or...
+   * query.price(30);
+   */
+
   _createClass(Query, [{
-    key: 'filter',
+    key: 'price',
+    value: function price() {
+      for (var _len = arguments.length, values = Array(_len), _key = 0; _key < _len; _key++) {
+        values[_key] = arguments[_key];
+      }
+
+      if (values.length > 2) throw 'price range just accept two values';
+
+      // Generate the filter
+      this._generateFilter(this._format('price', values, '', 'range'));
+
+      // Return the instance
+      return this;
+    }
 
     /**
+     * Make an query in the taxonomies
+     * @param {array} values Array that will be searched
+     * @param {string} field The field that the values will match
+     * @param {string} execution The execution value
      * @example
-     * query.filter()
+     * query.taxonomy(['camisetas', 'promocao']);
      */
-    value: function filter() {}
+  }, {
+    key: 'taxonomy',
+    value: function taxonomy(values) {
+      var field = arguments.length <= 1 || arguments[1] === undefined ? 'permalink' : arguments[1];
+      var execution = arguments.length <= 2 || arguments[2] === undefined ? 'and' : arguments[2];
+
+      // Generate the filter
+      this._generateFilter(this._format('taxonomy', values, field, 'fixed', execution));
+
+      // Return the instance
+      return this;
+    }
+
+    /**
+     * Make an query in Yebo Filters
+     * @param {string} name Filter name
+     * @param {array} values Array with the values that will be searched
+     * @param {string} execution The execution value
+     * @example
+     * query.filter('cor', ['azul', 'amarelo']);
+     */
+  }, {
+    key: 'filter',
+    value: function filter(name, values) {
+      var execution = arguments.length <= 2 || arguments[2] === undefined ? 'and' : arguments[2];
+
+      // Generate the filter
+      this._generateFilter(this._format(name, values, '', 'fixed', execution));
+
+      // Return the instance
+      return this;
+    }
+
+    /**
+     * Set the search page
+     * @param {integer} page Page number
+     */
+  }, {
+    key: 'page',
+    value: function page(_page) {
+      //
+      this._page = _page;
+
+      // Return the instance
+      return this;
+    }
+
+    /**
+     * Set the per page results
+     * @param {integer} perPage Per page number
+     */
+  }, {
+    key: 'perPage',
+    value: function perPage(_perPage) {
+      //
+      this._perPage = _perPage;
+
+      // Return the instance
+      return this;
+    }
+
+    /**
+     * Change the current operator to `or`
+     */
+  }, {
+    key: 'or',
+    value: function or() {
+      // Set the current operator
+      this._currentOperator = 'or';
+
+      // Return the instance
+      return this;
+    }
+
+    /**
+     * Change the current operator to `and`
+     */
+  }, {
+    key: 'and',
+    value: function and() {
+      // Set the current operator
+      this._currentOperator = 'and';
+
+      // Return the instance
+      return this;
+    }
+
+    /**
+     * Search products by the name
+     * @param {string} name Name that will be searched
+     * @example
+     * query.search('product-name');
+     */
+  }, {
+    key: 'search',
+    value: function search(name) {
+      // Set the search
+      this._search = name;
+
+      // Return the instance
+      return this;
+    }
+
+    /**
+     * Sort the search by a specific field and order
+     * @param {string} field Field that will be used to order. Suported: `name`, `price`
+     * @param {string} order `asc` or `desc`
+     * @example
+     * query.sort('price', 'asc');
+     */
+  }, {
+    key: 'sort',
+    value: function sort(field) {
+      var order = arguments.length <= 1 || arguments[1] === undefined ? 'asc' : arguments[1];
+
+      // Set sort
+      this._sort = {
+        field: field,
+        order: order
+      };
+
+      // Return the instance
+      return this;
+    }
+
+    /**
+     * Will generate the object that will be sent to Yebo
+     * @example
+     * query.build();
+     */
+  }, {
+    key: 'build',
+    value: function build() {
+      // Create result
+      var result = {
+        page: this._page,
+        per_page: this._perPage,
+        filters: this._filter
+      };
+
+      //
+      if (this._search !== '') result.name = this._search;
+
+      //
+      if (!isEmpty(this._sort)) result.sort = this._sort;
+
+      // Return the result
+      return result;
+    }
+
+    /**
+     * Generate the filter with the _currentOperator
+     */
+  }, {
+    key: '_generateFilter',
+    value: function _generateFilter(filter) {
+      this._filter[this._currentOperator].push(filter);
+    }
 
     /**
      * Generate an API like data structure
@@ -77,7 +283,7 @@ var Query = (function () {
 exports['default'] = Query;
 module.exports = exports['default'];
 
-},{"lodash/lang/isArray":58}],2:[function(require,module,exports){
+},{"lodash/lang/isArray":58,"lodash/lang/isEmpty":59}],2:[function(require,module,exports){
 // Variables
 // var chunk = require('lodash');
 'use strict';
@@ -174,7 +380,7 @@ var Request = (function () {
 exports['default'] = Request;
 module.exports = exports['default'];
 
-},{"lodash/object/assign":62,"rsvp":66}],3:[function(require,module,exports){
+},{"lodash/object/assign":64,"rsvp":68}],3:[function(require,module,exports){
 module.exports = require('./lib/chai');
 
 },{"./lib/chai":4}],4:[function(require,module,exports){
@@ -7276,7 +7482,7 @@ function assignWith(object, source, customizer) {
 
 module.exports = assignWith;
 
-},{"../object/keys":63}],44:[function(require,module,exports){
+},{"../object/keys":65}],44:[function(require,module,exports){
 var baseCopy = require('./baseCopy'),
     keys = require('../object/keys');
 
@@ -7297,7 +7503,7 @@ function baseAssign(object, source) {
 
 module.exports = baseAssign;
 
-},{"../object/keys":63,"./baseCopy":45}],45:[function(require,module,exports){
+},{"../object/keys":65,"./baseCopy":45}],45:[function(require,module,exports){
 /**
  * Copies properties of `source` to `object`.
  *
@@ -7379,7 +7585,7 @@ function bindCallback(func, thisArg, argCount) {
 
 module.exports = bindCallback;
 
-},{"../utility/identity":65}],48:[function(require,module,exports){
+},{"../utility/identity":67}],48:[function(require,module,exports){
 var bindCallback = require('./bindCallback'),
     isIterateeCall = require('./isIterateeCall'),
     restParam = require('../function/restParam');
@@ -7457,7 +7663,7 @@ function getNative(object, key) {
 
 module.exports = getNative;
 
-},{"../lang/isNative":60}],51:[function(require,module,exports){
+},{"../lang/isNative":61}],51:[function(require,module,exports){
 var getLength = require('./getLength'),
     isLength = require('./isLength');
 
@@ -7530,7 +7736,7 @@ function isIterateeCall(value, index, object) {
 
 module.exports = isIterateeCall;
 
-},{"../lang/isObject":61,"./isArrayLike":51,"./isIndex":52}],54:[function(require,module,exports){
+},{"../lang/isObject":62,"./isArrayLike":51,"./isIndex":52}],54:[function(require,module,exports){
 /**
  * Used as the [maximum length](http://ecma-international.org/ecma-262/6.0/#sec-number.max_safe_integer)
  * of an array-like value.
@@ -7609,7 +7815,7 @@ function shimKeys(object) {
 
 module.exports = shimKeys;
 
-},{"../lang/isArguments":57,"../lang/isArray":58,"../object/keysIn":64,"./isIndex":52,"./isLength":54}],57:[function(require,module,exports){
+},{"../lang/isArguments":57,"../lang/isArray":58,"../object/keysIn":66,"./isIndex":52,"./isLength":54}],57:[function(require,module,exports){
 var isArrayLike = require('../internal/isArrayLike'),
     isObjectLike = require('../internal/isObjectLike');
 
@@ -7688,6 +7894,55 @@ var isArray = nativeIsArray || function(value) {
 module.exports = isArray;
 
 },{"../internal/getNative":50,"../internal/isLength":54,"../internal/isObjectLike":55}],59:[function(require,module,exports){
+var isArguments = require('./isArguments'),
+    isArray = require('./isArray'),
+    isArrayLike = require('../internal/isArrayLike'),
+    isFunction = require('./isFunction'),
+    isObjectLike = require('../internal/isObjectLike'),
+    isString = require('./isString'),
+    keys = require('../object/keys');
+
+/**
+ * Checks if `value` is empty. A value is considered empty unless it's an
+ * `arguments` object, array, string, or jQuery-like collection with a length
+ * greater than `0` or an object with own enumerable properties.
+ *
+ * @static
+ * @memberOf _
+ * @category Lang
+ * @param {Array|Object|string} value The value to inspect.
+ * @returns {boolean} Returns `true` if `value` is empty, else `false`.
+ * @example
+ *
+ * _.isEmpty(null);
+ * // => true
+ *
+ * _.isEmpty(true);
+ * // => true
+ *
+ * _.isEmpty(1);
+ * // => true
+ *
+ * _.isEmpty([1, 2, 3]);
+ * // => false
+ *
+ * _.isEmpty({ 'a': 1 });
+ * // => false
+ */
+function isEmpty(value) {
+  if (value == null) {
+    return true;
+  }
+  if (isArrayLike(value) && (isArray(value) || isString(value) || isArguments(value) ||
+      (isObjectLike(value) && isFunction(value.splice)))) {
+    return !value.length;
+  }
+  return !keys(value).length;
+}
+
+module.exports = isEmpty;
+
+},{"../internal/isArrayLike":51,"../internal/isObjectLike":55,"../object/keys":65,"./isArguments":57,"./isArray":58,"./isFunction":60,"./isString":63}],60:[function(require,module,exports){
 var isObject = require('./isObject');
 
 /** `Object#toString` result references. */
@@ -7727,7 +7982,7 @@ function isFunction(value) {
 
 module.exports = isFunction;
 
-},{"./isObject":61}],60:[function(require,module,exports){
+},{"./isObject":62}],61:[function(require,module,exports){
 var isFunction = require('./isFunction'),
     isObjectLike = require('../internal/isObjectLike');
 
@@ -7777,7 +8032,7 @@ function isNative(value) {
 
 module.exports = isNative;
 
-},{"../internal/isObjectLike":55,"./isFunction":59}],61:[function(require,module,exports){
+},{"../internal/isObjectLike":55,"./isFunction":60}],62:[function(require,module,exports){
 /**
  * Checks if `value` is the [language type](https://es5.github.io/#x8) of `Object`.
  * (e.g. arrays, functions, objects, regexes, `new Number(0)`, and `new String('')`)
@@ -7807,7 +8062,44 @@ function isObject(value) {
 
 module.exports = isObject;
 
-},{}],62:[function(require,module,exports){
+},{}],63:[function(require,module,exports){
+var isObjectLike = require('../internal/isObjectLike');
+
+/** `Object#toString` result references. */
+var stringTag = '[object String]';
+
+/** Used for native method references. */
+var objectProto = Object.prototype;
+
+/**
+ * Used to resolve the [`toStringTag`](http://ecma-international.org/ecma-262/6.0/#sec-object.prototype.tostring)
+ * of values.
+ */
+var objToString = objectProto.toString;
+
+/**
+ * Checks if `value` is classified as a `String` primitive or object.
+ *
+ * @static
+ * @memberOf _
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is correctly classified, else `false`.
+ * @example
+ *
+ * _.isString('abc');
+ * // => true
+ *
+ * _.isString(1);
+ * // => false
+ */
+function isString(value) {
+  return typeof value == 'string' || (isObjectLike(value) && objToString.call(value) == stringTag);
+}
+
+module.exports = isString;
+
+},{"../internal/isObjectLike":55}],64:[function(require,module,exports){
 var assignWith = require('../internal/assignWith'),
     baseAssign = require('../internal/baseAssign'),
     createAssigner = require('../internal/createAssigner');
@@ -7852,7 +8144,7 @@ var assign = createAssigner(function(object, source, customizer) {
 
 module.exports = assign;
 
-},{"../internal/assignWith":43,"../internal/baseAssign":44,"../internal/createAssigner":48}],63:[function(require,module,exports){
+},{"../internal/assignWith":43,"../internal/baseAssign":44,"../internal/createAssigner":48}],65:[function(require,module,exports){
 var getNative = require('../internal/getNative'),
     isArrayLike = require('../internal/isArrayLike'),
     isObject = require('../lang/isObject'),
@@ -7899,7 +8191,7 @@ var keys = !nativeKeys ? shimKeys : function(object) {
 
 module.exports = keys;
 
-},{"../internal/getNative":50,"../internal/isArrayLike":51,"../internal/shimKeys":56,"../lang/isObject":61}],64:[function(require,module,exports){
+},{"../internal/getNative":50,"../internal/isArrayLike":51,"../internal/shimKeys":56,"../lang/isObject":62}],66:[function(require,module,exports){
 var isArguments = require('../lang/isArguments'),
     isArray = require('../lang/isArray'),
     isIndex = require('../internal/isIndex'),
@@ -7965,7 +8257,7 @@ function keysIn(object) {
 
 module.exports = keysIn;
 
-},{"../internal/isIndex":52,"../internal/isLength":54,"../lang/isArguments":57,"../lang/isArray":58,"../lang/isObject":61}],65:[function(require,module,exports){
+},{"../internal/isIndex":52,"../internal/isLength":54,"../lang/isArguments":57,"../lang/isArray":58,"../lang/isObject":62}],67:[function(require,module,exports){
 /**
  * This method returns the first argument provided to it.
  *
@@ -7987,7 +8279,7 @@ function identity(value) {
 
 module.exports = identity;
 
-},{}],66:[function(require,module,exports){
+},{}],68:[function(require,module,exports){
 (function (process,global){
 /*!
  * @overview RSVP - a tiny implementation of Promises/A+.
@@ -9588,13 +9880,13 @@ module.exports = identity;
 
 
 }).call(this,require("1YiZ5S"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"1YiZ5S":41}],67:[function(require,module,exports){
+},{"1YiZ5S":41}],69:[function(require,module,exports){
 'use strict';
 
 require('./yebo_sdk/request.js')();
 require('./yebo_sdk/query.js')();
 
-},{"./yebo_sdk/query.js":68,"./yebo_sdk/request.js":69}],68:[function(require,module,exports){
+},{"./yebo_sdk/query.js":70,"./yebo_sdk/request.js":71}],70:[function(require,module,exports){
 // Testing requests
 'use strict';
 
@@ -9617,7 +9909,7 @@ module.exports = function () {
     // });
 
     //
-    it('should format the filter correctly', function () {
+    it('should format the filter', function () {
       // Create new query
       var query = new _libYebo_sdkQuery2['default']();
 
@@ -9631,10 +9923,157 @@ module.exports = function () {
       expect(formatted).to.have.property('type');
       expect(formatted).to.have.property('execution');
     });
+
+    //
+    it('should generate the filter', function () {
+      // Create new query
+      var query = new _libYebo_sdkQuery2['default']();
+
+      // Do the query
+      query.filter('color', ['blue', 'red']);
+
+      // Assertions
+      expect(query._filter.or).to.have.length(1);
+    });
+
+    //
+    it('should generate two filters with `and` operator', function () {
+      // Create new query
+      var query = new _libYebo_sdkQuery2['default']();
+
+      // Do the query
+      query.filter('color', ['blue', 'red']).and().filter('size', ['s', 'm', 'l']);
+
+      // Assertions
+      expect(query._filter.or).to.have.length(1);
+      expect(query._filter.and).to.have.length(1);
+    });
+
+    //
+    it('should generate a taxonomy filter', function () {
+      // Create new query
+      var query = new _libYebo_sdkQuery2['default']();
+
+      // Do the query
+      query.taxonomy(['camisetas', 'promocao']);
+
+      // Assertions
+      expect(query._filter.or).to.have.length(1);
+
+      expect(query._filter.or[0].name).to.equal('taxonomy');
+      expect(query._filter.or[0].field).to.equal('permalink');
+
+      expect(query._filter.or[0]).to.have.property('values');
+      expect(query._filter.or[0]).to.have.property('type');
+      expect(query._filter.or[0]).to.have.property('execution');
+    });
+
+    //
+    it('should generate a price filter with two values', function () {
+      // Create new query
+      var query = new _libYebo_sdkQuery2['default']();
+
+      // Do the query
+      query.price(0, 15);
+
+      // Assertions
+      expect(query._filter.or).to.have.length(1);
+
+      expect(query._filter.or[0].name).to.equal('price');
+      expect(query._filter.or[0].values).to.be.a('array');
+      expect(query._filter.or[0].values).to.have.length(2);
+
+      expect(query._filter.or[0].values[0]).to.equal(0);
+      expect(query._filter.or[0].values[1]).to.equal(15);
+    });
+
+    //
+    it('should generate a price filter with one value', function () {
+      // Create new query
+      var query = new _libYebo_sdkQuery2['default']();
+
+      // Do the query
+      query.price(30);
+
+      // Assertions
+      expect(query._filter.or).to.have.length(1);
+
+      expect(query._filter.or[0].name).to.equal('price');
+      expect(query._filter.or[0].values).to.be.a('array');
+      expect(query._filter.or[0].values).to.have.length(1);
+
+      expect(query._filter.or[0].values[0]).to.equal(30);
+    });
+
+    //
+    it('should generate a sort', function () {
+      // Create new query
+      var query = new _libYebo_sdkQuery2['default']();
+
+      // Do the query
+      query.sort('price', 'asc');
+
+      // Assertions
+      expect(query._sort).to.have.property('field');
+      expect(query._sort).to.have.property('order');
+    });
+
+    //
+    it('should generate a search', function () {
+      // Create new query
+      var query = new _libYebo_sdkQuery2['default']();
+
+      // Do the query
+      query.search('product-name');
+
+      // Assertions
+      expect(query._search).to.equal('product-name');
+    });
+
+    //
+    it('should generate page', function () {
+      // Create new query
+      var query = new _libYebo_sdkQuery2['default']();
+
+      // Do the query
+      query.page(1);
+
+      // Assertions
+      expect(query._page).to.equal(1);
+    });
+
+    //
+    it('should generate per page', function () {
+      // Create new query
+      var query = new _libYebo_sdkQuery2['default']();
+
+      // Do the query
+      query.perPage(15);
+
+      // Assertions
+      expect(query._perPage).to.equal(15);
+    });
+
+    it('should build the query', function () {
+      // Create new query
+      var query = new _libYebo_sdkQuery2['default']();
+
+      // Do the query
+      query.search('product-name').and().taxonomy(['camisetas', 'promocao']).and().filter('color', ['blue', 'red']).and().price(0, 30);
+
+      // Build it
+      var build = query.build();
+
+      // Assertions
+      expect(build).to.have.property('page');
+      expect(build).to.have.property('per_page');
+      expect(build).to.have.property('filters');
+      expect(build).to.have.property('name');
+    });
   });
 };
 
-},{"../../lib/yebo_sdk/query":1,"chai":3}],69:[function(require,module,exports){
+},{"../../lib/yebo_sdk/query":1,"chai":3}],71:[function(require,module,exports){
 // Testing requests
 'use strict';
 
@@ -9668,4 +10107,4 @@ module.exports = function () {
   });
 };
 
-},{"../../lib/yebo_sdk/request":2,"chai":3}]},{},[67])
+},{"../../lib/yebo_sdk/request":2,"chai":3}]},{},[69])
