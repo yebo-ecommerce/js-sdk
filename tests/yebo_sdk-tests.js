@@ -14,9 +14,9 @@ var isArray = require('lodash/lang/isArray'),
     isEmpty = require('lodash/lang/isEmpty');
 
 /**
- * Query class
+ * Product Query class
  * @example
- * var query = new Query();
+ * var query = new ProductQuery();
 
  * query
  *   .search('camiseta')
@@ -32,13 +32,13 @@ var isArray = require('lodash/lang/isArray'),
  *   })
  */
 
-var Query = (function () {
+var ProductQuery = (function () {
   /**
    * @todo Create a new query based in other
    */
 
-  function Query() {
-    _classCallCheck(this, Query);
+  function ProductQuery() {
+    _classCallCheck(this, ProductQuery);
 
     // Initialize
     this._search = '';
@@ -64,7 +64,7 @@ var Query = (function () {
    * query.price(30);
    */
 
-  _createClass(Query, [{
+  _createClass(ProductQuery, [{
     key: 'price',
     value: function price() {
       for (var _len = arguments.length, values = Array(_len), _key = 0; _key < _len; _key++) {
@@ -277,10 +277,10 @@ var Query = (function () {
     }
   }]);
 
-  return Query;
+  return ProductQuery;
 })();
 
-exports['default'] = Query;
+exports['default'] = ProductQuery;
 module.exports = exports['default'];
 
 },{"lodash/lang/isArray":58,"lodash/lang/isEmpty":59}],2:[function(require,module,exports){
@@ -9881,20 +9881,23 @@ module.exports = identity;
 
 }).call(this,require("1YiZ5S"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{"1YiZ5S":41}],69:[function(require,module,exports){
+// Core
 'use strict';
 
 require('./yebo_sdk/request.js')();
-require('./yebo_sdk/query.js')();
 
-},{"./yebo_sdk/query.js":70,"./yebo_sdk/request.js":71}],70:[function(require,module,exports){
+// Query
+require('./yebo_sdk/query/product.js')();
+
+},{"./yebo_sdk/query/product.js":70,"./yebo_sdk/request.js":71}],70:[function(require,module,exports){
 // Testing requests
 'use strict';
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-var _libYebo_sdkQuery = require('../../lib/yebo_sdk/query');
+var _libYebo_sdkQueryProduct = require('../../../lib/yebo_sdk/query/product');
 
-var _libYebo_sdkQuery2 = _interopRequireDefault(_libYebo_sdkQuery);
+var _libYebo_sdkQueryProduct2 = _interopRequireDefault(_libYebo_sdkQueryProduct);
 
 //
 var assert = require('chai').assert,
@@ -9902,7 +9905,7 @@ var assert = require('chai').assert,
     should = require('chai').should();
 
 module.exports = function () {
-  describe('Query', function () {
+  describe('ProductQuery', function () {
     // IT template
     // it('', (done) => {
     //
@@ -9911,7 +9914,7 @@ module.exports = function () {
     //
     it('should format the filter', function () {
       // Create new query
-      var query = new _libYebo_sdkQuery2['default']();
+      var query = new _libYebo_sdkQueryProduct2['default']();
 
       // Format
       var formatted = query._format('color', ['blue', 'red']);
@@ -9927,7 +9930,7 @@ module.exports = function () {
     //
     it('should generate the filter', function () {
       // Create new query
-      var query = new _libYebo_sdkQuery2['default']();
+      var query = new _libYebo_sdkQueryProduct2['default']();
 
       // Do the query
       query.filter('color', ['blue', 'red']);
@@ -9939,7 +9942,7 @@ module.exports = function () {
     //
     it('should generate two filters with `and` operator', function () {
       // Create new query
-      var query = new _libYebo_sdkQuery2['default']();
+      var query = new _libYebo_sdkQueryProduct2['default']();
 
       // Do the query
       query.filter('color', ['blue', 'red']).and().filter('size', ['s', 'm', 'l']);
@@ -9952,7 +9955,7 @@ module.exports = function () {
     //
     it('should generate a taxonomy filter', function () {
       // Create new query
-      var query = new _libYebo_sdkQuery2['default']();
+      var query = new _libYebo_sdkQueryProduct2['default']();
 
       // Do the query
       query.taxonomy(['camisetas', 'promocao']);
@@ -9971,7 +9974,7 @@ module.exports = function () {
     //
     it('should generate a price filter with two values', function () {
       // Create new query
-      var query = new _libYebo_sdkQuery2['default']();
+      var query = new _libYebo_sdkQueryProduct2['default']();
 
       // Do the query
       query.price(0, 15);
@@ -9990,7 +9993,7 @@ module.exports = function () {
     //
     it('should generate a price filter with one value', function () {
       // Create new query
-      var query = new _libYebo_sdkQuery2['default']();
+      var query = new _libYebo_sdkQueryProduct2['default']();
 
       // Do the query
       query.price(30);
@@ -10008,7 +10011,7 @@ module.exports = function () {
     //
     it('should generate a sort', function () {
       // Create new query
-      var query = new _libYebo_sdkQuery2['default']();
+      var query = new _libYebo_sdkQueryProduct2['default']();
 
       // Do the query
       query.sort('price', 'asc');
@@ -10021,7 +10024,7 @@ module.exports = function () {
     //
     it('should generate a search', function () {
       // Create new query
-      var query = new _libYebo_sdkQuery2['default']();
+      var query = new _libYebo_sdkQueryProduct2['default']();
 
       // Do the query
       query.search('product-name');
@@ -10033,7 +10036,7 @@ module.exports = function () {
     //
     it('should generate page', function () {
       // Create new query
-      var query = new _libYebo_sdkQuery2['default']();
+      var query = new _libYebo_sdkQueryProduct2['default']();
 
       // Do the query
       query.page(1);
@@ -10045,7 +10048,7 @@ module.exports = function () {
     //
     it('should generate per page', function () {
       // Create new query
-      var query = new _libYebo_sdkQuery2['default']();
+      var query = new _libYebo_sdkQueryProduct2['default']();
 
       // Do the query
       query.perPage(15);
@@ -10056,15 +10059,13 @@ module.exports = function () {
 
     it('should build the query', function () {
       // Create new query
-      var query = new _libYebo_sdkQuery2['default']();
+      var query = new _libYebo_sdkQueryProduct2['default']();
 
       // Do the query
       query.search('product-name').and().taxonomy(['camisetas', 'promocao']).and().filter('color', ['blue', 'red']).and().sort('price', 'asc').price(0, 30).page(1).perPage(15);
 
       // Build it
       var build = query.build();
-
-      console.log(build);
 
       // Assertions
       expect(build).to.have.property('page');
@@ -10075,7 +10076,7 @@ module.exports = function () {
   });
 };
 
-},{"../../lib/yebo_sdk/query":1,"chai":3}],71:[function(require,module,exports){
+},{"../../../lib/yebo_sdk/query/product":1,"chai":3}],71:[function(require,module,exports){
 // Testing requests
 'use strict';
 

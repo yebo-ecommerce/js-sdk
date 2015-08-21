@@ -1,5 +1,5 @@
 // Testing requests
-import Query from '../../lib/yebo_sdk/query';
+import ProductQuery from '../../../lib/yebo_sdk/query/product';
 
 //
 var assert = require('chai').assert,
@@ -7,7 +7,7 @@ var assert = require('chai').assert,
     should = require('chai').should();
 
 module.exports = function() {
-  describe('Query', () => {
+  describe('ProductQuery', () => {
     // IT template
     // it('', (done) => {
     //
@@ -16,7 +16,7 @@ module.exports = function() {
     //
     it('should format the filter', () => {
       // Create new query
-      let query = new Query();
+      let query = new ProductQuery();
 
       // Format
       let formatted = query._format('color', ['blue', 'red']);
@@ -32,7 +32,7 @@ module.exports = function() {
     //
     it('should generate the filter', () => {
       // Create new query
-      let query = new Query();
+      let query = new ProductQuery();
 
       // Do the query
       query
@@ -45,7 +45,7 @@ module.exports = function() {
     //
     it('should generate two filters with `and` operator', () => {
       // Create new query
-      let query = new Query();
+      let query = new ProductQuery();
 
       // Do the query
       query
@@ -61,7 +61,7 @@ module.exports = function() {
     //
     it('should generate a taxonomy filter', () => {
       // Create new query
-      let query = new Query();
+      let query = new ProductQuery();
 
       // Do the query
       query
@@ -81,7 +81,7 @@ module.exports = function() {
     //
     it('should generate a price filter with two values', () => {
       // Create new query
-      let query = new Query();
+      let query = new ProductQuery();
 
       // Do the query
       query
@@ -101,7 +101,7 @@ module.exports = function() {
     //
     it('should generate a price filter with one value', () => {
       // Create new query
-      let query = new Query();
+      let query = new ProductQuery();
 
       // Do the query
       query
@@ -120,7 +120,7 @@ module.exports = function() {
     //
     it('should generate a sort', () => {
       // Create new query
-      let query = new Query();
+      let query = new ProductQuery();
 
       // Do the query
       query
@@ -134,7 +134,7 @@ module.exports = function() {
     //
     it('should generate a search', () => {
       // Create new query
-      let query = new Query();
+      let query = new ProductQuery();
 
       // Do the query
       query
@@ -147,7 +147,7 @@ module.exports = function() {
     //
     it('should generate page', () => {
       // Create new query
-      let query = new Query();
+      let query = new ProductQuery();
 
       // Do the query
       query
@@ -160,7 +160,7 @@ module.exports = function() {
     //
     it('should generate per page', () => {
       // Create new query
-      let query = new Query();
+      let query = new ProductQuery();
 
       // Do the query
       query
@@ -172,7 +172,7 @@ module.exports = function() {
 
     it('should build the query', () => {
       // Create new query
-      let query = new Query();
+      let query = new ProductQuery();
 
       // Do the query
       query

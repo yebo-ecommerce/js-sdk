@@ -1,2 +1,5 @@
+// Core
 require('./yebo_sdk/request.js')();
-require('./yebo_sdk/query.js')();
+
+// Query
+require('./yebo_sdk/query/product.js')();
