@@ -12,8 +12,26 @@ module.exports = function() {
     //
     // });
 
-    it('sould do nothing', (done) => {
-      done();
+    it('should create a query', () => {
+      let query = new Query();
+    });
+
+    it('should create a query based in another one', () => {
+      // Create the parent query
+      let parentQuery = new Query();
+
+      // Add some attributes
+      parentQuery._attrs = {
+        string: 'Sample',
+        number: 123
+      };
+
+      // Create a new query
+      let query = new Query(parentQuery);
+
+      // Assertions
+      expect(query._attrs.string).to.equal('Sample');
+      expect(query._attrs.number).to.equal(123);
     });
   });
 };

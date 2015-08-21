@@ -2,24 +2,36 @@
 /**
  * Abstract query class
  */
-"use strict";
+'use strict';
 
-Object.defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, '__esModule', {
   value: true
 });
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
 var Query =
 /**
  * @todo Create a new query based in other
  */
-function Query() {
+function Query(parentQuery) {
   _classCallCheck(this, Query);
+
+  // Set query name
+  this.queryName = 'abstract';
+
+  // Set attributes
+  this._attrs = {};
+
+  // Is there any parentQuery?
+  if (parentQuery !== undefined) {
+    // Check the queryName
+    if (this.queryName === parentQuery.queryName) this._attrs = parentQuery._attrs;
+  }
 };
 
-exports["default"] = Query;
-module.exports = exports["default"];
+exports['default'] = Query;
+module.exports = exports['default'];
 
 },{}],2:[function(require,module,exports){
 //
@@ -64,7 +76,8 @@ var _query2 = _interopRequireDefault(_query);
  *   })
  */
 var isArray = require('lodash/lang/isArray'),
-    isEmpty = require('lodash/lang/isEmpty');
+    isEmpty = require('lodash/lang/isEmpty'),
+    assign = require('lodash/object/assign');
 var ProductQuery = (function (_Query) {
   _inherits(ProductQuery, _Query);
 
@@ -72,11 +85,11 @@ var ProductQuery = (function (_Query) {
    *
    */
 
-  function ProductQuery() {
+  function ProductQuery(parentQuery) {
     _classCallCheck(this, ProductQuery);
 
     // Parent call
-    _get(Object.getPrototypeOf(ProductQuery.prototype), 'constructor', this).call(this);
+    _get(Object.getPrototypeOf(ProductQuery.prototype), 'constructor', this).call(this, parentQuery);
 
     // Set the query name
     this.queryName = 'product';
@@ -94,8 +107,8 @@ var ProductQuery = (function (_Query) {
       currentOperator: 'or'
     };
 
-    // Checks if attributes already exists
-    if (this._attrs === undefined) this._attrs = defaultAttributes;
+    // Merge the values
+    this._attrs = assign(defaultAttributes, this._attrs);
   }
 
   /**
@@ -327,7 +340,7 @@ var ProductQuery = (function (_Query) {
 exports['default'] = ProductQuery;
 module.exports = exports['default'];
 
-},{"../query":1,"lodash/lang/isArray":59,"lodash/lang/isEmpty":60}],3:[function(require,module,exports){
+},{"../query":1,"lodash/lang/isArray":59,"lodash/lang/isEmpty":60,"lodash/object/assign":65}],3:[function(require,module,exports){
 // Variables
 // var chunk = require('lodash');
 'use strict';
@@ -9955,8 +9968,26 @@ module.exports = function () {
     //
     // });
 
-    it('sould do nothing', function (done) {
-      done();
+    it('should create a query', function () {
+      var query = new _libYebo_sdkQuery2['default']();
+    });
+
+    it('should create a query base in another one', function () {
+      // Create the parent query
+      var parentQuery = new _libYebo_sdkQuery2['default']();
+
+      // Add some attributes
+      parentQuery._attrs = {
+        string: 'Sample',
+        number: 123
+      };
+
+      // Create a new query
+      var query = new _libYebo_sdkQuery2['default'](parentQuery);
+
+      // Assertions
+      expect(query._attrs.string).to.equal('Sample');
+      expect(query._attrs.number).to.equal(123);
     });
   });
 };
