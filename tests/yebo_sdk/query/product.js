@@ -39,7 +39,7 @@ module.exports = function() {
         .filter('color', ['blue', 'red']);
 
       // Assertions
-      expect(query._filter.or).to.have.length(1);
+      expect(query._attrs.filter.or).to.have.length(1);
     });
 
     //
@@ -54,8 +54,8 @@ module.exports = function() {
         .filter('size', ['s', 'm', 'l']);
 
       // Assertions
-      expect(query._filter.or).to.have.length(1);
-      expect(query._filter.and).to.have.length(1);
+      expect(query._attrs.filter.or).to.have.length(1);
+      expect(query._attrs.filter.and).to.have.length(1);
     });
 
     //
@@ -68,14 +68,14 @@ module.exports = function() {
         .taxonomy(['camisetas', 'promocao']);
 
       // Assertions
-      expect(query._filter.or).to.have.length(1);
+      expect(query._attrs.filter.or).to.have.length(1);
 
-      expect(query._filter.or[0].name).to.equal('taxonomy');
-      expect(query._filter.or[0].field).to.equal('permalink');
+      expect(query._attrs.filter.or[0].name).to.equal('taxonomy');
+      expect(query._attrs.filter.or[0].field).to.equal('permalink');
 
-      expect(query._filter.or[0]).to.have.property('values');
-      expect(query._filter.or[0]).to.have.property('type');
-      expect(query._filter.or[0]).to.have.property('execution');
+      expect(query._attrs.filter.or[0]).to.have.property('values');
+      expect(query._attrs.filter.or[0]).to.have.property('type');
+      expect(query._attrs.filter.or[0]).to.have.property('execution');
     });
 
     //
@@ -88,14 +88,14 @@ module.exports = function() {
         .price(0, 15);
 
       // Assertions
-      expect(query._filter.or).to.have.length(1);
+      expect(query._attrs.filter.or).to.have.length(1);
 
-      expect(query._filter.or[0].name).to.equal('price');
-      expect(query._filter.or[0].values).to.be.a('array');
-      expect(query._filter.or[0].values).to.have.length(2);
+      expect(query._attrs.filter.or[0].name).to.equal('price');
+      expect(query._attrs.filter.or[0].values).to.be.a('array');
+      expect(query._attrs.filter.or[0].values).to.have.length(2);
 
-      expect(query._filter.or[0].values[0]).to.equal(0);
-      expect(query._filter.or[0].values[1]).to.equal(15);
+      expect(query._attrs.filter.or[0].values[0]).to.equal(0);
+      expect(query._attrs.filter.or[0].values[1]).to.equal(15);
     });
 
     //
@@ -108,13 +108,13 @@ module.exports = function() {
         .price(30);
 
       // Assertions
-      expect(query._filter.or).to.have.length(1);
+      expect(query._attrs.filter.or).to.have.length(1);
 
-      expect(query._filter.or[0].name).to.equal('price');
-      expect(query._filter.or[0].values).to.be.a('array');
-      expect(query._filter.or[0].values).to.have.length(1);
+      expect(query._attrs.filter.or[0].name).to.equal('price');
+      expect(query._attrs.filter.or[0].values).to.be.a('array');
+      expect(query._attrs.filter.or[0].values).to.have.length(1);
 
-      expect(query._filter.or[0].values[0]).to.equal(30);
+      expect(query._attrs.filter.or[0].values[0]).to.equal(30);
     });
 
     //
@@ -127,8 +127,8 @@ module.exports = function() {
         .sort('price', 'asc');
 
       // Assertions
-      expect(query._sort).to.have.property('field');
-      expect(query._sort).to.have.property('order');
+      expect(query._attrs.sort).to.have.property('field');
+      expect(query._attrs.sort).to.have.property('order');
     });
 
     //
@@ -141,7 +141,7 @@ module.exports = function() {
         .search('product-name');
 
       // Assertions
-      expect(query._search).to.equal('product-name');
+      expect(query._attrs.search).to.equal('product-name');
     });
 
     //
@@ -154,7 +154,7 @@ module.exports = function() {
         .page(1);
 
       // Assertions
-      expect(query._page).to.equal(1);
+      expect(query._attrs.page).to.equal(1);
     });
 
     //
@@ -167,7 +167,7 @@ module.exports = function() {
         .perPage(15);
 
       // Assertions
-      expect(query._perPage).to.equal(15);
+      expect(query._attrs.perPage).to.equal(15);
     });
 
     it('should build the query', () => {

@@ -10,7 +10,11 @@ Object.defineProperty(exports, "__esModule", {
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var Query = function Query() {
+var Query =
+/**
+ * @todo Create a new query based in other
+ */
+function Query() {
   _classCallCheck(this, Query);
 };
 
@@ -65,7 +69,7 @@ var ProductQuery = (function (_Query) {
   _inherits(ProductQuery, _Query);
 
   /**
-   * @todo Create a new query based in other
+   *
    */
 
   function ProductQuery() {
@@ -74,18 +78,24 @@ var ProductQuery = (function (_Query) {
     // Parent call
     _get(Object.getPrototypeOf(ProductQuery.prototype), 'constructor', this).call(this);
 
-    // Initialize
-    this._search = '';
-    this._filter = {
-      and: [],
-      or: []
+    // Set the query name
+    this.queryName = 'product';
+
+    // Default attributes
+    var defaultAttributes = {
+      search: '',
+      filter: {
+        and: [],
+        or: []
+      },
+      sort: {},
+      page: 1,
+      perPage: 15,
+      currentOperator: 'or'
     };
-    this._sort = {};
 
-    this._page = 1;
-    this._perPage = 15;
-
-    this._currentOperator = 'or';
+    // Checks if attributes already exists
+    if (this._attrs === undefined) this._attrs = defaultAttributes;
   }
 
   /**
@@ -163,7 +173,7 @@ var ProductQuery = (function (_Query) {
     key: 'page',
     value: function page(_page) {
       //
-      this._page = _page;
+      this._attrs.page = _page;
 
       // Return the instance
       return this;
@@ -177,7 +187,7 @@ var ProductQuery = (function (_Query) {
     key: 'perPage',
     value: function perPage(_perPage) {
       //
-      this._perPage = _perPage;
+      this._attrs.perPage = _perPage;
 
       // Return the instance
       return this;
@@ -190,7 +200,7 @@ var ProductQuery = (function (_Query) {
     key: 'or',
     value: function or() {
       // Set the current operator
-      this._currentOperator = 'or';
+      this._attrs.currentOperator = 'or';
 
       // Return the instance
       return this;
@@ -203,7 +213,7 @@ var ProductQuery = (function (_Query) {
     key: 'and',
     value: function and() {
       // Set the current operator
-      this._currentOperator = 'and';
+      this._attrs.currentOperator = 'and';
 
       // Return the instance
       return this;
@@ -219,7 +229,7 @@ var ProductQuery = (function (_Query) {
     key: 'search',
     value: function search(name) {
       // Set the search
-      this._search = name;
+      this._attrs.search = name;
 
       // Return the instance
       return this;
@@ -238,7 +248,7 @@ var ProductQuery = (function (_Query) {
       var order = arguments.length <= 1 || arguments[1] === undefined ? 'asc' : arguments[1];
 
       // Set sort
-      this._sort = {
+      this._attrs.sort = {
         field: field,
         order: order
       };
@@ -257,16 +267,16 @@ var ProductQuery = (function (_Query) {
     value: function build() {
       // Create result
       var result = {
-        page: this._page,
-        per_page: this._perPage,
-        filters: this._filter
+        page: this._attrs.page,
+        per_page: this._attrs.perPage,
+        filters: this._attrs.filter
       };
 
       //
-      if (this._search !== '') result.name = this._search;
+      if (this._attrs.search !== '') result.name = this._attrs.search;
 
       //
-      if (!isEmpty(this._sort)) result.sort = this._sort;
+      if (!isEmpty(this._attrs.sort)) result.sort = this._attrs.sort;
 
       // Return the result
       return result;
@@ -278,7 +288,7 @@ var ProductQuery = (function (_Query) {
   }, {
     key: '_generateFilter',
     value: function _generateFilter(filter) {
-      this._filter[this._currentOperator].push(filter);
+      this._attrs.filter[this._attrs.currentOperator].push(filter);
     }
 
     /**
@@ -9998,7 +10008,7 @@ module.exports = function () {
       query.filter('color', ['blue', 'red']);
 
       // Assertions
-      expect(query._filter.or).to.have.length(1);
+      expect(query._attrs.filter.or).to.have.length(1);
     });
 
     //
@@ -10010,8 +10020,8 @@ module.exports = function () {
       query.filter('color', ['blue', 'red']).and().filter('size', ['s', 'm', 'l']);
 
       // Assertions
-      expect(query._filter.or).to.have.length(1);
-      expect(query._filter.and).to.have.length(1);
+      expect(query._attrs.filter.or).to.have.length(1);
+      expect(query._attrs.filter.and).to.have.length(1);
     });
 
     //
@@ -10023,14 +10033,14 @@ module.exports = function () {
       query.taxonomy(['camisetas', 'promocao']);
 
       // Assertions
-      expect(query._filter.or).to.have.length(1);
+      expect(query._attrs.filter.or).to.have.length(1);
 
-      expect(query._filter.or[0].name).to.equal('taxonomy');
-      expect(query._filter.or[0].field).to.equal('permalink');
+      expect(query._attrs.filter.or[0].name).to.equal('taxonomy');
+      expect(query._attrs.filter.or[0].field).to.equal('permalink');
 
-      expect(query._filter.or[0]).to.have.property('values');
-      expect(query._filter.or[0]).to.have.property('type');
-      expect(query._filter.or[0]).to.have.property('execution');
+      expect(query._attrs.filter.or[0]).to.have.property('values');
+      expect(query._attrs.filter.or[0]).to.have.property('type');
+      expect(query._attrs.filter.or[0]).to.have.property('execution');
     });
 
     //
@@ -10042,14 +10052,14 @@ module.exports = function () {
       query.price(0, 15);
 
       // Assertions
-      expect(query._filter.or).to.have.length(1);
+      expect(query._attrs.filter.or).to.have.length(1);
 
-      expect(query._filter.or[0].name).to.equal('price');
-      expect(query._filter.or[0].values).to.be.a('array');
-      expect(query._filter.or[0].values).to.have.length(2);
+      expect(query._attrs.filter.or[0].name).to.equal('price');
+      expect(query._attrs.filter.or[0].values).to.be.a('array');
+      expect(query._attrs.filter.or[0].values).to.have.length(2);
 
-      expect(query._filter.or[0].values[0]).to.equal(0);
-      expect(query._filter.or[0].values[1]).to.equal(15);
+      expect(query._attrs.filter.or[0].values[0]).to.equal(0);
+      expect(query._attrs.filter.or[0].values[1]).to.equal(15);
     });
 
     //
@@ -10061,13 +10071,13 @@ module.exports = function () {
       query.price(30);
 
       // Assertions
-      expect(query._filter.or).to.have.length(1);
+      expect(query._attrs.filter.or).to.have.length(1);
 
-      expect(query._filter.or[0].name).to.equal('price');
-      expect(query._filter.or[0].values).to.be.a('array');
-      expect(query._filter.or[0].values).to.have.length(1);
+      expect(query._attrs.filter.or[0].name).to.equal('price');
+      expect(query._attrs.filter.or[0].values).to.be.a('array');
+      expect(query._attrs.filter.or[0].values).to.have.length(1);
 
-      expect(query._filter.or[0].values[0]).to.equal(30);
+      expect(query._attrs.filter.or[0].values[0]).to.equal(30);
     });
 
     //
@@ -10079,8 +10089,8 @@ module.exports = function () {
       query.sort('price', 'asc');
 
       // Assertions
-      expect(query._sort).to.have.property('field');
-      expect(query._sort).to.have.property('order');
+      expect(query._attrs.sort).to.have.property('field');
+      expect(query._attrs.sort).to.have.property('order');
     });
 
     //
@@ -10092,7 +10102,7 @@ module.exports = function () {
       query.search('product-name');
 
       // Assertions
-      expect(query._search).to.equal('product-name');
+      expect(query._attrs.search).to.equal('product-name');
     });
 
     //
@@ -10104,7 +10114,7 @@ module.exports = function () {
       query.page(1);
 
       // Assertions
-      expect(query._page).to.equal(1);
+      expect(query._attrs.page).to.equal(1);
     });
 
     //
@@ -10116,7 +10126,7 @@ module.exports = function () {
       query.perPage(15);
 
       // Assertions
-      expect(query._perPage).to.equal(15);
+      expect(query._attrs.perPage).to.equal(15);
     });
 
     it('should build the query', function () {
