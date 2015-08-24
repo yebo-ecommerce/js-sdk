@@ -4,7 +4,8 @@ var gulp = require('gulp'),
     babelify = require('babelify'),
     browserify = require('gulp-browserify'),
     concat = require('gulp-concat'),
-    mochaPhantomJS = require('gulp-mocha-phantomjs');
+    mochaPhantomJS = require('gulp-mocha-phantomjs'),
+    addsrc = require('gulp-add-src');
 
 // Build the library
 gulp.task('build', function() {
@@ -12,7 +13,7 @@ gulp.task('build', function() {
       .pipe(browserify({
         transform: [ babelify ]
       }))
-      .pipe(gulp.src('./exeternal/*.js'))
+      .pipe(addsrc('./external/*.js'))
       .pipe(concat('yebo_sdk.js'))
       .pipe(gulp.dest('./dist'));
 });
@@ -23,7 +24,7 @@ gulp.task('buildTests', function() {
       .pipe(browserify({
         transform: [ babelify ]
       }))
-      .pipe(gulp.src('./exeternal/*.js'))
+      .pipe(addsrc('./external/*.js'))
       .pipe(concat('yebo_sdk-tests.js'))
       .pipe(gulp.dest('./tests'));
 });
