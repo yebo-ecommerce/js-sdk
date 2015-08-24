@@ -1,3 +1,6 @@
+/*! cacheJS 06-05-2015 */
+!function(a,b){"use strict";var c=function(){var a="localStorage";return{init:function(a){this.localStorageProvider=new e(a),this.arrayProvider=new f(a)},use:function(b){a=b},getProvider:function(b){var c=b||a;switch(c){case"localStorage":return this.localStorageProvider;case"array":return this.arrayProvider}}}},d=function(){var a={prefix:"_cache",ttl:604800},b={cacheAdded:[],cacheRemoved:[]},d={generateKey:function(b){var c=a.prefix+"_",d=[];for(var e in b)b.hasOwnProperty(e)&&d.push(e);d.sort();for(var f=0;f<d.length;f++)c+=d[f]+"_"+b[d[f]],f!==d.length-1&&(c+="__");return c},generateContextKey:function(b,c){return a.prefix+"_context_"+b+"_"+c},getCurrentTime:function(){var a=(new Date).getTime();return Math.floor(a/1e3)},getDefault:function(){return a},getEventSubscribers:function(){return b},dispatchEvent:function(a,c){var e=b[a];if(!(e.length<1))for(var f=0;f<e.length;f++)"undefined"!=typeof e[f]&&d.isFunction(e[f])&&e[f](c)},isFunction:function(a){return"[object Function]"==Object.prototype.toString.call(a)}},e=new c;return e.init(d),{use:function(a){return e.use(a),this},get:function(a){return e.getProvider().get(a)},set:function(a,b,c,d){return e.getProvider().set(a,b,c,d),this},setPrefix:function(b){return a.prefix=b,this},getPrefix:function(){return a.prefix},removeByKey:function(a){return e.getProvider().removeByKey(a),this},removeByContext:function(a){return e.getProvider().removeByContext(a),this},on:function(a,c){b[a].push(c)},unsubscribe:function(a,c){for(var d=b[a],e=0;e<d.length;e++)if(d[e]===c){delete d[e];break}}}},e=function(a){return{get:function(b){var c=a.generateKey(b),d=localStorage.getItem(c);return null!==d?(d=JSON.parse(d),a.getCurrentTime()-d.createdAt>=d.ttl?(localStorage.removeItem(c),null):d.data):null},set:function(b,c,d,e){d=d||a.getDefault().ttl;var f=a.generateKey(b);localStorage.setItem(f,JSON.stringify({data:c,ttl:d,createdAt:a.getCurrentTime()}));for(var g in e)if(e.hasOwnProperty(g)){var h=a.generateContextKey(g,e[g]),i=localStorage.getItem(h);if(null!==i){i=JSON.parse(i);var j=!1;if(Array.prototype.indexOf)j=i.indexOf(f)>=0;else for(var k=0;k<i.length;k++)if(i[k]==f){j=!0;break}j||i.push(f)}else i=[f];localStorage.setItem(h,JSON.stringify(i))}a.dispatchEvent("cacheAdded",{key:b,value:c,ttl:d,contexts:e||null})},removeByKey:function(b){var c=a.generateKey(b),d=localStorage.getItem(c);null!==d&&(d=JSON.parse(d),localStorage.removeItem(c),a.dispatchEvent("cacheRemoved",{generatedKey:c,value:d.data,ttl:d.ttl}))},removeByContext:function(b){for(var c in b)if(b.hasOwnProperty(c)){var d=a.generateContextKey(c,b[c]),e=localStorage.getItem(d);if(null===e)return;for(var f=JSON.parse(e),g=0;g<f.length;g++){var h=JSON.parse(localStorage.getItem(f[g]));localStorage.removeItem(f[g]),a.dispatchEvent("cacheRemoved",{generatedKey:f[g],value:h.data,ttl:h.ttl})}localStorage.removeItem(d)}}}},f=function(a){var b={},c={};return{get:function(c){var d=a.generateKey(c);if(b.hasOwnProperty(d)){var e=b[d];return a.getCurrentTime()-e.createdAt>=e.ttl?(delete b[d],null):e.data}return null},set:function(d,e,f,g){var h=a.generateKey(d);f=null===f||"undefined"==typeof f?a.getDefault().ttl:f,b[h]={data:e,ttl:f,createdAt:a.getCurrentTime()};for(var i in g)if(g.hasOwnProperty(i)){var j=a.generateContextKey(i,g[i]),k=c.hasOwnProperty(j)?c[j]:null;if(null!==k){var l=!1;if(Array.prototype.indexOf)l=k.indexOf(h)>=0;else for(var m=0;m<k.length;m++)if(k[m]==h){l=!0;break}l||k.push(h)}else k=[h];c[j]=k}a.dispatchEvent("cacheAdded",{key:d,value:e,ttl:f,contexts:g||null})},removeByKey:function(c){var d=a.generateKey(c);if(b.hasOwnProperty(d)){var e=b[d];delete b[d],a.dispatchEvent("cacheRemoved",{generatedKey:d,value:e.data,ttl:e.ttl})}},removeByContext:function(d){for(var e in d)if(d.hasOwnProperty(e)){var f=a.generateContextKey(e,d[e]),g=c.hasOwnProperty(f)?c[f]:null;if(null===g)return;for(var h=0;h<g.length;h++){var i=b[g[h]];delete b[g[h]],a.dispatchEvent("cacheRemoved",{generatedKey:g[h],value:i.data,ttl:i.ttl})}delete c[f]}}}};d.VERSION="1.1.1",a.cacheJS=new d}(this);
+
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 /**
  * Abstract query class
@@ -445,25 +448,100 @@ exports['default'] = Request;
 module.exports = exports['default'];
 
 },{"lodash/object/assign":66,"rsvp":70}],4:[function(require,module,exports){
-/**
- *
- */
-"use strict";
+// Dependencies
+'use strict';
 
-Object.defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, '__esModule', {
   value: true
 });
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-var Store = function Store() {
-  _classCallCheck(this, Store);
-};
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-exports["default"] = Store;
-module.exports = exports["default"];
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-},{}],5:[function(require,module,exports){
+var _request = require('./request');
+
+var _request2 = _interopRequireDefault(_request);
+
+//
+var RSVP = require('rsvp');
+
+/**
+ * This class will be the bridge between the Yebo and the SDK
+ * Always using the class Request as a connection interface
+ */
+
+var Store = (function () {
+  function Store() {
+    _classCallCheck(this, Store);
+  }
+
+  _createClass(Store, null, [{
+    key: 'auth',
+
+    /**
+     * Authenticate the current sessions
+     * @param {string} url The store URL
+     */
+    value: function auth(url) {
+      // Define the cache expire time
+      var EXPIRE_TIME = 1800;
+
+      // Return the an auth Promise
+      return new RSVP.Promise(function (resolve, reject) {
+        // Get the cached key
+        var cachedKey = cacheJS.get('yebo:auth');
+
+        // Check if the auth key is cached
+        if (cachedKey !== null) {
+          // Resolve the promise
+          resolve(cachedKey);
+        } else {
+          // Get a new key
+          new _request2['default'](url).then(function (result) {
+            // Insert into the cache
+            cacheJS.set('yebo:auth', result.token, EXPIRE_TIME);
+
+            // resolve the promise
+            resolve(result.token);
+          })['catch'](reject);
+        }
+      });
+    }
+
+    /**
+     * Fetch any kind of data from Yebo
+     * @todo A way to able the user to config the store URL
+     * @param {}
+     */
+  }, {
+    key: 'fetch',
+    value: function fetch(path) {
+      var data = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+      var method = arguments.length <= 2 || arguments[2] === undefined ? 'GET' : arguments[2];
+
+      // Define the store url
+      var url = 'http://vivreshop.yebo.me:3000/v3/';
+
+      // Auth header
+      var authHeader = {
+        'Authorization': 'Bearer'
+      };
+
+      // Return a fetch promise
+      return new RSPV.Promise(function () {});
+    }
+  }]);
+
+  return Store;
+})();
+
+exports['default'] = Store;
+module.exports = exports['default'];
+
+},{"./request":3,"rsvp":70}],5:[function(require,module,exports){
 module.exports = require('./lib/chai');
 
 },{"./lib/chai":6}],6:[function(require,module,exports){
@@ -9964,6 +10042,9 @@ module.exports = identity;
 
 }).call(this,require("1YiZ5S"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{"1YiZ5S":43}],71:[function(require,module,exports){
+//
+// require('babelify/polyfill');
+
 // Core
 'use strict';
 
@@ -10261,7 +10342,21 @@ module.exports = function () {
     //
     // });
 
-    it('should do nothing', function () {});
+    it('should be authenticated by Yebo', function (done) {
+      _libYebo_sdkStore2['default'].auth('http://vivreshop.yebo.me:3000/v3/').then(function (token) {
+        console.log(token);
+
+        // Done!
+        done();
+      });
+    });
+
+    it('should be authenticated by cache', function (done) {
+      _libYebo_sdkStore2['default'].auth('http://vivreshop.yebo.me:3000/v3/').then(function (token) {
+        // Done!
+        done();
+      });
+    });
   });
 };
 
