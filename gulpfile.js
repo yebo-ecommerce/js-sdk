@@ -12,6 +12,8 @@ gulp.task('build', function() {
       .pipe(browserify({
         transform: [ babelify ]
       }))
+      .pipe(gulp.src('./exeternal/*.js'))
+      .pipe(concat('yebo_sdk.js'))
       .pipe(gulp.dest('./dist'));
 });
 
@@ -21,6 +23,7 @@ gulp.task('buildTests', function() {
       .pipe(browserify({
         transform: [ babelify ]
       }))
+      .pipe(gulp.src('./exeternal/*.js'))
       .pipe(concat('yebo_sdk-tests.js'))
       .pipe(gulp.dest('./tests'));
 });
