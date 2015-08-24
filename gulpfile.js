@@ -10,7 +10,7 @@ var gulp = require('gulp'),
 gulp.task('build', function() {
   gulp.src(['lib/yebo_sdk.js'])
       .pipe(browserify({
-        transform: ['babelify']
+        transform: [ babelify ]
       }))
       .pipe(gulp.dest('./dist'));
 });
@@ -19,7 +19,7 @@ gulp.task('build', function() {
 gulp.task('buildTests', function() {
   gulp.src(['tests/index.js'])
       .pipe(browserify({
-        transform: ['babelify']
+        transform: [ babelify ]
       }))
       .pipe(concat('yebo_sdk-tests.js'))
       .pipe(gulp.dest('./tests'));
