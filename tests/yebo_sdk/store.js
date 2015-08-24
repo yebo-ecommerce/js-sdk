@@ -1,5 +1,5 @@
 // Testing requests
-import Query from '../../lib/yebo_sdk/store';
+import Store from '../../lib/yebo_sdk/store';
 
 //
 var expect = require('chai').expect,
@@ -12,8 +12,18 @@ module.exports = function() {
     //
     // });
 
-    it('should do nothing', () => {
+    it('should be authenticated by Yebo', (done) => {
+      Store.auth('http://vivreshop.yebo.me:3000/v3/').then((token) => {
+        // Done!
+        done();
+      });
+    });
 
+    it('should be authenticated by cache', (done) => {
+      Store.auth('http://vivreshop.yebo.me:3000/v3/').then((token) => {
+        // Done!
+        done();
+      });
     });
   });
 };
