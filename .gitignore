@@ -1,2 +1,5 @@
+docs/
+tests/yebo_sdk-tests.js
 node_modules/
+dist/
 .DS_Store

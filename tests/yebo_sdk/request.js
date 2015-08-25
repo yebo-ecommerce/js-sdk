@@ -1,9 +1,10 @@
 // Testing requests
-import req from '../../lib/yebo_sdk/request';
+import { Request } from '../../index';
+import chai from 'chai';
 
 //
-var expect = require('chai').expect,
-    should = require('chai').should();
+var expect = chai.expect,
+    should = chai.should();
 
 module.exports = function() {
   describe('Request', () => {
@@ -13,7 +14,7 @@ module.exports = function() {
     // });
 
     it('should make a VALID request', (done) => {
-      new req('http://vivreshop.yebo.me:3000/v3').then((result, xhr) => {
+      new Request('http://vivreshop.yebo.me:3000/v3').then((result, xhr) => {
         // Assert
         result.should.be.a('object');
 
