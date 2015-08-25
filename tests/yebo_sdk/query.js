@@ -1,9 +1,10 @@
 // Testing requests
-import Query from '../../lib/yebo_sdk/query';
+import { Query } from '../../index';
+import chai from 'chai';
 
 //
-var expect = require('chai').expect,
-    should = require('chai').should();
+var expect = chai.expect,
+    should = chai.should();
 
 module.exports = function() {
   describe('Query', () => {

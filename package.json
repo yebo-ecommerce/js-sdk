@@ -20,8 +20,10 @@
     "gulp-babel": "^5.2.0",
     "gulp-browserify": "^0.5.1",
     "gulp-concat": "^2.6.0",
+    "gulp-file": "^0.2.0",
     "gulp-mocha-phantomjs": "^0.8.1",
-    "mocha": "^2.2.5"
+    "mocha": "^2.2.5",
+    "rollup": "^0.14.1"
   },
   "dependencies": {
     "lodash": "^3.10.1",

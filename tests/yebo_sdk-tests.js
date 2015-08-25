@@ -2,6 +2,50 @@
 !function(a,b){"use strict";var c=function(){var a="localStorage";return{init:function(a){this.localStorageProvider=new e(a),this.arrayProvider=new f(a)},use:function(b){a=b},getProvider:function(b){var c=b||a;switch(c){case"localStorage":return this.localStorageProvider;case"array":return this.arrayProvider}}}},d=function(){var a={prefix:"_cache",ttl:604800},b={cacheAdded:[],cacheRemoved:[]},d={generateKey:function(b){var c=a.prefix+"_",d=[];for(var e in b)b.hasOwnProperty(e)&&d.push(e);d.sort();for(var f=0;f<d.length;f++)c+=d[f]+"_"+b[d[f]],f!==d.length-1&&(c+="__");return c},generateContextKey:function(b,c){return a.prefix+"_context_"+b+"_"+c},getCurrentTime:function(){var a=(new Date).getTime();return Math.floor(a/1e3)},getDefault:function(){return a},getEventSubscribers:function(){return b},dispatchEvent:function(a,c){var e=b[a];if(!(e.length<1))for(var f=0;f<e.length;f++)"undefined"!=typeof e[f]&&d.isFunction(e[f])&&e[f](c)},isFunction:function(a){return"[object Function]"==Object.prototype.toString.call(a)}},e=new c;return e.init(d),{use:function(a){return e.use(a),this},get:function(a){return e.getProvider().get(a)},set:function(a,b,c,d){return e.getProvider().set(a,b,c,d),this},setPrefix:function(b){return a.prefix=b,this},getPrefix:function(){return a.prefix},removeByKey:function(a){return e.getProvider().removeByKey(a),this},removeByContext:function(a){return e.getProvider().removeByContext(a),this},on:function(a,c){b[a].push(c)},unsubscribe:function(a,c){for(var d=b[a],e=0;e<d.length;e++)if(d[e]===c){delete d[e];break}}}},e=function(a){return{get:function(b){var c=a.generateKey(b),d=localStorage.getItem(c);return null!==d?(d=JSON.parse(d),a.getCurrentTime()-d.createdAt>=d.ttl?(localStorage.removeItem(c),null):d.data):null},set:function(b,c,d,e){d=d||a.getDefault().ttl;var f=a.generateKey(b);localStorage.setItem(f,JSON.stringify({data:c,ttl:d,createdAt:a.getCurrentTime()}));for(var g in e)if(e.hasOwnProperty(g)){var h=a.generateContextKey(g,e[g]),i=localStorage.getItem(h);if(null!==i){i=JSON.parse(i);var j=!1;if(Array.prototype.indexOf)j=i.indexOf(f)>=0;else for(var k=0;k<i.length;k++)if(i[k]==f){j=!0;break}j||i.push(f)}else i=[f];localStorage.setItem(h,JSON.stringify(i))}a.dispatchEvent("cacheAdded",{key:b,value:c,ttl:d,contexts:e||null})},removeByKey:function(b){var c=a.generateKey(b),d=localStorage.getItem(c);null!==d&&(d=JSON.parse(d),localStorage.removeItem(c),a.dispatchEvent("cacheRemoved",{generatedKey:c,value:d.data,ttl:d.ttl}))},removeByContext:function(b){for(var c in b)if(b.hasOwnProperty(c)){var d=a.generateContextKey(c,b[c]),e=localStorage.getItem(d);if(null===e)return;for(var f=JSON.parse(e),g=0;g<f.length;g++){var h=JSON.parse(localStorage.getItem(f[g]));localStorage.removeItem(f[g]),a.dispatchEvent("cacheRemoved",{generatedKey:f[g],value:h.data,ttl:h.ttl})}localStorage.removeItem(d)}}}},f=function(a){var b={},c={};return{get:function(c){var d=a.generateKey(c);if(b.hasOwnProperty(d)){var e=b[d];return a.getCurrentTime()-e.createdAt>=e.ttl?(delete b[d],null):e.data}return null},set:function(d,e,f,g){var h=a.generateKey(d);f=null===f||"undefined"==typeof f?a.getDefault().ttl:f,b[h]={data:e,ttl:f,createdAt:a.getCurrentTime()};for(var i in g)if(g.hasOwnProperty(i)){var j=a.generateContextKey(i,g[i]),k=c.hasOwnProperty(j)?c[j]:null;if(null!==k){var l=!1;if(Array.prototype.indexOf)l=k.indexOf(h)>=0;else for(var m=0;m<k.length;m++)if(k[m]==h){l=!0;break}l||k.push(h)}else k=[h];c[j]=k}a.dispatchEvent("cacheAdded",{key:d,value:e,ttl:f,contexts:g||null})},removeByKey:function(c){var d=a.generateKey(c);if(b.hasOwnProperty(d)){var e=b[d];delete b[d],a.dispatchEvent("cacheRemoved",{generatedKey:d,value:e.data,ttl:e.ttl})}},removeByContext:function(d){for(var e in d)if(d.hasOwnProperty(e)){var f=a.generateContextKey(e,d[e]),g=c.hasOwnProperty(f)?c[f]:null;if(null===g)return;for(var h=0;h<g.length;h++){var i=b[g[h]];delete b[g[h]],a.dispatchEvent("cacheRemoved",{generatedKey:g[h],value:i.data,ttl:i.ttl})}delete c[f]}}}};d.VERSION="1.1.1",a.cacheJS=new d}(this);
 
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+//
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+
+var _libYebo_sdkRequest = require('./lib/yebo_sdk/request');
+
+Object.defineProperty(exports, 'Request', {
+  enumerable: true,
+  get: function get() {
+    return _libYebo_sdkRequest.Request;
+  }
+});
+
+var _libYebo_sdkQuery = require('./lib/yebo_sdk/query');
+
+Object.defineProperty(exports, 'Query', {
+  enumerable: true,
+  get: function get() {
+    return _libYebo_sdkQuery.Query;
+  }
+});
+
+var _libYebo_sdkStore = require('./lib/yebo_sdk/store');
+
+Object.defineProperty(exports, 'Store', {
+  enumerable: true,
+  get: function get() {
+    return _libYebo_sdkStore.Store;
+  }
+});
+
+var _libYebo_sdkQueryProducts = require('./lib/yebo_sdk/query/products');
+
+Object.defineProperty(exports, 'Products', {
+  enumerable: true,
+  get: function get() {
+    return _libYebo_sdkQueryProducts.Products;
+  }
+});
+
+},{"./lib/yebo_sdk/query":2,"./lib/yebo_sdk/query/products":3,"./lib/yebo_sdk/request":4,"./lib/yebo_sdk/store":5}],2:[function(require,module,exports){
 /**
  * Abstract query class
  */
@@ -40,10 +84,9 @@ function Query(parentQuery) {
 
 ;
 
-exports['default'] = Query;
-module.exports = exports['default'];
+exports.Query = Query;
 
-},{}],2:[function(require,module,exports){
+},{}],3:[function(require,module,exports){
 //
 'use strict';
 
@@ -55,8 +98,6 @@ var _createClass = (function () { function defineProperties(target, props) { for
 
 var _get = function get(_x8, _x9, _x10) { var _again = true; _function: while (_again) { var object = _x8, property = _x9, receiver = _x10; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x8 = parent; _x9 = property; _x10 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
@@ -64,8 +105,6 @@ function _inherits(subClass, superClass) { if (typeof superClass !== 'function' 
 // Import parent class
 
 var _query = require('../query');
-
-var _query2 = _interopRequireDefault(_query);
 
 /**
  * Product Query class
@@ -88,18 +127,18 @@ var _query2 = _interopRequireDefault(_query);
 var isArray = require('lodash/lang/isArray'),
     isEmpty = require('lodash/lang/isEmpty'),
     assign = require('lodash/object/assign');
-var ProductQuery = (function (_Query) {
-  _inherits(ProductQuery, _Query);
+var Products = (function (_Query) {
+  _inherits(Products, _Query);
 
   /**
    *
    */
 
-  function ProductQuery(parentQuery) {
-    _classCallCheck(this, ProductQuery);
+  function Products(parentQuery) {
+    _classCallCheck(this, Products);
 
     // Parent call
-    _get(Object.getPrototypeOf(ProductQuery.prototype), 'constructor', this).call(this, parentQuery);
+    _get(Object.getPrototypeOf(Products.prototype), 'constructor', this).call(this, parentQuery);
 
     // Set the query name
     this.queryName = 'product';
@@ -131,7 +170,7 @@ var ProductQuery = (function (_Query) {
    * query.price(30);
    */
 
-  _createClass(ProductQuery, [{
+  _createClass(Products, [{
     key: 'price',
     value: function price() {
       for (var _len = arguments.length, values = Array(_len), _key = 0; _key < _len; _key++) {
@@ -344,13 +383,12 @@ var ProductQuery = (function (_Query) {
     }
   }]);
 
-  return ProductQuery;
-})(_query2['default']);
+  return Products;
+})(_query.Query);
 
-exports['default'] = ProductQuery;
-module.exports = exports['default'];
+exports.Products = Products;
 
-},{"../query":1,"lodash/lang/isArray":60,"lodash/lang/isEmpty":61,"lodash/object/assign":66}],3:[function(require,module,exports){
+},{"../query":2,"lodash/lang/isArray":61,"lodash/lang/isEmpty":62,"lodash/object/assign":67}],4:[function(require,module,exports){
 // Variables
 // var chunk = require('lodash');
 'use strict';
@@ -444,10 +482,9 @@ var Request = (function () {
   return Request;
 })();
 
-exports['default'] = Request;
-module.exports = exports['default'];
+exports.Request = Request;
 
-},{"lodash/object/assign":66,"rsvp":70}],4:[function(require,module,exports){
+},{"lodash/object/assign":67,"rsvp":71}],5:[function(require,module,exports){
 // Dependencies
 'use strict';
 
@@ -457,13 +494,11 @@ Object.defineProperty(exports, '__esModule', {
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
 var _request = require('./request');
 
-var _request2 = _interopRequireDefault(_request);
+// import cacheJS from 'cacheJS';
 
 //
 var RSVP = require('rsvp');
@@ -500,7 +535,7 @@ var Store = (function () {
           resolve(cachedKey);
         } else {
           // Get a new key
-          new _request2['default'](url).then(function (result) {
+          new _request.Request(url).then(function (result) {
             // Insert into the cache
             cacheJS.set('yebo:auth', result.token, EXPIRE_TIME);
 
@@ -531,20 +566,19 @@ var Store = (function () {
       };
 
       // Return a fetch promise
-      return new RSPV.Promise(function () {});
+      return new RSPV.Promise(function (resolve, reject) {});
     }
   }]);
 
   return Store;
 })();
 
-exports['default'] = Store;
-module.exports = exports['default'];
+exports.Store = Store;
 
-},{"./request":3,"rsvp":70}],5:[function(require,module,exports){
+},{"./request":4,"rsvp":71}],6:[function(require,module,exports){
 module.exports = require('./lib/chai');
 
-},{"./lib/chai":6}],6:[function(require,module,exports){
+},{"./lib/chai":7}],7:[function(require,module,exports){
 /*!
  * chai
  * Copyright(c) 2011-2014 Jake Luer <jake@alogicalparadox.com>
@@ -639,7 +673,7 @@ exports.use(should);
 var assert = require('./chai/interface/assert');
 exports.use(assert);
 
-},{"./chai/assertion":7,"./chai/config":8,"./chai/core/assertions":9,"./chai/interface/assert":10,"./chai/interface/expect":11,"./chai/interface/should":12,"./chai/utils":25,"assertion-error":33}],7:[function(require,module,exports){
+},{"./chai/assertion":8,"./chai/config":9,"./chai/core/assertions":10,"./chai/interface/assert":11,"./chai/interface/expect":12,"./chai/interface/should":13,"./chai/utils":26,"assertion-error":34}],8:[function(require,module,exports){
 /*!
  * chai
  * http://chaijs.com
@@ -772,7 +806,7 @@ module.exports = function (_chai, util) {
   });
 };
 
-},{"./config":8}],8:[function(require,module,exports){
+},{"./config":9}],9:[function(require,module,exports){
 module.exports = {
 
   /**
@@ -829,7 +863,7 @@ module.exports = {
 
 };
 
-},{}],9:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 /*!
  * chai
  * http://chaijs.com
@@ -2560,7 +2594,7 @@ module.exports = function (chai, _) {
 
 };
 
-},{}],10:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 /*!
  * chai
  * Copyright(c) 2011-2014 Jake Luer <jake@alogicalparadox.com>
@@ -4000,7 +4034,7 @@ module.exports = function (chai, util) {
   ('isNotFrozen', 'notFrozen');
 };
 
-},{}],11:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 /*!
  * chai
  * Copyright(c) 2011-2014 Jake Luer <jake@alogicalparadox.com>
@@ -4035,7 +4069,7 @@ module.exports = function (chai, util) {
   };
 };
 
-},{}],12:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 /*!
  * chai
  * Copyright(c) 2011-2014 Jake Luer <jake@alogicalparadox.com>
@@ -4135,7 +4169,7 @@ module.exports = function (chai, util) {
   chai.Should = loadShould;
 };
 
-},{}],13:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 /*!
  * Chai - addChainingMethod utility
  * Copyright(c) 2012-2014 Jake Luer <jake@alogicalparadox.com>
@@ -4248,7 +4282,7 @@ module.exports = function (ctx, name, method, chainingBehavior) {
   });
 };
 
-},{"../config":8,"./flag":16,"./transferFlags":32}],14:[function(require,module,exports){
+},{"../config":9,"./flag":17,"./transferFlags":33}],15:[function(require,module,exports){
 /*!
  * Chai - addMethod utility
  * Copyright(c) 2012-2014 Jake Luer <jake@alogicalparadox.com>
@@ -4293,7 +4327,7 @@ module.exports = function (ctx, name, method) {
   };
 };
 
-},{"../config":8,"./flag":16}],15:[function(require,module,exports){
+},{"../config":9,"./flag":17}],16:[function(require,module,exports){
 /*!
  * Chai - addProperty utility
  * Copyright(c) 2012-2014 Jake Luer <jake@alogicalparadox.com>
@@ -4335,7 +4369,7 @@ module.exports = function (ctx, name, getter) {
   });
 };
 
-},{}],16:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 /*!
  * Chai - flag utility
  * Copyright(c) 2012-2014 Jake Luer <jake@alogicalparadox.com>
@@ -4369,7 +4403,7 @@ module.exports = function (obj, key, value) {
   }
 };
 
-},{}],17:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 /*!
  * Chai - getActual utility
  * Copyright(c) 2012-2014 Jake Luer <jake@alogicalparadox.com>
@@ -4389,7 +4423,7 @@ module.exports = function (obj, args) {
   return args.length > 4 ? args[4] : obj._obj;
 };
 
-},{}],18:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 /*!
  * Chai - getEnumerableProperties utility
  * Copyright(c) 2012-2014 Jake Luer <jake@alogicalparadox.com>
@@ -4416,7 +4450,7 @@ module.exports = function getEnumerableProperties(object) {
   return result;
 };
 
-},{}],19:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 /*!
  * Chai - message composition utility
  * Copyright(c) 2012-2014 Jake Luer <jake@alogicalparadox.com>
@@ -4468,7 +4502,7 @@ module.exports = function (obj, args) {
   return flagMsg ? flagMsg + ': ' + msg : msg;
 };
 
-},{"./flag":16,"./getActual":17,"./inspect":26,"./objDisplay":27}],20:[function(require,module,exports){
+},{"./flag":17,"./getActual":18,"./inspect":27,"./objDisplay":28}],21:[function(require,module,exports){
 /*!
  * Chai - getName utility
  * Copyright(c) 2012-2014 Jake Luer <jake@alogicalparadox.com>
@@ -4490,7 +4524,7 @@ module.exports = function (func) {
   return match && match[1] ? match[1] : "";
 };
 
-},{}],21:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
 /*!
  * Chai - getPathInfo utility
  * Copyright(c) 2012-2014 Jake Luer <jake@alogicalparadox.com>
@@ -4602,7 +4636,7 @@ function _getPathValue (parsed, obj, index) {
   return res;
 }
 
-},{"./hasProperty":24}],22:[function(require,module,exports){
+},{"./hasProperty":25}],23:[function(require,module,exports){
 /*!
  * Chai - getPathValue utility
  * Copyright(c) 2012-2014 Jake Luer <jake@alogicalparadox.com>
@@ -4646,7 +4680,7 @@ module.exports = function(path, obj) {
   return info.value;
 }; 
 
-},{"./getPathInfo":21}],23:[function(require,module,exports){
+},{"./getPathInfo":22}],24:[function(require,module,exports){
 /*!
  * Chai - getProperties utility
  * Copyright(c) 2012-2014 Jake Luer <jake@alogicalparadox.com>
@@ -4683,7 +4717,7 @@ module.exports = function getProperties(object) {
   return result;
 };
 
-},{}],24:[function(require,module,exports){
+},{}],25:[function(require,module,exports){
 /*!
  * Chai - hasProperty utility
  * Copyright(c) 2012-2014 Jake Luer <jake@alogicalparadox.com>
@@ -4748,7 +4782,7 @@ module.exports = function hasProperty(name, obj) {
   return name in obj;
 };
 
-},{"type-detect":38}],25:[function(require,module,exports){
+},{"type-detect":39}],26:[function(require,module,exports){
 /*!
  * chai
  * Copyright(c) 2011 Jake Luer <jake@alogicalparadox.com>
@@ -4876,7 +4910,7 @@ exports.addChainableMethod = require('./addChainableMethod');
 exports.overwriteChainableMethod = require('./overwriteChainableMethod');
 
 
-},{"./addChainableMethod":13,"./addMethod":14,"./addProperty":15,"./flag":16,"./getActual":17,"./getMessage":19,"./getName":20,"./getPathInfo":21,"./getPathValue":22,"./hasProperty":24,"./inspect":26,"./objDisplay":27,"./overwriteChainableMethod":28,"./overwriteMethod":29,"./overwriteProperty":30,"./test":31,"./transferFlags":32,"deep-eql":34,"type-detect":38}],26:[function(require,module,exports){
+},{"./addChainableMethod":14,"./addMethod":15,"./addProperty":16,"./flag":17,"./getActual":18,"./getMessage":20,"./getName":21,"./getPathInfo":22,"./getPathValue":23,"./hasProperty":25,"./inspect":27,"./objDisplay":28,"./overwriteChainableMethod":29,"./overwriteMethod":30,"./overwriteProperty":31,"./test":32,"./transferFlags":33,"deep-eql":35,"type-detect":39}],27:[function(require,module,exports){
 // This is (almost) directly from Node.js utils
 // https://github.com/joyent/node/blob/f8c335d0caf47f16d31413f89aa28eda3878e3aa/lib/util.js
 
@@ -5211,7 +5245,7 @@ function objectToString(o) {
   return Object.prototype.toString.call(o);
 }
 
-},{"./getEnumerableProperties":18,"./getName":20,"./getProperties":23}],27:[function(require,module,exports){
+},{"./getEnumerableProperties":19,"./getName":21,"./getProperties":24}],28:[function(require,module,exports){
 /*!
  * Chai - flag utility
  * Copyright(c) 2012-2014 Jake Luer <jake@alogicalparadox.com>
@@ -5262,7 +5296,7 @@ module.exports = function (obj) {
   }
 };
 
-},{"../config":8,"./inspect":26}],28:[function(require,module,exports){
+},{"../config":9,"./inspect":27}],29:[function(require,module,exports){
 /*!
  * Chai - overwriteChainableMethod utility
  * Copyright(c) 2012-2014 Jake Luer <jake@alogicalparadox.com>
@@ -5317,7 +5351,7 @@ module.exports = function (ctx, name, method, chainingBehavior) {
   };
 };
 
-},{}],29:[function(require,module,exports){
+},{}],30:[function(require,module,exports){
 /*!
  * Chai - overwriteMethod utility
  * Copyright(c) 2012-2014 Jake Luer <jake@alogicalparadox.com>
@@ -5370,7 +5404,7 @@ module.exports = function (ctx, name, method) {
   }
 };
 
-},{}],30:[function(require,module,exports){
+},{}],31:[function(require,module,exports){
 /*!
  * Chai - overwriteProperty utility
  * Copyright(c) 2012-2014 Jake Luer <jake@alogicalparadox.com>
@@ -5426,7 +5460,7 @@ module.exports = function (ctx, name, getter) {
   });
 };
 
-},{}],31:[function(require,module,exports){
+},{}],32:[function(require,module,exports){
 /*!
  * Chai - test utility
  * Copyright(c) 2012-2014 Jake Luer <jake@alogicalparadox.com>
@@ -5454,7 +5488,7 @@ module.exports = function (obj, args) {
   return negate ? !expr : expr;
 };
 
-},{"./flag":16}],32:[function(require,module,exports){
+},{"./flag":17}],33:[function(require,module,exports){
 /*!
  * Chai - transferFlags utility
  * Copyright(c) 2012-2014 Jake Luer <jake@alogicalparadox.com>
@@ -5500,7 +5534,7 @@ module.exports = function (assertion, object, includeAll) {
   }
 };
 
-},{}],33:[function(require,module,exports){
+},{}],34:[function(require,module,exports){
 /*!
  * assertion-error
  * Copyright(c) 2013 Jake Luer <jake@qualiancy.com>
@@ -5614,10 +5648,10 @@ AssertionError.prototype.toJSON = function (stack) {
   return props;
 };
 
-},{}],34:[function(require,module,exports){
+},{}],35:[function(require,module,exports){
 module.exports = require('./lib/eql');
 
-},{"./lib/eql":35}],35:[function(require,module,exports){
+},{"./lib/eql":36}],36:[function(require,module,exports){
 /*!
  * deep-eql
  * Copyright(c) 2013 Jake Luer <jake@alogicalparadox.com>
@@ -5876,10 +5910,10 @@ function objectEqual(a, b, m) {
   return true;
 }
 
-},{"buffer":40,"type-detect":36}],36:[function(require,module,exports){
+},{"buffer":41,"type-detect":37}],37:[function(require,module,exports){
 module.exports = require('./lib/type');
 
-},{"./lib/type":37}],37:[function(require,module,exports){
+},{"./lib/type":38}],38:[function(require,module,exports){
 /*!
  * type-detect
  * Copyright(c) 2013 jake luer <jake@alogicalparadox.com>
@@ -6023,9 +6057,9 @@ Library.prototype.test = function (obj, type) {
   }
 };
 
-},{}],38:[function(require,module,exports){
-arguments[4][36][0].apply(exports,arguments)
-},{"./lib/type":39}],39:[function(require,module,exports){
+},{}],39:[function(require,module,exports){
+arguments[4][37][0].apply(exports,arguments)
+},{"./lib/type":40}],40:[function(require,module,exports){
 /*!
  * type-detect
  * Copyright(c) 2013 jake luer <jake@alogicalparadox.com>
@@ -6161,7 +6195,7 @@ Library.prototype.test = function(obj, type) {
   }
 };
 
-},{}],40:[function(require,module,exports){
+},{}],41:[function(require,module,exports){
 /*!
  * The buffer module from node.js, for the browser.
  *
@@ -7272,7 +7306,7 @@ function assert (test, message) {
   if (!test) throw new Error(message || 'Failed assertion')
 }
 
-},{"base64-js":41,"ieee754":42}],41:[function(require,module,exports){
+},{"base64-js":42,"ieee754":43}],42:[function(require,module,exports){
 var lookup = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
 
 ;(function (exports) {
@@ -7398,7 +7432,7 @@ var lookup = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
 	exports.fromByteArray = uint8ToBase64
 }(typeof exports === 'undefined' ? (this.base64js = {}) : exports))
 
-},{}],42:[function(require,module,exports){
+},{}],43:[function(require,module,exports){
 exports.read = function (buffer, offset, isLE, mLen, nBytes) {
   var e, m
   var eLen = nBytes * 8 - mLen - 1
@@ -7484,7 +7518,7 @@ exports.write = function (buffer, value, offset, isLE, mLen, nBytes) {
   buffer[offset + i - d] |= s * 128
 }
 
-},{}],43:[function(require,module,exports){
+},{}],44:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -7549,7 +7583,7 @@ process.chdir = function (dir) {
     throw new Error('process.chdir is not supported');
 };
 
-},{}],44:[function(require,module,exports){
+},{}],45:[function(require,module,exports){
 /** Used as the `TypeError` message for "Functions" methods. */
 var FUNC_ERROR_TEXT = 'Expected a function';
 
@@ -7609,7 +7643,7 @@ function restParam(func, start) {
 
 module.exports = restParam;
 
-},{}],45:[function(require,module,exports){
+},{}],46:[function(require,module,exports){
 var keys = require('../object/keys');
 
 /**
@@ -7643,7 +7677,7 @@ function assignWith(object, source, customizer) {
 
 module.exports = assignWith;
 
-},{"../object/keys":67}],46:[function(require,module,exports){
+},{"../object/keys":68}],47:[function(require,module,exports){
 var baseCopy = require('./baseCopy'),
     keys = require('../object/keys');
 
@@ -7664,7 +7698,7 @@ function baseAssign(object, source) {
 
 module.exports = baseAssign;
 
-},{"../object/keys":67,"./baseCopy":47}],47:[function(require,module,exports){
+},{"../object/keys":68,"./baseCopy":48}],48:[function(require,module,exports){
 /**
  * Copies properties of `source` to `object`.
  *
@@ -7689,7 +7723,7 @@ function baseCopy(source, props, object) {
 
 module.exports = baseCopy;
 
-},{}],48:[function(require,module,exports){
+},{}],49:[function(require,module,exports){
 /**
  * The base implementation of `_.property` without support for deep paths.
  *
@@ -7705,7 +7739,7 @@ function baseProperty(key) {
 
 module.exports = baseProperty;
 
-},{}],49:[function(require,module,exports){
+},{}],50:[function(require,module,exports){
 var identity = require('../utility/identity');
 
 /**
@@ -7746,7 +7780,7 @@ function bindCallback(func, thisArg, argCount) {
 
 module.exports = bindCallback;
 
-},{"../utility/identity":69}],50:[function(require,module,exports){
+},{"../utility/identity":70}],51:[function(require,module,exports){
 var bindCallback = require('./bindCallback'),
     isIterateeCall = require('./isIterateeCall'),
     restParam = require('../function/restParam');
@@ -7789,7 +7823,7 @@ function createAssigner(assigner) {
 
 module.exports = createAssigner;
 
-},{"../function/restParam":44,"./bindCallback":49,"./isIterateeCall":55}],51:[function(require,module,exports){
+},{"../function/restParam":45,"./bindCallback":50,"./isIterateeCall":56}],52:[function(require,module,exports){
 var baseProperty = require('./baseProperty');
 
 /**
@@ -7806,7 +7840,7 @@ var getLength = baseProperty('length');
 
 module.exports = getLength;
 
-},{"./baseProperty":48}],52:[function(require,module,exports){
+},{"./baseProperty":49}],53:[function(require,module,exports){
 var isNative = require('../lang/isNative');
 
 /**
@@ -7824,7 +7858,7 @@ function getNative(object, key) {
 
 module.exports = getNative;
 
-},{"../lang/isNative":63}],53:[function(require,module,exports){
+},{"../lang/isNative":64}],54:[function(require,module,exports){
 var getLength = require('./getLength'),
     isLength = require('./isLength');
 
@@ -7841,7 +7875,7 @@ function isArrayLike(value) {
 
 module.exports = isArrayLike;
 
-},{"./getLength":51,"./isLength":56}],54:[function(require,module,exports){
+},{"./getLength":52,"./isLength":57}],55:[function(require,module,exports){
 /** Used to detect unsigned integer values. */
 var reIsUint = /^\d+$/;
 
@@ -7867,7 +7901,7 @@ function isIndex(value, length) {
 
 module.exports = isIndex;
 
-},{}],55:[function(require,module,exports){
+},{}],56:[function(require,module,exports){
 var isArrayLike = require('./isArrayLike'),
     isIndex = require('./isIndex'),
     isObject = require('../lang/isObject');
@@ -7897,7 +7931,7 @@ function isIterateeCall(value, index, object) {
 
 module.exports = isIterateeCall;
 
-},{"../lang/isObject":64,"./isArrayLike":53,"./isIndex":54}],56:[function(require,module,exports){
+},{"../lang/isObject":65,"./isArrayLike":54,"./isIndex":55}],57:[function(require,module,exports){
 /**
  * Used as the [maximum length](http://ecma-international.org/ecma-262/6.0/#sec-number.max_safe_integer)
  * of an array-like value.
@@ -7919,7 +7953,7 @@ function isLength(value) {
 
 module.exports = isLength;
 
-},{}],57:[function(require,module,exports){
+},{}],58:[function(require,module,exports){
 /**
  * Checks if `value` is object-like.
  *
@@ -7933,7 +7967,7 @@ function isObjectLike(value) {
 
 module.exports = isObjectLike;
 
-},{}],58:[function(require,module,exports){
+},{}],59:[function(require,module,exports){
 var isArguments = require('../lang/isArguments'),
     isArray = require('../lang/isArray'),
     isIndex = require('./isIndex'),
@@ -7976,7 +8010,7 @@ function shimKeys(object) {
 
 module.exports = shimKeys;
 
-},{"../lang/isArguments":59,"../lang/isArray":60,"../object/keysIn":68,"./isIndex":54,"./isLength":56}],59:[function(require,module,exports){
+},{"../lang/isArguments":60,"../lang/isArray":61,"../object/keysIn":69,"./isIndex":55,"./isLength":57}],60:[function(require,module,exports){
 var isArrayLike = require('../internal/isArrayLike'),
     isObjectLike = require('../internal/isObjectLike');
 
@@ -8012,7 +8046,7 @@ function isArguments(value) {
 
 module.exports = isArguments;
 
-},{"../internal/isArrayLike":53,"../internal/isObjectLike":57}],60:[function(require,module,exports){
+},{"../internal/isArrayLike":54,"../internal/isObjectLike":58}],61:[function(require,module,exports){
 var getNative = require('../internal/getNative'),
     isLength = require('../internal/isLength'),
     isObjectLike = require('../internal/isObjectLike');
@@ -8054,7 +8088,7 @@ var isArray = nativeIsArray || function(value) {
 
 module.exports = isArray;
 
-},{"../internal/getNative":52,"../internal/isLength":56,"../internal/isObjectLike":57}],61:[function(require,module,exports){
+},{"../internal/getNative":53,"../internal/isLength":57,"../internal/isObjectLike":58}],62:[function(require,module,exports){
 var isArguments = require('./isArguments'),
     isArray = require('./isArray'),
     isArrayLike = require('../internal/isArrayLike'),
@@ -8103,7 +8137,7 @@ function isEmpty(value) {
 
 module.exports = isEmpty;
 
-},{"../internal/isArrayLike":53,"../internal/isObjectLike":57,"../object/keys":67,"./isArguments":59,"./isArray":60,"./isFunction":62,"./isString":65}],62:[function(require,module,exports){
+},{"../internal/isArrayLike":54,"../internal/isObjectLike":58,"../object/keys":68,"./isArguments":60,"./isArray":61,"./isFunction":63,"./isString":66}],63:[function(require,module,exports){
 var isObject = require('./isObject');
 
 /** `Object#toString` result references. */
@@ -8143,7 +8177,7 @@ function isFunction(value) {
 
 module.exports = isFunction;
 
-},{"./isObject":64}],63:[function(require,module,exports){
+},{"./isObject":65}],64:[function(require,module,exports){
 var isFunction = require('./isFunction'),
     isObjectLike = require('../internal/isObjectLike');
 
@@ -8193,7 +8227,7 @@ function isNative(value) {
 
 module.exports = isNative;
 
-},{"../internal/isObjectLike":57,"./isFunction":62}],64:[function(require,module,exports){
+},{"../internal/isObjectLike":58,"./isFunction":63}],65:[function(require,module,exports){
 /**
  * Checks if `value` is the [language type](https://es5.github.io/#x8) of `Object`.
  * (e.g. arrays, functions, objects, regexes, `new Number(0)`, and `new String('')`)
@@ -8223,7 +8257,7 @@ function isObject(value) {
 
 module.exports = isObject;
 
-},{}],65:[function(require,module,exports){
+},{}],66:[function(require,module,exports){
 var isObjectLike = require('../internal/isObjectLike');
 
 /** `Object#toString` result references. */
@@ -8260,7 +8294,7 @@ function isString(value) {
 
 module.exports = isString;
 
-},{"../internal/isObjectLike":57}],66:[function(require,module,exports){
+},{"../internal/isObjectLike":58}],67:[function(require,module,exports){
 var assignWith = require('../internal/assignWith'),
     baseAssign = require('../internal/baseAssign'),
     createAssigner = require('../internal/createAssigner');
@@ -8305,7 +8339,7 @@ var assign = createAssigner(function(object, source, customizer) {
 
 module.exports = assign;
 
-},{"../internal/assignWith":45,"../internal/baseAssign":46,"../internal/createAssigner":50}],67:[function(require,module,exports){
+},{"../internal/assignWith":46,"../internal/baseAssign":47,"../internal/createAssigner":51}],68:[function(require,module,exports){
 var getNative = require('../internal/getNative'),
     isArrayLike = require('../internal/isArrayLike'),
     isObject = require('../lang/isObject'),
@@ -8352,7 +8386,7 @@ var keys = !nativeKeys ? shimKeys : function(object) {
 
 module.exports = keys;
 
-},{"../internal/getNative":52,"../internal/isArrayLike":53,"../internal/shimKeys":58,"../lang/isObject":64}],68:[function(require,module,exports){
+},{"../internal/getNative":53,"../internal/isArrayLike":54,"../internal/shimKeys":59,"../lang/isObject":65}],69:[function(require,module,exports){
 var isArguments = require('../lang/isArguments'),
     isArray = require('../lang/isArray'),
     isIndex = require('../internal/isIndex'),
@@ -8418,7 +8452,7 @@ function keysIn(object) {
 
 module.exports = keysIn;
 
-},{"../internal/isIndex":54,"../internal/isLength":56,"../lang/isArguments":59,"../lang/isArray":60,"../lang/isObject":64}],69:[function(require,module,exports){
+},{"../internal/isIndex":55,"../internal/isLength":57,"../lang/isArguments":60,"../lang/isArray":61,"../lang/isObject":65}],70:[function(require,module,exports){
 /**
  * This method returns the first argument provided to it.
  *
@@ -8440,7 +8474,7 @@ function identity(value) {
 
 module.exports = identity;
 
-},{}],70:[function(require,module,exports){
+},{}],71:[function(require,module,exports){
 (function (process,global){
 /*!
  * @overview RSVP - a tiny implementation of Promises/A+.
@@ -10041,7 +10075,7 @@ module.exports = identity;
 
 
 }).call(this,require("1YiZ5S"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"1YiZ5S":43}],71:[function(require,module,exports){
+},{"1YiZ5S":44}],72:[function(require,module,exports){
 //
 // require('babelify/polyfill');
 
@@ -10053,21 +10087,23 @@ require('./yebo_sdk/store.js')();
 
 // Query
 require('./yebo_sdk/query.js')();
-require('./yebo_sdk/query/product.js')();
+require('./yebo_sdk/query/products.js')();
 
-},{"./yebo_sdk/query.js":72,"./yebo_sdk/query/product.js":73,"./yebo_sdk/request.js":74,"./yebo_sdk/store.js":75}],72:[function(require,module,exports){
+},{"./yebo_sdk/query.js":73,"./yebo_sdk/query/products.js":74,"./yebo_sdk/request.js":75,"./yebo_sdk/store.js":76}],73:[function(require,module,exports){
 // Testing requests
 'use strict';
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-var _libYebo_sdkQuery = require('../../lib/yebo_sdk/query');
+var _index = require('../../index');
 
-var _libYebo_sdkQuery2 = _interopRequireDefault(_libYebo_sdkQuery);
+var _chai = require('chai');
+
+var _chai2 = _interopRequireDefault(_chai);
 
 //
-var expect = require('chai').expect,
-    should = require('chai').should();
+var expect = _chai2['default'].expect,
+    should = _chai2['default'].should();
 
 module.exports = function () {
   describe('Query', function () {
@@ -10077,12 +10113,12 @@ module.exports = function () {
     // });
 
     it('should create a query', function () {
-      var query = new _libYebo_sdkQuery2['default']();
+      var query = new _index.Query();
     });
 
     it('should create a query based in another one', function () {
       // Create the parent query
-      var parentQuery = new _libYebo_sdkQuery2['default']();
+      var parentQuery = new _index.Query();
 
       // Add some attributes
       parentQuery._attrs = {
@@ -10091,7 +10127,7 @@ module.exports = function () {
       };
 
       // Create a new query
-      var query = new _libYebo_sdkQuery2['default'](parentQuery);
+      var query = new _index.Query(parentQuery);
 
       // Assertions
       expect(query._attrs.string).to.equal('Sample');
@@ -10100,23 +10136,25 @@ module.exports = function () {
   });
 };
 
-},{"../../lib/yebo_sdk/query":1,"chai":5}],73:[function(require,module,exports){
+},{"../../index":1,"chai":6}],74:[function(require,module,exports){
 // Testing requests
 'use strict';
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-var _libYebo_sdkQueryProduct = require('../../../lib/yebo_sdk/query/product');
+var _index = require('../../../index');
 
-var _libYebo_sdkQueryProduct2 = _interopRequireDefault(_libYebo_sdkQueryProduct);
+var _chai = require('chai');
+
+var _chai2 = _interopRequireDefault(_chai);
 
 //
-var assert = require('chai').assert,
-    expect = require('chai').expect,
-    should = require('chai').should();
+var expect = _chai2['default'].expect,
+    should = _chai2['default'].should(),
+    assert = _chai2['default'].assert;
 
 module.exports = function () {
-  describe('ProductQuery', function () {
+  describe('Products', function () {
     // IT template
     // it('', (done) => {
     //
@@ -10125,7 +10163,7 @@ module.exports = function () {
     //
     it('should format the filter', function () {
       // Create new query
-      var query = new _libYebo_sdkQueryProduct2['default']();
+      var query = new _index.Products();
 
       // Format
       var formatted = query._format('color', ['blue', 'red']);
@@ -10141,7 +10179,7 @@ module.exports = function () {
     //
     it('should generate the filter', function () {
       // Create new query
-      var query = new _libYebo_sdkQueryProduct2['default']();
+      var query = new _index.Products();
 
       // Do the query
       query.filter('color', ['blue', 'red']);
@@ -10153,7 +10191,7 @@ module.exports = function () {
     //
     it('should generate two filters with `and` operator', function () {
       // Create new query
-      var query = new _libYebo_sdkQueryProduct2['default']();
+      var query = new _index.Products();
 
       // Do the query
       query.filter('color', ['blue', 'red']).and().filter('size', ['s', 'm', 'l']);
@@ -10166,7 +10204,7 @@ module.exports = function () {
     //
     it('should generate a taxonomy filter', function () {
       // Create new query
-      var query = new _libYebo_sdkQueryProduct2['default']();
+      var query = new _index.Products();
 
       // Do the query
       query.taxonomy(['camisetas', 'promocao']);
@@ -10185,7 +10223,7 @@ module.exports = function () {
     //
     it('should generate a price filter with two values', function () {
       // Create new query
-      var query = new _libYebo_sdkQueryProduct2['default']();
+      var query = new _index.Products();
 
       // Do the query
       query.price(0, 15);
@@ -10204,7 +10242,7 @@ module.exports = function () {
     //
     it('should generate a price filter with one value', function () {
       // Create new query
-      var query = new _libYebo_sdkQueryProduct2['default']();
+      var query = new _index.Products();
 
       // Do the query
       query.price(30);
@@ -10222,7 +10260,7 @@ module.exports = function () {
     //
     it('should generate a sort', function () {
       // Create new query
-      var query = new _libYebo_sdkQueryProduct2['default']();
+      var query = new _index.Products();
 
       // Do the query
       query.sort('price', 'asc');
@@ -10235,7 +10273,7 @@ module.exports = function () {
     //
     it('should generate a search', function () {
       // Create new query
-      var query = new _libYebo_sdkQueryProduct2['default']();
+      var query = new _index.Products();
 
       // Do the query
       query.search('product-name');
@@ -10247,7 +10285,7 @@ module.exports = function () {
     //
     it('should generate page', function () {
       // Create new query
-      var query = new _libYebo_sdkQueryProduct2['default']();
+      var query = new _index.Products();
 
       // Do the query
       query.page(1);
@@ -10259,7 +10297,7 @@ module.exports = function () {
     //
     it('should generate per page', function () {
       // Create new query
-      var query = new _libYebo_sdkQueryProduct2['default']();
+      var query = new _index.Products();
 
       // Do the query
       query.perPage(15);
@@ -10270,7 +10308,7 @@ module.exports = function () {
 
     it('should build the query', function () {
       // Create new query
-      var query = new _libYebo_sdkQueryProduct2['default']();
+      var query = new _index.Products();
 
       // Do the query
       query.search('product-name').and().taxonomy(['camisetas', 'promocao']).and().filter('color', ['blue', 'red']).and().sort('price', 'asc').price(0, 30).page(1).perPage(15);
@@ -10287,19 +10325,21 @@ module.exports = function () {
   });
 };
 
-},{"../../../lib/yebo_sdk/query/product":2,"chai":5}],74:[function(require,module,exports){
+},{"../../../index":1,"chai":6}],75:[function(require,module,exports){
 // Testing requests
 'use strict';
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-var _libYebo_sdkRequest = require('../../lib/yebo_sdk/request');
+var _index = require('../../index');
 
-var _libYebo_sdkRequest2 = _interopRequireDefault(_libYebo_sdkRequest);
+var _chai = require('chai');
+
+var _chai2 = _interopRequireDefault(_chai);
 
 //
-var expect = require('chai').expect,
-    should = require('chai').should();
+var expect = _chai2['default'].expect,
+    should = _chai2['default'].should();
 
 module.exports = function () {
   describe('Request', function () {
@@ -10309,7 +10349,7 @@ module.exports = function () {
     // });
 
     it('should make a VALID request', function (done) {
-      new _libYebo_sdkRequest2['default']('http://vivreshop.yebo.me:3000/v3').then(function (result, xhr) {
+      new _index.Request('http://vivreshop.yebo.me:3000/v3').then(function (result, xhr) {
         // Assert
         result.should.be.a('object');
 
@@ -10321,19 +10361,21 @@ module.exports = function () {
   });
 };
 
-},{"../../lib/yebo_sdk/request":3,"chai":5}],75:[function(require,module,exports){
+},{"../../index":1,"chai":6}],76:[function(require,module,exports){
 // Testing requests
 'use strict';
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-var _libYebo_sdkStore = require('../../lib/yebo_sdk/store');
+var _index = require('../../index');
 
-var _libYebo_sdkStore2 = _interopRequireDefault(_libYebo_sdkStore);
+var _chai = require('chai');
+
+var _chai2 = _interopRequireDefault(_chai);
 
 //
-var expect = require('chai').expect,
-    should = require('chai').should();
+var expect = _chai2['default'].expect,
+    should = _chai2['default'].should();
 
 module.exports = function () {
   describe('Store', function () {
@@ -10343,16 +10385,14 @@ module.exports = function () {
     // });
 
     it('should be authenticated by Yebo', function (done) {
-      _libYebo_sdkStore2['default'].auth('http://vivreshop.yebo.me:3000/v3/').then(function (token) {
-        console.log(token);
-
+      _index.Store.auth('http://vivreshop.yebo.me:3000/v3/').then(function (token) {
         // Done!
         done();
       });
     });
 
     it('should be authenticated by cache', function (done) {
-      _libYebo_sdkStore2['default'].auth('http://vivreshop.yebo.me:3000/v3/').then(function (token) {
+      _index.Store.auth('http://vivreshop.yebo.me:3000/v3/').then(function (token) {
         // Done!
         done();
       });
@@ -10360,4 +10400,4 @@ module.exports = function () {
   });
 };
 
-},{"../../lib/yebo_sdk/store":4,"chai":5}]},{},[71])
+},{"../../index":1,"chai":6}]},{},[72])

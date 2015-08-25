@@ -10,6 +10,8 @@
     <div id="mocha"></div>
 
     <script src="../node_modules/mocha/mocha.js"></script>
+    <script src="../node_modules/chai/chai.js"></script>
+
     <script>
       mocha.reporter('html');
       mocha.ui('bdd');
@@ -18,10 +20,6 @@
     <script src="./yebo_sdk-tests.js"></script>
 
     <script>
-      console.error = function(exception) {
-
-      };
-
       if (window.mochaPhantomJS) {
         mochaPhantomJS.run();
       } else {
