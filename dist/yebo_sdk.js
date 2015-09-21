@@ -12,46 +12,12 @@ function _inherits(subClass, superClass) { if (typeof superClass !== 'function' 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
 (function (global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('cacheJS')) : typeof define === 'function' && define.amd ? define(['exports', 'cacheJS'], factory) : factory(global.yebo_sdk = {}, global.cacheJS);
-})(undefined, function (exports, cacheJS) {
+  typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) : typeof define === 'function' && define.amd ? define(['exports'], factory) : factory(global.yebo_sdk = {});
+})(undefined, function (exports) {
   'use strict';
-
-  cacheJS = 'default' in cacheJS ? cacheJS['default'] : cacheJS;
-
-  /**
-   * Abstract query class
-   */
-
-  var Query =
-  /**
-   * Create a new Query
-   * @param {any} parentQuery Base query that will be exetend
-   */
-  function Query(parentQuery) {
-    _classCallCheck(this, Query);
-
-    // Set query name
-    this.queryName = 'abstract';
-
-    // Set attributes
-    this._attrs = {};
-
-    // Is there any parentQuery?
-    if (parentQuery !== undefined) {
-      // Check the queryName
-      if (this.queryName === parentQuery.queryName) this._attrs = parentQuery._attrs;
-    }
-  }
 
   // Variables
   // var chunk = require('lodash');
-
-  /**
-   * Run the query
-   */
-
-  ;
-
   var _assign = require('lodash/object/assign');
   var _RSVP = require('rsvp');
   /**
@@ -116,7 +82,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       });
     }
 
-    //
+    /**
+     * Abstract query class
+     */
 
     /**
      * Parse the XHR response according to the type
@@ -132,6 +100,51 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     }]);
 
     return Request;
+  })();
+
+  var Query = (function () {
+    /**
+     * Create a new Query
+     * @param {any} parentQuery Base query that will be exetend
+     */
+
+    function Query(parentQuery) {
+      _classCallCheck(this, Query);
+
+      // Set query name
+      this.queryName = 'abstract';
+
+      // Set attributes
+      this._attrs = {};
+
+      // Is there any parentQuery?
+      if (parentQuery !== undefined) {
+        // Check the queryName
+        if (this.queryName === parentQuery.queryName) this._attrs = parentQuery._attrs;
+      }
+    }
+
+    // import cacheJS from 'cacheJS';
+
+    //
+
+    /**
+     * Build the query
+     * @return {Object} The object that will be passed to the run as `data`
+     */
+
+    _createClass(Query, [{
+      key: 'build',
+      value: function build() {
+        // Warn!
+        console.warn('This method should be implemented in the Query class.');
+
+        // Return nothing
+        return {};
+      }
+    }]);
+
+    return Query;
   })();
 
   var RSVP = require('rsvp');
@@ -184,24 +197,42 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       /**
        * Fetch any kind of data from Yebo
        * @todo A way to able the user to config the store URL
-       * @param {}
+       * @todo Create a Result Object to make all the API returns the same
+       * @param {url} path The path that will be requested
+       * @param {object} data Data that will be sent to the URL
+       * @param {string} method Method HTTP that will be used
        */
     }, {
       key: 'fetch',
       value: function fetch(path) {
+        var _this2 = this;
+
         var data = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
         var method = arguments.length <= 2 || arguments[2] === undefined ? 'GET' : arguments[2];
 
         // Define the store url
-        var url = 'http://vivreshop.yebo.me:3000/v3/';
+        // const url = 'http://vivreshop.yebo.me:3000/v3/';
+        var url = 'http://vivreshop.azsale.com.br/api/v3';
 
-        // Auth header
-        var authHeader = {
-          'Authorization': 'Bearer'
-        };
+        // Define the full fetch url
+        var fullPath = url + '/' + path;
 
         // Return a fetch promise
-        return new RSPV.Promise(function (resolve, reject) {});
+        return new RSVP.Promise(function (resolve, reject) {
+          // Auth the connection
+          _this2.auth(url).then(function (token) {
+            // Auth header
+            var authHeader = {
+              'Authorization': 'Bearer ' + token
+            };
+
+            // Make the request
+            new Request(fullPath, method, data, authHeader).then(function (result) {
+              // resolve the promise
+              resolve(result);
+            })['catch'](reject);
+          });
+        });
       }
     }]);
 
@@ -488,6 +519,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     return Products;
   })(Query);
 
+  exports.Request = Request;
   exports.Query = Query;
   exports.Store = Store;
   exports.Products = Products;
