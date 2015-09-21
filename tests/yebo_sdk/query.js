@@ -17,6 +17,17 @@ module.exports = function() {
       let query = new Query();
     });
 
+    it('should be built', () => {
+      // Create a new query
+      let query = new Query();
+
+      // Build it
+      let build = query.build();
+
+      // Assertions
+      expect(build).to.be.a('object');
+    });
+
     it('should create a query based in another one', () => {
       // Create the parent query
       let parentQuery = new Query();
