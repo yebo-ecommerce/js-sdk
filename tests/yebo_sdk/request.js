@@ -14,7 +14,7 @@ module.exports = function() {
     // });
 
     it('should make a VALID request', (done) => {
-      new Request('http://vivreshop.yebo.me:3000/v3').then((result, xhr) => {
+      new Request('http://vivreshop.azsale.com.br/api/v3').then((result, xhr) => {
         // Assert
         result.should.be.a('object');
 
