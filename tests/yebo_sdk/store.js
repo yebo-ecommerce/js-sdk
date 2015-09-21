@@ -8,20 +8,31 @@ var expect = chai.expect,
 
 module.exports = function() {
   describe('Store', () => {
+    // Setting the URL that will be used in this test
+    const url = 'http://vivreshop.azsale.com.br/api'
+
     // IT template
     // it('', (done) => {
     //
     // });
 
     it('should be authenticated by Yebo', (done) => {
-      Store.auth('http://vivreshop.yebo.me:3000/v3/').then((token) => {
+      Store.auth(`${url}/v3`).then((token) => {
         // Done!
         done();
       });
     });
 
     it('should be authenticated by cache', (done) => {
-      Store.auth('http://vivreshop.yebo.me:3000/v3/').then((token) => {
+      Store.auth(`${url}/v3`).then((token) => {
+        // Done!
+        done();
+      });
+    });
+
+    // IT template
+    it('should request an Yebo URL passing through the JWT authentication', (done) => {
+      Store.fetch('products').then(() => {
         // Done!
         done();
       });
