@@ -2,7 +2,7 @@
   "name": "yebo_sdk",
   "version": "0.0.0-alpha",
   "description": "A bridge between the Yebo e-commerce and your website",
-  "main": "yebo_sdk.js",
+  "main": "index.js",
   "scripts": {
     "test": "./node_modules/gulp/bin/gulp.js test",
     "docs": "./node_modules/esdoc/out/src/ESDocCLI.js -c esdoc.json",
