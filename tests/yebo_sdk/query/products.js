@@ -197,5 +197,24 @@ module.exports = function() {
       expect(build).to.have.property('filters');
       expect(build).to.have.property('name');
     });
+
+    it('should execute a simple query', (done) => {
+      // Create new query
+      let query = new Products();
+
+      // Do the query
+      query
+        .perPage(15);
+
+      // Execute it
+      query.execute().then((result) => {
+      // Assertions
+        expect(result).to.be.a('object');
+        expect(result).to.have.property('products');
+
+        // Done!
+        done();
+      });
+    });
   });
 };

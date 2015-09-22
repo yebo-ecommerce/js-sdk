@@ -28,6 +28,15 @@ module.exports = function() {
       expect(build).to.be.a('object');
     });
 
+    it('should not execute the query, because the endpoint is not defined', () => {
+      // Create a new query
+      let query = new Query();
+
+      // Try to execute the query
+      // should.Throw(query.execute());
+      expect(query.endPoint).to.equal(undefined);
+    });
+
     it('should create a query based in another one', () => {
       // Create the parent query
       let parentQuery = new Query();
