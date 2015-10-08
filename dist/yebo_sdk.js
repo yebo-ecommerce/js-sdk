@@ -36,6 +36,17 @@ Object.defineProperty(exports, 'Store', {
   }
 });
 
+var _libYebo_sdkConfig = _dereq_('./lib/yebo_sdk/config');
+
+Object.defineProperty(exports, 'Config', {
+  enumerable: true,
+  get: function get() {
+    return _libYebo_sdkConfig.Config;
+  }
+});
+
+// Queries
+
 var _libYebo_sdkQueryProducts = _dereq_('./lib/yebo_sdk/query/products');
 
 Object.defineProperty(exports, 'Products', {
@@ -45,10 +56,87 @@ Object.defineProperty(exports, 'Products', {
   }
 });
 
-},{"./lib/yebo_sdk/query":2,"./lib/yebo_sdk/query/products":3,"./lib/yebo_sdk/request":4,"./lib/yebo_sdk/store":5}],2:[function(_dereq_,module,exports){
+},{"./lib/yebo_sdk/config":2,"./lib/yebo_sdk/query":3,"./lib/yebo_sdk/query/products":4,"./lib/yebo_sdk/request":5,"./lib/yebo_sdk/store":6}],2:[function(_dereq_,module,exports){
 /**
- * Abstract query class
+ * Config Class
+ * This class is reponsible to store all the configurations from the SDK
+ * @todo Store the config in the Browser Cache also
  */
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Config = (function () {
+  function Config() {
+    _classCallCheck(this, Config);
+  }
+
+  _createClass(Config, null, [{
+    key: "set",
+
+    /**
+     * Set
+     * @param {String} key The key of the value that will be stored
+     * @param {Any} value The value to be stored
+     * @param {Object} options Options for the storage
+     */
+    value: function set(key, value) {
+      var options = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
+
+      // Set the new value to store
+      this._store[key] = value;
+
+      // Default return
+      return true;
+    }
+
+    /**
+     * Get - Retrieve the stored info
+     * @param {String} key The same key used to store the value
+     * @param {Boolean} required If this flag is true, when get the key if the value is undefined it throw an error
+     */
+  }, {
+    key: "get",
+    value: function get(key) {
+      var required = arguments.length <= 1 || arguments[1] === undefined ? false : arguments[1];
+
+      // Get the key value
+      var value = this._store[key];
+
+      // If its required and it is undefined throw an error
+      if (_dereq_ === true && value === undefined) throw "The key " + key + " is not defined and its required.";
+
+      // Return the value
+      return this._store[key];
+    }
+  }, {
+    key: "_store",
+
+    /**
+     * This variable is where all the config are stored
+     */
+    get: function get() {
+      // Check if __store exists
+      if (this.__store === undefined) this.__store = {};
+
+      // Return the __store value
+      return this.__store;
+    }
+  }]);
+
+  return Config;
+})();
+
+exports.Config = Config;
+
+},{}],3:[function(_dereq_,module,exports){
+// Dependencies
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -58,6 +146,12 @@ Object.defineProperty(exports, '__esModule', {
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+var _store = _dereq_('./store');
+
+/**
+ * Abstract query class
+ */
 
 var Query = (function () {
   /**
@@ -73,6 +167,9 @@ var Query = (function () {
 
     // Set attributes
     this._attrs = {};
+
+    // Query endpoint
+    this.endPoint = undefined;
 
     // Is there any parentQuery?
     if (parentQuery !== undefined) {
@@ -95,6 +192,20 @@ var Query = (function () {
       // Return nothing
       return {};
     }
+
+    /**
+     * Execute the query using Store#fetch
+     * @return {Object} The result of the query
+     */
+  }, {
+    key: 'execute',
+    value: function execute() {
+      // Check if the endpoint is defined
+      if (this.endPoint === undefined) throw 'The query endpoint must be defined';
+
+      // Return the Fetch!
+      return _store.Store.fetch(this.endPoint, this.build());
+    }
   }]);
 
   return Query;
@@ -102,7 +213,7 @@ var Query = (function () {
 
 exports.Query = Query;
 
-},{}],3:[function(_dereq_,module,exports){
+},{"./store":6}],4:[function(_dereq_,module,exports){
 // Utils
 'use strict';
 
@@ -112,7 +223,7 @@ Object.defineProperty(exports, '__esModule', {
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-var _get = function get(_x8, _x9, _x10) { var _again = true; _function: while (_again) { var object = _x8, property = _x9, receiver = _x10; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x8 = parent; _x9 = property; _x10 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+var _get = function get(_x10, _x11, _x12) { var _again = true; _function: while (_again) { var object = _x10, property = _x11, receiver = _x12; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x10 = parent; _x11 = property; _x12 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
@@ -131,6 +242,10 @@ var _lodashLangIsEmpty2 = _interopRequireDefault(_lodashLangIsEmpty);
 var _lodashLangIsArray = _dereq_('lodash/lang/isArray');
 
 var _lodashLangIsArray2 = _interopRequireDefault(_lodashLangIsArray);
+
+// Dependencies
+
+var _store = _dereq_('../store');
 
 // Import parent class
 
@@ -170,6 +285,9 @@ var Products = (function (_Query) {
 
     // Set the query name
     this.queryName = 'product';
+
+    // Set the endpoint
+    this.endPoint = 'products';
 
     // Default attributes
     var defaultAttributes = {
@@ -358,9 +476,21 @@ var Products = (function (_Query) {
       // Create result
       var result = {
         page: this._attrs.page,
-        per_page: this._attrs.perPage,
-        filters: this._attrs.filter
+        per_page: this._attrs.perPage
       };
+
+      // Check if filters are empty
+      //
+      var filters = {};
+
+      // Check `or` filters
+      if (!(0, _lodashLangIsEmpty2['default'])(this._attrs.filter.or)) filters.or = this._attrs.filter.or;
+
+      // Check `and` filters
+      if (!(0, _lodashLangIsEmpty2['default'])(this._attrs.filter.and)) filters.and = this._attrs.filter.and;
+
+      // Set filters if it is not empty
+      if (!(0, _lodashLangIsEmpty2['default'])(filters)) result.filters = filters;
 
       //
       if (this._attrs.search !== '') result.name = this._attrs.search;
@@ -370,6 +500,28 @@ var Products = (function (_Query) {
 
       // Return the result
       return result;
+    }
+
+    /*
+     * Get the number of products based on the query
+     * @param {integer} priceInterval The interval that will be used to generate tha price ranges
+     * @param {boolean} execute If its false the method return the params used to get the aggs
+     * @return {Object} The result of the aggregations
+     */
+  }, {
+    key: 'aggregations',
+    value: function aggregations() {
+      var priceInterval = arguments.length <= 0 || arguments[0] === undefined ? 50 : arguments[0];
+      var execute = arguments.length <= 1 || arguments[1] === undefined ? true : arguments[1];
+
+      // Create the aggs params
+      var params = (0, _lodashObjectAssign2['default'])({ price_interval: priceInterval }, this.build());
+
+      // Check if its necessary to execute the aggs
+      if (!execute) return params;
+
+      // Return the Fetch!
+      return _store.Store.fetch(this.endPoint + '/aggs', params);
     }
 
     /**
@@ -416,7 +568,7 @@ var Products = (function (_Query) {
 
 exports.Products = Products;
 
-},{"../query":2,"lodash/lang/isArray":23,"lodash/lang/isEmpty":24,"lodash/object/assign":29}],4:[function(_dereq_,module,exports){
+},{"../query":3,"../store":6,"lodash/lang/isArray":24,"lodash/lang/isEmpty":25,"lodash/object/assign":30}],5:[function(_dereq_,module,exports){
 // Variables
 'use strict';
 
@@ -518,7 +670,7 @@ var Request = (function () {
 
 exports.Request = Request;
 
-},{"lodash/object/assign":29,"rsvp":33}],5:[function(_dereq_,module,exports){
+},{"lodash/object/assign":30,"rsvp":34}],6:[function(_dereq_,module,exports){
 // Dependencies
 'use strict';
 
@@ -533,6 +685,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'd
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
 var _request = _dereq_('./request');
+
+var _config = _dereq_('./config');
 
 var _rsvp = _dereq_('rsvp');
 
@@ -555,11 +709,19 @@ var Store = (function () {
 
     /**
      * Authenticate the current sessions
-     * @param {string} url The store URL
      */
-    value: function auth(url) {
+    value: function auth() {
       // Define the cache expire time
       var EXPIRE_TIME = 1800;
+
+      // Define the store url
+      var url = _config.Config.get('store:url', true);
+
+      // Define the API version
+      var apiVersion = _config.Config.get('store:api:version', true);
+
+      // Define the full fetch url
+      var fullURL = url + '/' + apiVersion;
 
       // Return the an auth Promise
       return new _rsvp2['default'].Promise(function (resolve, reject) {
@@ -572,7 +734,7 @@ var Store = (function () {
           resolve(cachedKey);
         } else {
           // Get a new key
-          new _request.Request(url).then(function (result) {
+          new _request.Request(fullURL).then(function (result) {
             // Insert into the cache
             cacheJS.set('yebo:auth', result.token, EXPIRE_TIME);
 
@@ -600,16 +762,18 @@ var Store = (function () {
       var method = arguments.length <= 2 || arguments[2] === undefined ? 'GET' : arguments[2];
 
       // Define the store url
-      // const url = 'http://vivreshop.yebo.me:3000/v3/';
-      var url = 'http://vivreshop.azsale.com.br/api/v3';
+      var url = _config.Config.get('store:url', true);
+
+      // Define the API version
+      var apiVersion = _config.Config.get('store:api:version', true);
 
       // Define the full fetch url
-      var fullPath = url + '/' + path;
+      var fullPath = url + '/' + apiVersion + '/' + path;
 
       // Return a fetch promise
       return new _rsvp2['default'].Promise(function (resolve, reject) {
         // Auth the connection
-        _this.auth(url).then(function (token) {
+        _this.auth().then(function (token) {
           // Auth header
           var authHeader = {
             'Authorization': 'Bearer ' + token
@@ -630,7 +794,7 @@ var Store = (function () {
 
 exports.Store = Store;
 
-},{"./request":4,"rsvp":33}],6:[function(_dereq_,module,exports){
+},{"./config":2,"./request":5,"rsvp":34}],7:[function(_dereq_,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -695,7 +859,7 @@ process.chdir = function (dir) {
     throw new Error('process.chdir is not supported');
 };
 
-},{}],7:[function(_dereq_,module,exports){
+},{}],8:[function(_dereq_,module,exports){
 /** Used as the `TypeError` message for "Functions" methods. */
 var FUNC_ERROR_TEXT = 'Expected a function';
 
@@ -755,7 +919,7 @@ function restParam(func, start) {
 
 module.exports = restParam;
 
-},{}],8:[function(_dereq_,module,exports){
+},{}],9:[function(_dereq_,module,exports){
 var keys = _dereq_('../object/keys');
 
 /**
@@ -789,7 +953,7 @@ function assignWith(object, source, customizer) {
 
 module.exports = assignWith;
 
-},{"../object/keys":30}],9:[function(_dereq_,module,exports){
+},{"../object/keys":31}],10:[function(_dereq_,module,exports){
 var baseCopy = _dereq_('./baseCopy'),
     keys = _dereq_('../object/keys');
 
@@ -810,7 +974,7 @@ function baseAssign(object, source) {
 
 module.exports = baseAssign;
 
-},{"../object/keys":30,"./baseCopy":10}],10:[function(_dereq_,module,exports){
+},{"../object/keys":31,"./baseCopy":11}],11:[function(_dereq_,module,exports){
 /**
  * Copies properties of `source` to `object`.
  *
@@ -835,7 +999,7 @@ function baseCopy(source, props, object) {
 
 module.exports = baseCopy;
 
-},{}],11:[function(_dereq_,module,exports){
+},{}],12:[function(_dereq_,module,exports){
 /**
  * The base implementation of `_.property` without support for deep paths.
  *
@@ -851,7 +1015,7 @@ function baseProperty(key) {
 
 module.exports = baseProperty;
 
-},{}],12:[function(_dereq_,module,exports){
+},{}],13:[function(_dereq_,module,exports){
 var identity = _dereq_('../utility/identity');
 
 /**
@@ -892,7 +1056,7 @@ function bindCallback(func, thisArg, argCount) {
 
 module.exports = bindCallback;
 
-},{"../utility/identity":32}],13:[function(_dereq_,module,exports){
+},{"../utility/identity":33}],14:[function(_dereq_,module,exports){
 var bindCallback = _dereq_('./bindCallback'),
     isIterateeCall = _dereq_('./isIterateeCall'),
     restParam = _dereq_('../function/restParam');
@@ -935,7 +1099,7 @@ function createAssigner(assigner) {
 
 module.exports = createAssigner;
 
-},{"../function/restParam":7,"./bindCallback":12,"./isIterateeCall":18}],14:[function(_dereq_,module,exports){
+},{"../function/restParam":8,"./bindCallback":13,"./isIterateeCall":19}],15:[function(_dereq_,module,exports){
 var baseProperty = _dereq_('./baseProperty');
 
 /**
@@ -952,7 +1116,7 @@ var getLength = baseProperty('length');
 
 module.exports = getLength;
 
-},{"./baseProperty":11}],15:[function(_dereq_,module,exports){
+},{"./baseProperty":12}],16:[function(_dereq_,module,exports){
 var isNative = _dereq_('../lang/isNative');
 
 /**
@@ -970,7 +1134,7 @@ function getNative(object, key) {
 
 module.exports = getNative;
 
-},{"../lang/isNative":26}],16:[function(_dereq_,module,exports){
+},{"../lang/isNative":27}],17:[function(_dereq_,module,exports){
 var getLength = _dereq_('./getLength'),
     isLength = _dereq_('./isLength');
 
@@ -987,7 +1151,7 @@ function isArrayLike(value) {
 
 module.exports = isArrayLike;
 
-},{"./getLength":14,"./isLength":19}],17:[function(_dereq_,module,exports){
+},{"./getLength":15,"./isLength":20}],18:[function(_dereq_,module,exports){
 /** Used to detect unsigned integer values. */
 var reIsUint = /^\d+$/;
 
@@ -1013,7 +1177,7 @@ function isIndex(value, length) {
 
 module.exports = isIndex;
 
-},{}],18:[function(_dereq_,module,exports){
+},{}],19:[function(_dereq_,module,exports){
 var isArrayLike = _dereq_('./isArrayLike'),
     isIndex = _dereq_('./isIndex'),
     isObject = _dereq_('../lang/isObject');
@@ -1043,7 +1207,7 @@ function isIterateeCall(value, index, object) {
 
 module.exports = isIterateeCall;
 
-},{"../lang/isObject":27,"./isArrayLike":16,"./isIndex":17}],19:[function(_dereq_,module,exports){
+},{"../lang/isObject":28,"./isArrayLike":17,"./isIndex":18}],20:[function(_dereq_,module,exports){
 /**
  * Used as the [maximum length](http://ecma-international.org/ecma-262/6.0/#sec-number.max_safe_integer)
  * of an array-like value.
@@ -1065,7 +1229,7 @@ function isLength(value) {
 
 module.exports = isLength;
 
-},{}],20:[function(_dereq_,module,exports){
+},{}],21:[function(_dereq_,module,exports){
 /**
  * Checks if `value` is object-like.
  *
@@ -1079,7 +1243,7 @@ function isObjectLike(value) {
 
 module.exports = isObjectLike;
 
-},{}],21:[function(_dereq_,module,exports){
+},{}],22:[function(_dereq_,module,exports){
 var isArguments = _dereq_('../lang/isArguments'),
     isArray = _dereq_('../lang/isArray'),
     isIndex = _dereq_('./isIndex'),
@@ -1122,7 +1286,7 @@ function shimKeys(object) {
 
 module.exports = shimKeys;
 
-},{"../lang/isArguments":22,"../lang/isArray":23,"../object/keysIn":31,"./isIndex":17,"./isLength":19}],22:[function(_dereq_,module,exports){
+},{"../lang/isArguments":23,"../lang/isArray":24,"../object/keysIn":32,"./isIndex":18,"./isLength":20}],23:[function(_dereq_,module,exports){
 var isArrayLike = _dereq_('../internal/isArrayLike'),
     isObjectLike = _dereq_('../internal/isObjectLike');
 
@@ -1158,7 +1322,7 @@ function isArguments(value) {
 
 module.exports = isArguments;
 
-},{"../internal/isArrayLike":16,"../internal/isObjectLike":20}],23:[function(_dereq_,module,exports){
+},{"../internal/isArrayLike":17,"../internal/isObjectLike":21}],24:[function(_dereq_,module,exports){
 var getNative = _dereq_('../internal/getNative'),
     isLength = _dereq_('../internal/isLength'),
     isObjectLike = _dereq_('../internal/isObjectLike');
@@ -1200,7 +1364,7 @@ var isArray = nativeIsArray || function(value) {
 
 module.exports = isArray;
 
-},{"../internal/getNative":15,"../internal/isLength":19,"../internal/isObjectLike":20}],24:[function(_dereq_,module,exports){
+},{"../internal/getNative":16,"../internal/isLength":20,"../internal/isObjectLike":21}],25:[function(_dereq_,module,exports){
 var isArguments = _dereq_('./isArguments'),
     isArray = _dereq_('./isArray'),
     isArrayLike = _dereq_('../internal/isArrayLike'),
@@ -1249,7 +1413,7 @@ function isEmpty(value) {
 
 module.exports = isEmpty;
 
-},{"../internal/isArrayLike":16,"../internal/isObjectLike":20,"../object/keys":30,"./isArguments":22,"./isArray":23,"./isFunction":25,"./isString":28}],25:[function(_dereq_,module,exports){
+},{"../internal/isArrayLike":17,"../internal/isObjectLike":21,"../object/keys":31,"./isArguments":23,"./isArray":24,"./isFunction":26,"./isString":29}],26:[function(_dereq_,module,exports){
 var isObject = _dereq_('./isObject');
 
 /** `Object#toString` result references. */
@@ -1289,7 +1453,7 @@ function isFunction(value) {
 
 module.exports = isFunction;
 
-},{"./isObject":27}],26:[function(_dereq_,module,exports){
+},{"./isObject":28}],27:[function(_dereq_,module,exports){
 var isFunction = _dereq_('./isFunction'),
     isObjectLike = _dereq_('../internal/isObjectLike');
 
@@ -1339,7 +1503,7 @@ function isNative(value) {
 
 module.exports = isNative;
 
-},{"../internal/isObjectLike":20,"./isFunction":25}],27:[function(_dereq_,module,exports){
+},{"../internal/isObjectLike":21,"./isFunction":26}],28:[function(_dereq_,module,exports){
 /**
  * Checks if `value` is the [language type](https://es5.github.io/#x8) of `Object`.
  * (e.g. arrays, functions, objects, regexes, `new Number(0)`, and `new String('')`)
@@ -1369,7 +1533,7 @@ function isObject(value) {
 
 module.exports = isObject;
 
-},{}],28:[function(_dereq_,module,exports){
+},{}],29:[function(_dereq_,module,exports){
 var isObjectLike = _dereq_('../internal/isObjectLike');
 
 /** `Object#toString` result references. */
@@ -1406,7 +1570,7 @@ function isString(value) {
 
 module.exports = isString;
 
-},{"../internal/isObjectLike":20}],29:[function(_dereq_,module,exports){
+},{"../internal/isObjectLike":21}],30:[function(_dereq_,module,exports){
 var assignWith = _dereq_('../internal/assignWith'),
     baseAssign = _dereq_('../internal/baseAssign'),
     createAssigner = _dereq_('../internal/createAssigner');
@@ -1451,7 +1615,7 @@ var assign = createAssigner(function(object, source, customizer) {
 
 module.exports = assign;
 
-},{"../internal/assignWith":8,"../internal/baseAssign":9,"../internal/createAssigner":13}],30:[function(_dereq_,module,exports){
+},{"../internal/assignWith":9,"../internal/baseAssign":10,"../internal/createAssigner":14}],31:[function(_dereq_,module,exports){
 var getNative = _dereq_('../internal/getNative'),
     isArrayLike = _dereq_('../internal/isArrayLike'),
     isObject = _dereq_('../lang/isObject'),
@@ -1498,7 +1662,7 @@ var keys = !nativeKeys ? shimKeys : function(object) {
 
 module.exports = keys;
 
-},{"../internal/getNative":15,"../internal/isArrayLike":16,"../internal/shimKeys":21,"../lang/isObject":27}],31:[function(_dereq_,module,exports){
+},{"../internal/getNative":16,"../internal/isArrayLike":17,"../internal/shimKeys":22,"../lang/isObject":28}],32:[function(_dereq_,module,exports){
 var isArguments = _dereq_('../lang/isArguments'),
     isArray = _dereq_('../lang/isArray'),
     isIndex = _dereq_('../internal/isIndex'),
@@ -1564,7 +1728,7 @@ function keysIn(object) {
 
 module.exports = keysIn;
 
-},{"../internal/isIndex":17,"../internal/isLength":19,"../lang/isArguments":22,"../lang/isArray":23,"../lang/isObject":27}],32:[function(_dereq_,module,exports){
+},{"../internal/isIndex":18,"../internal/isLength":20,"../lang/isArguments":23,"../lang/isArray":24,"../lang/isObject":28}],33:[function(_dereq_,module,exports){
 /**
  * This method returns the first argument provided to it.
  *
@@ -1586,7 +1750,7 @@ function identity(value) {
 
 module.exports = identity;
 
-},{}],33:[function(_dereq_,module,exports){
+},{}],34:[function(_dereq_,module,exports){
 (function (process,global){
 /*!
  * @overview RSVP - a tiny implementation of Promises/A+.
@@ -3187,6 +3351,6 @@ module.exports = identity;
 
 
 }).call(this,_dereq_("IrXUsu"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"IrXUsu":6}]},{},[1])
+},{"IrXUsu":7}]},{},[1])
 (1)
 });

@@ -216,5 +216,31 @@ module.exports = function() {
         done();
       });
     });
+
+    // This probably will work just in the http://vivreshop.azsale.com.br/ store
+    it('should get the aggregations for some query', (done) => {
+      // Create new query
+      let query = new Products();
+
+      // Do the query
+      query
+        .taxonomy(['marcas'])
+        .perPage(15);
+
+      // Get the aggs params
+      let aggsParams = query.aggregations(50, false);
+
+      // Assertions
+      expect(aggsParams).to.have.property('price_interval');
+
+      // Get the aggregations
+      query.aggregations().then((aggs) => {
+        // Assertions
+        expect(aggs).to.have.property('price');
+
+        // Done!
+        done();
+      });
+    });
   });
 };
