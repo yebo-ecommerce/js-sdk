@@ -1,0 +1,17 @@
+{
+  "name": "yebo_sdk",
+  "main": [
+    "yebo_sdk/yebo_sdk.js",
+    "yebo_sdk/yebo_sdk.css"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "!LICENSE.txt",
+    "package.json",
+    "Gruntfile.js",
+    "node_modules",
+    "test"
+  ],
+  "version": "0.0.0-alpha"
+}

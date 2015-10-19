@@ -145,9 +145,15 @@ Object.defineProperty(exports, '__esModule', {
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
 var _store = _dereq_('./store');
+
+var _componentQuerystring = _dereq_('component-querystring');
+
+var _componentQuerystring2 = _interopRequireDefault(_componentQuerystring);
 
 /**
  * Abstract query class
@@ -193,6 +199,15 @@ var Query = (function () {
       return {};
     }
 
+    /*
+    * Object to QueryString
+    */
+  }, {
+    key: 'toParams',
+    value: function toParams() {
+      return _componentQuerystring2['default'].stringify(this.build());
+    }
+
     /**
      * Execute the query using Store#fetch
      * @return {Object} The result of the query
@@ -213,7 +228,7 @@ var Query = (function () {
 
 exports.Query = Query;
 
-},{"./store":6}],4:[function(_dereq_,module,exports){
+},{"./store":6,"component-querystring":7}],4:[function(_dereq_,module,exports){
 // Utils
 'use strict';
 
@@ -568,7 +583,7 @@ var Products = (function (_Query) {
 
 exports.Products = Products;
 
-},{"../query":3,"../store":6,"lodash/lang/isArray":24,"lodash/lang/isEmpty":25,"lodash/object/assign":30}],5:[function(_dereq_,module,exports){
+},{"../query":3,"../store":6,"lodash/lang/isArray":27,"lodash/lang/isEmpty":28,"lodash/object/assign":33}],5:[function(_dereq_,module,exports){
 // Variables
 'use strict';
 
@@ -670,7 +685,7 @@ var Request = (function () {
 
 exports.Request = Request;
 
-},{"lodash/object/assign":30,"rsvp":34}],6:[function(_dereq_,module,exports){
+},{"lodash/object/assign":33,"rsvp":37}],6:[function(_dereq_,module,exports){
 // Dependencies
 'use strict';
 
@@ -794,7 +809,166 @@ var Store = (function () {
 
 exports.Store = Store;
 
-},{"./config":2,"./request":5,"rsvp":34}],7:[function(_dereq_,module,exports){
+},{"./config":2,"./request":5,"rsvp":37}],7:[function(_dereq_,module,exports){
+
+/**
+ * Module dependencies.
+ */
+
+var trim = _dereq_('trim');
+var type = _dereq_('type');
+
+var pattern = /(\w+)\[(\d+)\]/
+
+/**
+ * Safely encode the given string
+ * 
+ * @param {String} str
+ * @return {String}
+ * @api private
+ */
+
+var encode = function(str) {
+  try {
+    return encodeURIComponent(str);
+  } catch (e) {
+    return str;
+  }
+};
+
+/**
+ * Safely decode the string
+ * 
+ * @param {String} str
+ * @return {String}
+ * @api private
+ */
+
+var decode = function(str) {
+  try {
+    return decodeURIComponent(str.replace(/\+/g, ' '));
+  } catch (e) {
+    return str;
+  }
+}
+
+/**
+ * Parse the given query `str`.
+ *
+ * @param {String} str
+ * @return {Object}
+ * @api public
+ */
+
+exports.parse = function(str){
+  if ('string' != typeof str) return {};
+
+  str = trim(str);
+  if ('' == str) return {};
+  if ('?' == str.charAt(0)) str = str.slice(1);
+
+  var obj = {};
+  var pairs = str.split('&');
+  for (var i = 0; i < pairs.length; i++) {
+    var parts = pairs[i].split('=');
+    var key = decode(parts[0]);
+    var m;
+
+    if (m = pattern.exec(key)) {
+      obj[m[1]] = obj[m[1]] || [];
+      obj[m[1]][m[2]] = decode(parts[1]);
+      continue;
+    }
+
+    obj[parts[0]] = null == parts[1]
+      ? ''
+      : decode(parts[1]);
+  }
+
+  return obj;
+};
+
+/**
+ * Stringify the given `obj`.
+ *
+ * @param {Object} obj
+ * @return {String}
+ * @api public
+ */
+
+exports.stringify = function(obj){
+  if (!obj) return '';
+  var pairs = [];
+
+  for (var key in obj) {
+    var value = obj[key];
+
+    if ('array' == type(value)) {
+      for (var i = 0; i < value.length; ++i) {
+        pairs.push(encode(key + '[' + i + ']') + '=' + encode(value[i]));
+      }
+      continue;
+    }
+
+    pairs.push(encode(key) + '=' + encode(obj[key]));
+  }
+
+  return pairs.join('&');
+};
+
+},{"trim":9,"type":8}],8:[function(_dereq_,module,exports){
+/**
+ * toString ref.
+ */
+
+var toString = Object.prototype.toString;
+
+/**
+ * Return the type of `val`.
+ *
+ * @param {Mixed} val
+ * @return {String}
+ * @api public
+ */
+
+module.exports = function(val){
+  switch (toString.call(val)) {
+    case '[object Date]': return 'date';
+    case '[object RegExp]': return 'regexp';
+    case '[object Arguments]': return 'arguments';
+    case '[object Array]': return 'array';
+    case '[object Error]': return 'error';
+  }
+
+  if (val === null) return 'null';
+  if (val === undefined) return 'undefined';
+  if (val !== val) return 'nan';
+  if (val && val.nodeType === 1) return 'element';
+
+  val = val.valueOf
+    ? val.valueOf()
+    : Object.prototype.valueOf.apply(val)
+
+  return typeof val;
+};
+
+},{}],9:[function(_dereq_,module,exports){
+
+exports = module.exports = trim;
+
+function trim(str){
+  return str.replace(/^\s*|\s*$/g, '');
+}
+
+exports.left = function(str){
+  return str.replace(/^\s*/, '');
+};
+
+exports.right = function(str){
+  return str.replace(/\s*$/, '');
+};
+
+},{}],10:[function(_dereq_,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -859,7 +1033,7 @@ process.chdir = function (dir) {
     throw new Error('process.chdir is not supported');
 };
 
-},{}],8:[function(_dereq_,module,exports){
+},{}],11:[function(_dereq_,module,exports){
 /** Used as the `TypeError` message for "Functions" methods. */
 var FUNC_ERROR_TEXT = 'Expected a function';
 
@@ -919,7 +1093,7 @@ function restParam(func, start) {
 
 module.exports = restParam;
 
-},{}],9:[function(_dereq_,module,exports){
+},{}],12:[function(_dereq_,module,exports){
 var keys = _dereq_('../object/keys');
 
 /**
@@ -953,7 +1127,7 @@ function assignWith(object, source, customizer) {
 
 module.exports = assignWith;
 
-},{"../object/keys":31}],10:[function(_dereq_,module,exports){
+},{"../object/keys":34}],13:[function(_dereq_,module,exports){
 var baseCopy = _dereq_('./baseCopy'),
     keys = _dereq_('../object/keys');
 
@@ -974,7 +1148,7 @@ function baseAssign(object, source) {
 
 module.exports = baseAssign;
 
-},{"../object/keys":31,"./baseCopy":11}],11:[function(_dereq_,module,exports){
+},{"../object/keys":34,"./baseCopy":14}],14:[function(_dereq_,module,exports){
 /**
  * Copies properties of `source` to `object`.
  *
@@ -999,7 +1173,7 @@ function baseCopy(source, props, object) {
 
 module.exports = baseCopy;
 
-},{}],12:[function(_dereq_,module,exports){
+},{}],15:[function(_dereq_,module,exports){
 /**
  * The base implementation of `_.property` without support for deep paths.
  *
@@ -1015,7 +1189,7 @@ function baseProperty(key) {
 
 module.exports = baseProperty;
 
-},{}],13:[function(_dereq_,module,exports){
+},{}],16:[function(_dereq_,module,exports){
 var identity = _dereq_('../utility/identity');
 
 /**
@@ -1056,7 +1230,7 @@ function bindCallback(func, thisArg, argCount) {
 
 module.exports = bindCallback;
 
-},{"../utility/identity":33}],14:[function(_dereq_,module,exports){
+},{"../utility/identity":36}],17:[function(_dereq_,module,exports){
 var bindCallback = _dereq_('./bindCallback'),
     isIterateeCall = _dereq_('./isIterateeCall'),
     restParam = _dereq_('../function/restParam');
@@ -1099,7 +1273,7 @@ function createAssigner(assigner) {
 
 module.exports = createAssigner;
 
-},{"../function/restParam":8,"./bindCallback":13,"./isIterateeCall":19}],15:[function(_dereq_,module,exports){
+},{"../function/restParam":11,"./bindCallback":16,"./isIterateeCall":22}],18:[function(_dereq_,module,exports){
 var baseProperty = _dereq_('./baseProperty');
 
 /**
@@ -1116,7 +1290,7 @@ var getLength = baseProperty('length');
 
 module.exports = getLength;
 
-},{"./baseProperty":12}],16:[function(_dereq_,module,exports){
+},{"./baseProperty":15}],19:[function(_dereq_,module,exports){
 var isNative = _dereq_('../lang/isNative');
 
 /**
@@ -1134,7 +1308,7 @@ function getNative(object, key) {
 
 module.exports = getNative;
 
-},{"../lang/isNative":27}],17:[function(_dereq_,module,exports){
+},{"../lang/isNative":30}],20:[function(_dereq_,module,exports){
 var getLength = _dereq_('./getLength'),
     isLength = _dereq_('./isLength');
 
@@ -1151,7 +1325,7 @@ function isArrayLike(value) {
 
 module.exports = isArrayLike;
 
-},{"./getLength":15,"./isLength":20}],18:[function(_dereq_,module,exports){
+},{"./getLength":18,"./isLength":23}],21:[function(_dereq_,module,exports){
 /** Used to detect unsigned integer values. */
 var reIsUint = /^\d+$/;
 
@@ -1177,7 +1351,7 @@ function isIndex(value, length) {
 
 module.exports = isIndex;
 
-},{}],19:[function(_dereq_,module,exports){
+},{}],22:[function(_dereq_,module,exports){
 var isArrayLike = _dereq_('./isArrayLike'),
     isIndex = _dereq_('./isIndex'),
     isObject = _dereq_('../lang/isObject');
@@ -1207,7 +1381,7 @@ function isIterateeCall(value, index, object) {
 
 module.exports = isIterateeCall;
 
-},{"../lang/isObject":28,"./isArrayLike":17,"./isIndex":18}],20:[function(_dereq_,module,exports){
+},{"../lang/isObject":31,"./isArrayLike":20,"./isIndex":21}],23:[function(_dereq_,module,exports){
 /**
  * Used as the [maximum length](http://ecma-international.org/ecma-262/6.0/#sec-number.max_safe_integer)
  * of an array-like value.
@@ -1229,7 +1403,7 @@ function isLength(value) {
 
 module.exports = isLength;
 
-},{}],21:[function(_dereq_,module,exports){
+},{}],24:[function(_dereq_,module,exports){
 /**
  * Checks if `value` is object-like.
  *
@@ -1243,7 +1417,7 @@ function isObjectLike(value) {
 
 module.exports = isObjectLike;
 
-},{}],22:[function(_dereq_,module,exports){
+},{}],25:[function(_dereq_,module,exports){
 var isArguments = _dereq_('../lang/isArguments'),
     isArray = _dereq_('../lang/isArray'),
     isIndex = _dereq_('./isIndex'),
@@ -1286,7 +1460,7 @@ function shimKeys(object) {
 
 module.exports = shimKeys;
 
-},{"../lang/isArguments":23,"../lang/isArray":24,"../object/keysIn":32,"./isIndex":18,"./isLength":20}],23:[function(_dereq_,module,exports){
+},{"../lang/isArguments":26,"../lang/isArray":27,"../object/keysIn":35,"./isIndex":21,"./isLength":23}],26:[function(_dereq_,module,exports){
 var isArrayLike = _dereq_('../internal/isArrayLike'),
     isObjectLike = _dereq_('../internal/isObjectLike');
 
@@ -1322,7 +1496,7 @@ function isArguments(value) {
 
 module.exports = isArguments;
 
-},{"../internal/isArrayLike":17,"../internal/isObjectLike":21}],24:[function(_dereq_,module,exports){
+},{"../internal/isArrayLike":20,"../internal/isObjectLike":24}],27:[function(_dereq_,module,exports){
 var getNative = _dereq_('../internal/getNative'),
     isLength = _dereq_('../internal/isLength'),
     isObjectLike = _dereq_('../internal/isObjectLike');
@@ -1364,7 +1538,7 @@ var isArray = nativeIsArray || function(value) {
 
 module.exports = isArray;
 
-},{"../internal/getNative":16,"../internal/isLength":20,"../internal/isObjectLike":21}],25:[function(_dereq_,module,exports){
+},{"../internal/getNative":19,"../internal/isLength":23,"../internal/isObjectLike":24}],28:[function(_dereq_,module,exports){
 var isArguments = _dereq_('./isArguments'),
     isArray = _dereq_('./isArray'),
     isArrayLike = _dereq_('../internal/isArrayLike'),
@@ -1413,7 +1587,7 @@ function isEmpty(value) {
 
 module.exports = isEmpty;
 
-},{"../internal/isArrayLike":17,"../internal/isObjectLike":21,"../object/keys":31,"./isArguments":23,"./isArray":24,"./isFunction":26,"./isString":29}],26:[function(_dereq_,module,exports){
+},{"../internal/isArrayLike":20,"../internal/isObjectLike":24,"../object/keys":34,"./isArguments":26,"./isArray":27,"./isFunction":29,"./isString":32}],29:[function(_dereq_,module,exports){
 var isObject = _dereq_('./isObject');
 
 /** `Object#toString` result references. */
@@ -1453,7 +1627,7 @@ function isFunction(value) {
 
 module.exports = isFunction;
 
-},{"./isObject":28}],27:[function(_dereq_,module,exports){
+},{"./isObject":31}],30:[function(_dereq_,module,exports){
 var isFunction = _dereq_('./isFunction'),
     isObjectLike = _dereq_('../internal/isObjectLike');
 
@@ -1503,7 +1677,7 @@ function isNative(value) {
 
 module.exports = isNative;
 
-},{"../internal/isObjectLike":21,"./isFunction":26}],28:[function(_dereq_,module,exports){
+},{"../internal/isObjectLike":24,"./isFunction":29}],31:[function(_dereq_,module,exports){
 /**
  * Checks if `value` is the [language type](https://es5.github.io/#x8) of `Object`.
  * (e.g. arrays, functions, objects, regexes, `new Number(0)`, and `new String('')`)
@@ -1533,7 +1707,7 @@ function isObject(value) {
 
 module.exports = isObject;
 
-},{}],29:[function(_dereq_,module,exports){
+},{}],32:[function(_dereq_,module,exports){
 var isObjectLike = _dereq_('../internal/isObjectLike');
 
 /** `Object#toString` result references. */
@@ -1570,7 +1744,7 @@ function isString(value) {
 
 module.exports = isString;
 
-},{"../internal/isObjectLike":21}],30:[function(_dereq_,module,exports){
+},{"../internal/isObjectLike":24}],33:[function(_dereq_,module,exports){
 var assignWith = _dereq_('../internal/assignWith'),
     baseAssign = _dereq_('../internal/baseAssign'),
     createAssigner = _dereq_('../internal/createAssigner');
@@ -1615,7 +1789,7 @@ var assign = createAssigner(function(object, source, customizer) {
 
 module.exports = assign;
 
-},{"../internal/assignWith":9,"../internal/baseAssign":10,"../internal/createAssigner":14}],31:[function(_dereq_,module,exports){
+},{"../internal/assignWith":12,"../internal/baseAssign":13,"../internal/createAssigner":17}],34:[function(_dereq_,module,exports){
 var getNative = _dereq_('../internal/getNative'),
     isArrayLike = _dereq_('../internal/isArrayLike'),
     isObject = _dereq_('../lang/isObject'),
@@ -1662,7 +1836,7 @@ var keys = !nativeKeys ? shimKeys : function(object) {
 
 module.exports = keys;
 
-},{"../internal/getNative":16,"../internal/isArrayLike":17,"../internal/shimKeys":22,"../lang/isObject":28}],32:[function(_dereq_,module,exports){
+},{"../internal/getNative":19,"../internal/isArrayLike":20,"../internal/shimKeys":25,"../lang/isObject":31}],35:[function(_dereq_,module,exports){
 var isArguments = _dereq_('../lang/isArguments'),
     isArray = _dereq_('../lang/isArray'),
     isIndex = _dereq_('../internal/isIndex'),
@@ -1728,7 +1902,7 @@ function keysIn(object) {
 
 module.exports = keysIn;
 
-},{"../internal/isIndex":18,"../internal/isLength":20,"../lang/isArguments":23,"../lang/isArray":24,"../lang/isObject":28}],33:[function(_dereq_,module,exports){
+},{"../internal/isIndex":21,"../internal/isLength":23,"../lang/isArguments":26,"../lang/isArray":27,"../lang/isObject":31}],36:[function(_dereq_,module,exports){
 /**
  * This method returns the first argument provided to it.
  *
@@ -1750,14 +1924,14 @@ function identity(value) {
 
 module.exports = identity;
 
-},{}],34:[function(_dereq_,module,exports){
+},{}],37:[function(_dereq_,module,exports){
 (function (process,global){
 /*!
  * @overview RSVP - a tiny implementation of Promises/A+.
  * @copyright Copyright (c) 2014 Yehuda Katz, Tom Dale, Stefan Penner and contributors
  * @license   Licensed under MIT license
  *            See https://raw.githubusercontent.com/tildeio/rsvp.js/master/LICENSE
- * @version   3.0.21
+ * @version   3.1.0
  */
 
 (function() {
@@ -1988,7 +2162,7 @@ module.exports = identity;
         @param {*} options optional value to be passed to any event handlers for
         the given `eventName`
       */
-      'trigger': function(eventName, options) {
+      'trigger': function(eventName, options, label) {
         var allCallbacks = lib$rsvp$events$$callbacksFor(this), callbacks, callback;
 
         if (callbacks = allCallbacks[eventName]) {
@@ -1996,7 +2170,7 @@ module.exports = identity;
           for (var i=0; i<callbacks.length; i++) {
             callback = callbacks[i];
 
-            callback(options);
+            callback(options, label);
           }
         }
       }
@@ -2530,7 +2704,7 @@ module.exports = identity;
         var promise = this;
         lib$rsvp$config$$config.after(function() {
           if (promise._onError) {
-            lib$rsvp$config$$config['trigger']('error', reason);
+            lib$rsvp$config$$config['trigger']('error', reason, promise._label);
           }
         });
       },
@@ -3351,6 +3525,6 @@ module.exports = identity;
 
 
 }).call(this,_dereq_("IrXUsu"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"IrXUsu":7}]},{},[1])
+},{"IrXUsu":10}]},{},[1])
 (1)
 });
