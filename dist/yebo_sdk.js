@@ -145,9 +145,23 @@ Object.defineProperty(exports, '__esModule', {
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
 var _store = _dereq_('./store');
+
+var _lodashLangIsArray = _dereq_('lodash/lang/isArray');
+
+var _lodashLangIsArray2 = _interopRequireDefault(_lodashLangIsArray);
+
+var _lodashLangIsObject = _dereq_('lodash/lang/isObject');
+
+var _lodashLangIsObject2 = _interopRequireDefault(_lodashLangIsObject);
+
+var _lodashCollectionMap = _dereq_('lodash/collection/map');
+
+var _lodashCollectionMap2 = _interopRequireDefault(_lodashCollectionMap);
 
 /**
  * Abstract query class
@@ -194,6 +208,43 @@ var Query = (function () {
     }
 
     /**
+     *
+     */
+  }, {
+    key: 'toParams',
+    value: function toParams() {
+      // The query params
+      var data = this.build();
+
+      // Transform it to params
+      return this._toParams('', data, true);
+    }
+
+    /**
+     *
+     */
+  }, {
+    key: '_toParams',
+    value: function _toParams(prefix, val, top) {
+      var _this = this;
+
+      // Check data type
+      if ((0, _lodashLangIsArray2['default'])(val)) {
+        // Map the array
+        return (0, _lodashCollectionMap2['default'])(val, function (value, key) {
+          return _this._toParams((top ? key : prefix) + '[]', value, false);
+        }).join('&');
+      } else if ((0, _lodashLangIsObject2['default'])(val)) {
+        // Map the object
+        return (0, _lodashCollectionMap2['default'])(val, function (value, key) {
+          return _this._toParams((top ? key : prefix) + '[' + key + ']', value, false);
+        }).join('&');
+      } else {
+        return encodeURIComponent(prefix) + '=' + encodeURIComponent(val);
+      }
+    }
+
+    /**
      * Execute the query using Store#fetch
      * @return {Object} The result of the query
      */
@@ -213,7 +264,7 @@ var Query = (function () {
 
 exports.Query = Query;
 
-},{"./store":6}],4:[function(_dereq_,module,exports){
+},{"./store":6,"lodash/collection/map":9,"lodash/lang/isArray":52,"lodash/lang/isObject":56}],4:[function(_dereq_,module,exports){
 // Utils
 'use strict';
 
@@ -568,7 +619,7 @@ var Products = (function (_Query) {
 
 exports.Products = Products;
 
-},{"../query":3,"../store":6,"lodash/lang/isArray":24,"lodash/lang/isEmpty":25,"lodash/object/assign":30}],5:[function(_dereq_,module,exports){
+},{"../query":3,"../store":6,"lodash/lang/isArray":52,"lodash/lang/isEmpty":53,"lodash/object/assign":59}],5:[function(_dereq_,module,exports){
 // Variables
 'use strict';
 
@@ -670,7 +721,7 @@ var Request = (function () {
 
 exports.Request = Request;
 
-},{"lodash/object/assign":30,"rsvp":34}],6:[function(_dereq_,module,exports){
+},{"lodash/object/assign":59,"rsvp":65}],6:[function(_dereq_,module,exports){
 // Dependencies
 'use strict';
 
@@ -794,7 +845,7 @@ var Store = (function () {
 
 exports.Store = Store;
 
-},{"./config":2,"./request":5,"rsvp":34}],7:[function(_dereq_,module,exports){
+},{"./config":2,"./request":5,"rsvp":65}],7:[function(_dereq_,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -860,6 +911,97 @@ process.chdir = function (dir) {
 };
 
 },{}],8:[function(_dereq_,module,exports){
+/**
+ * Gets the last element of `array`.
+ *
+ * @static
+ * @memberOf _
+ * @category Array
+ * @param {Array} array The array to query.
+ * @returns {*} Returns the last element of `array`.
+ * @example
+ *
+ * _.last([1, 2, 3]);
+ * // => 3
+ */
+function last(array) {
+  var length = array ? array.length : 0;
+  return length ? array[length - 1] : undefined;
+}
+
+module.exports = last;
+
+},{}],9:[function(_dereq_,module,exports){
+var arrayMap = _dereq_('../internal/arrayMap'),
+    baseCallback = _dereq_('../internal/baseCallback'),
+    baseMap = _dereq_('../internal/baseMap'),
+    isArray = _dereq_('../lang/isArray');
+
+/**
+ * Creates an array of values by running each element in `collection` through
+ * `iteratee`. The `iteratee` is bound to `thisArg` and invoked with three
+ * arguments: (value, index|key, collection).
+ *
+ * If a property name is provided for `iteratee` the created `_.property`
+ * style callback returns the property value of the given element.
+ *
+ * If a value is also provided for `thisArg` the created `_.matchesProperty`
+ * style callback returns `true` for elements that have a matching property
+ * value, else `false`.
+ *
+ * If an object is provided for `iteratee` the created `_.matches` style
+ * callback returns `true` for elements that have the properties of the given
+ * object, else `false`.
+ *
+ * Many lodash methods are guarded to work as iteratees for methods like
+ * `_.every`, `_.filter`, `_.map`, `_.mapValues`, `_.reject`, and `_.some`.
+ *
+ * The guarded methods are:
+ * `ary`, `callback`, `chunk`, `clone`, `create`, `curry`, `curryRight`,
+ * `drop`, `dropRight`, `every`, `fill`, `flatten`, `invert`, `max`, `min`,
+ * `parseInt`, `slice`, `sortBy`, `take`, `takeRight`, `template`, `trim`,
+ * `trimLeft`, `trimRight`, `trunc`, `random`, `range`, `sample`, `some`,
+ * `sum`, `uniq`, and `words`
+ *
+ * @static
+ * @memberOf _
+ * @alias collect
+ * @category Collection
+ * @param {Array|Object|string} collection The collection to iterate over.
+ * @param {Function|Object|string} [iteratee=_.identity] The function invoked
+ *  per iteration.
+ * @param {*} [thisArg] The `this` binding of `iteratee`.
+ * @returns {Array} Returns the new mapped array.
+ * @example
+ *
+ * function timesThree(n) {
+ *   return n * 3;
+ * }
+ *
+ * _.map([1, 2], timesThree);
+ * // => [3, 6]
+ *
+ * _.map({ 'a': 1, 'b': 2 }, timesThree);
+ * // => [3, 6] (iteration order is not guaranteed)
+ *
+ * var users = [
+ *   { 'user': 'barney' },
+ *   { 'user': 'fred' }
+ * ];
+ *
+ * // using the `_.property` callback shorthand
+ * _.map(users, 'user');
+ * // => ['barney', 'fred']
+ */
+function map(collection, iteratee, thisArg) {
+  var func = isArray(collection) ? arrayMap : baseMap;
+  iteratee = baseCallback(iteratee, thisArg, 3);
+  return func(collection, iteratee);
+}
+
+module.exports = map;
+
+},{"../internal/arrayMap":11,"../internal/baseCallback":15,"../internal/baseMap":24,"../lang/isArray":52}],10:[function(_dereq_,module,exports){
 /** Used as the `TypeError` message for "Functions" methods. */
 var FUNC_ERROR_TEXT = 'Expected a function';
 
@@ -919,7 +1061,55 @@ function restParam(func, start) {
 
 module.exports = restParam;
 
-},{}],9:[function(_dereq_,module,exports){
+},{}],11:[function(_dereq_,module,exports){
+/**
+ * A specialized version of `_.map` for arrays without support for callback
+ * shorthands and `this` binding.
+ *
+ * @private
+ * @param {Array} array The array to iterate over.
+ * @param {Function} iteratee The function invoked per iteration.
+ * @returns {Array} Returns the new mapped array.
+ */
+function arrayMap(array, iteratee) {
+  var index = -1,
+      length = array.length,
+      result = Array(length);
+
+  while (++index < length) {
+    result[index] = iteratee(array[index], index, array);
+  }
+  return result;
+}
+
+module.exports = arrayMap;
+
+},{}],12:[function(_dereq_,module,exports){
+/**
+ * A specialized version of `_.some` for arrays without support for callback
+ * shorthands and `this` binding.
+ *
+ * @private
+ * @param {Array} array The array to iterate over.
+ * @param {Function} predicate The function invoked per iteration.
+ * @returns {boolean} Returns `true` if any element passes the predicate check,
+ *  else `false`.
+ */
+function arraySome(array, predicate) {
+  var index = -1,
+      length = array.length;
+
+  while (++index < length) {
+    if (predicate(array[index], index, array)) {
+      return true;
+    }
+  }
+  return false;
+}
+
+module.exports = arraySome;
+
+},{}],13:[function(_dereq_,module,exports){
 var keys = _dereq_('../object/keys');
 
 /**
@@ -953,7 +1143,7 @@ function assignWith(object, source, customizer) {
 
 module.exports = assignWith;
 
-},{"../object/keys":31}],10:[function(_dereq_,module,exports){
+},{"../object/keys":60}],14:[function(_dereq_,module,exports){
 var baseCopy = _dereq_('./baseCopy'),
     keys = _dereq_('../object/keys');
 
@@ -974,7 +1164,44 @@ function baseAssign(object, source) {
 
 module.exports = baseAssign;
 
-},{"../object/keys":31,"./baseCopy":11}],11:[function(_dereq_,module,exports){
+},{"../object/keys":60,"./baseCopy":16}],15:[function(_dereq_,module,exports){
+var baseMatches = _dereq_('./baseMatches'),
+    baseMatchesProperty = _dereq_('./baseMatchesProperty'),
+    bindCallback = _dereq_('./bindCallback'),
+    identity = _dereq_('../utility/identity'),
+    property = _dereq_('../utility/property');
+
+/**
+ * The base implementation of `_.callback` which supports specifying the
+ * number of arguments to provide to `func`.
+ *
+ * @private
+ * @param {*} [func=_.identity] The value to convert to a callback.
+ * @param {*} [thisArg] The `this` binding of `func`.
+ * @param {number} [argCount] The number of arguments to provide to `func`.
+ * @returns {Function} Returns the callback.
+ */
+function baseCallback(func, thisArg, argCount) {
+  var type = typeof func;
+  if (type == 'function') {
+    return thisArg === undefined
+      ? func
+      : bindCallback(func, thisArg, argCount);
+  }
+  if (func == null) {
+    return identity;
+  }
+  if (type == 'object') {
+    return baseMatches(func);
+  }
+  return thisArg === undefined
+    ? property(func)
+    : baseMatchesProperty(func, thisArg);
+}
+
+module.exports = baseCallback;
+
+},{"../utility/identity":63,"../utility/property":64,"./baseMatches":25,"./baseMatchesProperty":26,"./bindCallback":31}],16:[function(_dereq_,module,exports){
 /**
  * Copies properties of `source` to `object`.
  *
@@ -999,7 +1226,385 @@ function baseCopy(source, props, object) {
 
 module.exports = baseCopy;
 
-},{}],12:[function(_dereq_,module,exports){
+},{}],17:[function(_dereq_,module,exports){
+var baseForOwn = _dereq_('./baseForOwn'),
+    createBaseEach = _dereq_('./createBaseEach');
+
+/**
+ * The base implementation of `_.forEach` without support for callback
+ * shorthands and `this` binding.
+ *
+ * @private
+ * @param {Array|Object|string} collection The collection to iterate over.
+ * @param {Function} iteratee The function invoked per iteration.
+ * @returns {Array|Object|string} Returns `collection`.
+ */
+var baseEach = createBaseEach(baseForOwn);
+
+module.exports = baseEach;
+
+},{"./baseForOwn":19,"./createBaseEach":33}],18:[function(_dereq_,module,exports){
+var createBaseFor = _dereq_('./createBaseFor');
+
+/**
+ * The base implementation of `baseForIn` and `baseForOwn` which iterates
+ * over `object` properties returned by `keysFunc` invoking `iteratee` for
+ * each property. Iteratee functions may exit iteration early by explicitly
+ * returning `false`.
+ *
+ * @private
+ * @param {Object} object The object to iterate over.
+ * @param {Function} iteratee The function invoked per iteration.
+ * @param {Function} keysFunc The function to get the keys of `object`.
+ * @returns {Object} Returns `object`.
+ */
+var baseFor = createBaseFor();
+
+module.exports = baseFor;
+
+},{"./createBaseFor":34}],19:[function(_dereq_,module,exports){
+var baseFor = _dereq_('./baseFor'),
+    keys = _dereq_('../object/keys');
+
+/**
+ * The base implementation of `_.forOwn` without support for callback
+ * shorthands and `this` binding.
+ *
+ * @private
+ * @param {Object} object The object to iterate over.
+ * @param {Function} iteratee The function invoked per iteration.
+ * @returns {Object} Returns `object`.
+ */
+function baseForOwn(object, iteratee) {
+  return baseFor(object, iteratee, keys);
+}
+
+module.exports = baseForOwn;
+
+},{"../object/keys":60,"./baseFor":18}],20:[function(_dereq_,module,exports){
+var toObject = _dereq_('./toObject');
+
+/**
+ * The base implementation of `get` without support for string paths
+ * and default values.
+ *
+ * @private
+ * @param {Object} object The object to query.
+ * @param {Array} path The path of the property to get.
+ * @param {string} [pathKey] The key representation of path.
+ * @returns {*} Returns the resolved value.
+ */
+function baseGet(object, path, pathKey) {
+  if (object == null) {
+    return;
+  }
+  if (pathKey !== undefined && pathKey in toObject(object)) {
+    path = [pathKey];
+  }
+  var index = 0,
+      length = path.length;
+
+  while (object != null && index < length) {
+    object = object[path[index++]];
+  }
+  return (index && index == length) ? object : undefined;
+}
+
+module.exports = baseGet;
+
+},{"./toObject":49}],21:[function(_dereq_,module,exports){
+var baseIsEqualDeep = _dereq_('./baseIsEqualDeep'),
+    isObject = _dereq_('../lang/isObject'),
+    isObjectLike = _dereq_('./isObjectLike');
+
+/**
+ * The base implementation of `_.isEqual` without support for `this` binding
+ * `customizer` functions.
+ *
+ * @private
+ * @param {*} value The value to compare.
+ * @param {*} other The other value to compare.
+ * @param {Function} [customizer] The function to customize comparing values.
+ * @param {boolean} [isLoose] Specify performing partial comparisons.
+ * @param {Array} [stackA] Tracks traversed `value` objects.
+ * @param {Array} [stackB] Tracks traversed `other` objects.
+ * @returns {boolean} Returns `true` if the values are equivalent, else `false`.
+ */
+function baseIsEqual(value, other, customizer, isLoose, stackA, stackB) {
+  if (value === other) {
+    return true;
+  }
+  if (value == null || other == null || (!isObject(value) && !isObjectLike(other))) {
+    return value !== value && other !== other;
+  }
+  return baseIsEqualDeep(value, other, baseIsEqual, customizer, isLoose, stackA, stackB);
+}
+
+module.exports = baseIsEqual;
+
+},{"../lang/isObject":56,"./baseIsEqualDeep":22,"./isObjectLike":46}],22:[function(_dereq_,module,exports){
+var equalArrays = _dereq_('./equalArrays'),
+    equalByTag = _dereq_('./equalByTag'),
+    equalObjects = _dereq_('./equalObjects'),
+    isArray = _dereq_('../lang/isArray'),
+    isTypedArray = _dereq_('../lang/isTypedArray');
+
+/** `Object#toString` result references. */
+var argsTag = '[object Arguments]',
+    arrayTag = '[object Array]',
+    objectTag = '[object Object]';
+
+/** Used for native method references. */
+var objectProto = Object.prototype;
+
+/** Used to check objects for own properties. */
+var hasOwnProperty = objectProto.hasOwnProperty;
+
+/**
+ * Used to resolve the [`toStringTag`](http://ecma-international.org/ecma-262/6.0/#sec-object.prototype.tostring)
+ * of values.
+ */
+var objToString = objectProto.toString;
+
+/**
+ * A specialized version of `baseIsEqual` for arrays and objects which performs
+ * deep comparisons and tracks traversed objects enabling objects with circular
+ * references to be compared.
+ *
+ * @private
+ * @param {Object} object The object to compare.
+ * @param {Object} other The other object to compare.
+ * @param {Function} equalFunc The function to determine equivalents of values.
+ * @param {Function} [customizer] The function to customize comparing objects.
+ * @param {boolean} [isLoose] Specify performing partial comparisons.
+ * @param {Array} [stackA=[]] Tracks traversed `value` objects.
+ * @param {Array} [stackB=[]] Tracks traversed `other` objects.
+ * @returns {boolean} Returns `true` if the objects are equivalent, else `false`.
+ */
+function baseIsEqualDeep(object, other, equalFunc, customizer, isLoose, stackA, stackB) {
+  var objIsArr = isArray(object),
+      othIsArr = isArray(other),
+      objTag = arrayTag,
+      othTag = arrayTag;
+
+  if (!objIsArr) {
+    objTag = objToString.call(object);
+    if (objTag == argsTag) {
+      objTag = objectTag;
+    } else if (objTag != objectTag) {
+      objIsArr = isTypedArray(object);
+    }
+  }
+  if (!othIsArr) {
+    othTag = objToString.call(other);
+    if (othTag == argsTag) {
+      othTag = objectTag;
+    } else if (othTag != objectTag) {
+      othIsArr = isTypedArray(other);
+    }
+  }
+  var objIsObj = objTag == objectTag,
+      othIsObj = othTag == objectTag,
+      isSameTag = objTag == othTag;
+
+  if (isSameTag && !(objIsArr || objIsObj)) {
+    return equalByTag(object, other, objTag);
+  }
+  if (!isLoose) {
+    var objIsWrapped = objIsObj && hasOwnProperty.call(object, '__wrapped__'),
+        othIsWrapped = othIsObj && hasOwnProperty.call(other, '__wrapped__');
+
+    if (objIsWrapped || othIsWrapped) {
+      return equalFunc(objIsWrapped ? object.value() : object, othIsWrapped ? other.value() : other, customizer, isLoose, stackA, stackB);
+    }
+  }
+  if (!isSameTag) {
+    return false;
+  }
+  // Assume cyclic values are equal.
+  // For more information on detecting circular references see https://es5.github.io/#JO.
+  stackA || (stackA = []);
+  stackB || (stackB = []);
+
+  var length = stackA.length;
+  while (length--) {
+    if (stackA[length] == object) {
+      return stackB[length] == other;
+    }
+  }
+  // Add `object` and `other` to the stack of traversed objects.
+  stackA.push(object);
+  stackB.push(other);
+
+  var result = (objIsArr ? equalArrays : equalObjects)(object, other, equalFunc, customizer, isLoose, stackA, stackB);
+
+  stackA.pop();
+  stackB.pop();
+
+  return result;
+}
+
+module.exports = baseIsEqualDeep;
+
+},{"../lang/isArray":52,"../lang/isTypedArray":58,"./equalArrays":35,"./equalByTag":36,"./equalObjects":37}],23:[function(_dereq_,module,exports){
+var baseIsEqual = _dereq_('./baseIsEqual'),
+    toObject = _dereq_('./toObject');
+
+/**
+ * The base implementation of `_.isMatch` without support for callback
+ * shorthands and `this` binding.
+ *
+ * @private
+ * @param {Object} object The object to inspect.
+ * @param {Array} matchData The propery names, values, and compare flags to match.
+ * @param {Function} [customizer] The function to customize comparing objects.
+ * @returns {boolean} Returns `true` if `object` is a match, else `false`.
+ */
+function baseIsMatch(object, matchData, customizer) {
+  var index = matchData.length,
+      length = index,
+      noCustomizer = !customizer;
+
+  if (object == null) {
+    return !length;
+  }
+  object = toObject(object);
+  while (index--) {
+    var data = matchData[index];
+    if ((noCustomizer && data[2])
+          ? data[1] !== object[data[0]]
+          : !(data[0] in object)
+        ) {
+      return false;
+    }
+  }
+  while (++index < length) {
+    data = matchData[index];
+    var key = data[0],
+        objValue = object[key],
+        srcValue = data[1];
+
+    if (noCustomizer && data[2]) {
+      if (objValue === undefined && !(key in object)) {
+        return false;
+      }
+    } else {
+      var result = customizer ? customizer(objValue, srcValue, key) : undefined;
+      if (!(result === undefined ? baseIsEqual(srcValue, objValue, customizer, true) : result)) {
+        return false;
+      }
+    }
+  }
+  return true;
+}
+
+module.exports = baseIsMatch;
+
+},{"./baseIsEqual":21,"./toObject":49}],24:[function(_dereq_,module,exports){
+var baseEach = _dereq_('./baseEach'),
+    isArrayLike = _dereq_('./isArrayLike');
+
+/**
+ * The base implementation of `_.map` without support for callback shorthands
+ * and `this` binding.
+ *
+ * @private
+ * @param {Array|Object|string} collection The collection to iterate over.
+ * @param {Function} iteratee The function invoked per iteration.
+ * @returns {Array} Returns the new mapped array.
+ */
+function baseMap(collection, iteratee) {
+  var index = -1,
+      result = isArrayLike(collection) ? Array(collection.length) : [];
+
+  baseEach(collection, function(value, key, collection) {
+    result[++index] = iteratee(value, key, collection);
+  });
+  return result;
+}
+
+module.exports = baseMap;
+
+},{"./baseEach":17,"./isArrayLike":41}],25:[function(_dereq_,module,exports){
+var baseIsMatch = _dereq_('./baseIsMatch'),
+    getMatchData = _dereq_('./getMatchData'),
+    toObject = _dereq_('./toObject');
+
+/**
+ * The base implementation of `_.matches` which does not clone `source`.
+ *
+ * @private
+ * @param {Object} source The object of property values to match.
+ * @returns {Function} Returns the new function.
+ */
+function baseMatches(source) {
+  var matchData = getMatchData(source);
+  if (matchData.length == 1 && matchData[0][2]) {
+    var key = matchData[0][0],
+        value = matchData[0][1];
+
+    return function(object) {
+      if (object == null) {
+        return false;
+      }
+      return object[key] === value && (value !== undefined || (key in toObject(object)));
+    };
+  }
+  return function(object) {
+    return baseIsMatch(object, matchData);
+  };
+}
+
+module.exports = baseMatches;
+
+},{"./baseIsMatch":23,"./getMatchData":39,"./toObject":49}],26:[function(_dereq_,module,exports){
+var baseGet = _dereq_('./baseGet'),
+    baseIsEqual = _dereq_('./baseIsEqual'),
+    baseSlice = _dereq_('./baseSlice'),
+    isArray = _dereq_('../lang/isArray'),
+    isKey = _dereq_('./isKey'),
+    isStrictComparable = _dereq_('./isStrictComparable'),
+    last = _dereq_('../array/last'),
+    toObject = _dereq_('./toObject'),
+    toPath = _dereq_('./toPath');
+
+/**
+ * The base implementation of `_.matchesProperty` which does not clone `srcValue`.
+ *
+ * @private
+ * @param {string} path The path of the property to get.
+ * @param {*} srcValue The value to compare.
+ * @returns {Function} Returns the new function.
+ */
+function baseMatchesProperty(path, srcValue) {
+  var isArr = isArray(path),
+      isCommon = isKey(path) && isStrictComparable(srcValue),
+      pathKey = (path + '');
+
+  path = toPath(path);
+  return function(object) {
+    if (object == null) {
+      return false;
+    }
+    var key = pathKey;
+    object = toObject(object);
+    if ((isArr || !isCommon) && !(key in object)) {
+      object = path.length == 1 ? object : baseGet(object, baseSlice(path, 0, -1));
+      if (object == null) {
+        return false;
+      }
+      key = last(path);
+      object = toObject(object);
+    }
+    return object[key] === srcValue
+      ? (srcValue !== undefined || (key in object))
+      : baseIsEqual(srcValue, object[key], undefined, true);
+  };
+}
+
+module.exports = baseMatchesProperty;
+
+},{"../array/last":8,"../lang/isArray":52,"./baseGet":20,"./baseIsEqual":21,"./baseSlice":29,"./isKey":44,"./isStrictComparable":47,"./toObject":49,"./toPath":50}],27:[function(_dereq_,module,exports){
 /**
  * The base implementation of `_.property` without support for deep paths.
  *
@@ -1015,7 +1620,77 @@ function baseProperty(key) {
 
 module.exports = baseProperty;
 
-},{}],13:[function(_dereq_,module,exports){
+},{}],28:[function(_dereq_,module,exports){
+var baseGet = _dereq_('./baseGet'),
+    toPath = _dereq_('./toPath');
+
+/**
+ * A specialized version of `baseProperty` which supports deep paths.
+ *
+ * @private
+ * @param {Array|string} path The path of the property to get.
+ * @returns {Function} Returns the new function.
+ */
+function basePropertyDeep(path) {
+  var pathKey = (path + '');
+  path = toPath(path);
+  return function(object) {
+    return baseGet(object, path, pathKey);
+  };
+}
+
+module.exports = basePropertyDeep;
+
+},{"./baseGet":20,"./toPath":50}],29:[function(_dereq_,module,exports){
+/**
+ * The base implementation of `_.slice` without an iteratee call guard.
+ *
+ * @private
+ * @param {Array} array The array to slice.
+ * @param {number} [start=0] The start position.
+ * @param {number} [end=array.length] The end position.
+ * @returns {Array} Returns the slice of `array`.
+ */
+function baseSlice(array, start, end) {
+  var index = -1,
+      length = array.length;
+
+  start = start == null ? 0 : (+start || 0);
+  if (start < 0) {
+    start = -start > length ? 0 : (length + start);
+  }
+  end = (end === undefined || end > length) ? length : (+end || 0);
+  if (end < 0) {
+    end += length;
+  }
+  length = start > end ? 0 : ((end - start) >>> 0);
+  start >>>= 0;
+
+  var result = Array(length);
+  while (++index < length) {
+    result[index] = array[index + start];
+  }
+  return result;
+}
+
+module.exports = baseSlice;
+
+},{}],30:[function(_dereq_,module,exports){
+/**
+ * Converts `value` to a string if it's not one. An empty string is returned
+ * for `null` or `undefined` values.
+ *
+ * @private
+ * @param {*} value The value to process.
+ * @returns {string} Returns the string.
+ */
+function baseToString(value) {
+  return value == null ? '' : (value + '');
+}
+
+module.exports = baseToString;
+
+},{}],31:[function(_dereq_,module,exports){
 var identity = _dereq_('../utility/identity');
 
 /**
@@ -1056,7 +1731,7 @@ function bindCallback(func, thisArg, argCount) {
 
 module.exports = bindCallback;
 
-},{"../utility/identity":33}],14:[function(_dereq_,module,exports){
+},{"../utility/identity":63}],32:[function(_dereq_,module,exports){
 var bindCallback = _dereq_('./bindCallback'),
     isIterateeCall = _dereq_('./isIterateeCall'),
     restParam = _dereq_('../function/restParam');
@@ -1099,7 +1774,241 @@ function createAssigner(assigner) {
 
 module.exports = createAssigner;
 
-},{"../function/restParam":8,"./bindCallback":13,"./isIterateeCall":19}],15:[function(_dereq_,module,exports){
+},{"../function/restParam":10,"./bindCallback":31,"./isIterateeCall":43}],33:[function(_dereq_,module,exports){
+var getLength = _dereq_('./getLength'),
+    isLength = _dereq_('./isLength'),
+    toObject = _dereq_('./toObject');
+
+/**
+ * Creates a `baseEach` or `baseEachRight` function.
+ *
+ * @private
+ * @param {Function} eachFunc The function to iterate over a collection.
+ * @param {boolean} [fromRight] Specify iterating from right to left.
+ * @returns {Function} Returns the new base function.
+ */
+function createBaseEach(eachFunc, fromRight) {
+  return function(collection, iteratee) {
+    var length = collection ? getLength(collection) : 0;
+    if (!isLength(length)) {
+      return eachFunc(collection, iteratee);
+    }
+    var index = fromRight ? length : -1,
+        iterable = toObject(collection);
+
+    while ((fromRight ? index-- : ++index < length)) {
+      if (iteratee(iterable[index], index, iterable) === false) {
+        break;
+      }
+    }
+    return collection;
+  };
+}
+
+module.exports = createBaseEach;
+
+},{"./getLength":38,"./isLength":45,"./toObject":49}],34:[function(_dereq_,module,exports){
+var toObject = _dereq_('./toObject');
+
+/**
+ * Creates a base function for `_.forIn` or `_.forInRight`.
+ *
+ * @private
+ * @param {boolean} [fromRight] Specify iterating from right to left.
+ * @returns {Function} Returns the new base function.
+ */
+function createBaseFor(fromRight) {
+  return function(object, iteratee, keysFunc) {
+    var iterable = toObject(object),
+        props = keysFunc(object),
+        length = props.length,
+        index = fromRight ? length : -1;
+
+    while ((fromRight ? index-- : ++index < length)) {
+      var key = props[index];
+      if (iteratee(iterable[key], key, iterable) === false) {
+        break;
+      }
+    }
+    return object;
+  };
+}
+
+module.exports = createBaseFor;
+
+},{"./toObject":49}],35:[function(_dereq_,module,exports){
+var arraySome = _dereq_('./arraySome');
+
+/**
+ * A specialized version of `baseIsEqualDeep` for arrays with support for
+ * partial deep comparisons.
+ *
+ * @private
+ * @param {Array} array The array to compare.
+ * @param {Array} other The other array to compare.
+ * @param {Function} equalFunc The function to determine equivalents of values.
+ * @param {Function} [customizer] The function to customize comparing arrays.
+ * @param {boolean} [isLoose] Specify performing partial comparisons.
+ * @param {Array} [stackA] Tracks traversed `value` objects.
+ * @param {Array} [stackB] Tracks traversed `other` objects.
+ * @returns {boolean} Returns `true` if the arrays are equivalent, else `false`.
+ */
+function equalArrays(array, other, equalFunc, customizer, isLoose, stackA, stackB) {
+  var index = -1,
+      arrLength = array.length,
+      othLength = other.length;
+
+  if (arrLength != othLength && !(isLoose && othLength > arrLength)) {
+    return false;
+  }
+  // Ignore non-index properties.
+  while (++index < arrLength) {
+    var arrValue = array[index],
+        othValue = other[index],
+        result = customizer ? customizer(isLoose ? othValue : arrValue, isLoose ? arrValue : othValue, index) : undefined;
+
+    if (result !== undefined) {
+      if (result) {
+        continue;
+      }
+      return false;
+    }
+    // Recursively compare arrays (susceptible to call stack limits).
+    if (isLoose) {
+      if (!arraySome(other, function(othValue) {
+            return arrValue === othValue || equalFunc(arrValue, othValue, customizer, isLoose, stackA, stackB);
+          })) {
+        return false;
+      }
+    } else if (!(arrValue === othValue || equalFunc(arrValue, othValue, customizer, isLoose, stackA, stackB))) {
+      return false;
+    }
+  }
+  return true;
+}
+
+module.exports = equalArrays;
+
+},{"./arraySome":12}],36:[function(_dereq_,module,exports){
+/** `Object#toString` result references. */
+var boolTag = '[object Boolean]',
+    dateTag = '[object Date]',
+    errorTag = '[object Error]',
+    numberTag = '[object Number]',
+    regexpTag = '[object RegExp]',
+    stringTag = '[object String]';
+
+/**
+ * A specialized version of `baseIsEqualDeep` for comparing objects of
+ * the same `toStringTag`.
+ *
+ * **Note:** This function only supports comparing values with tags of
+ * `Boolean`, `Date`, `Error`, `Number`, `RegExp`, or `String`.
+ *
+ * @private
+ * @param {Object} object The object to compare.
+ * @param {Object} other The other object to compare.
+ * @param {string} tag The `toStringTag` of the objects to compare.
+ * @returns {boolean} Returns `true` if the objects are equivalent, else `false`.
+ */
+function equalByTag(object, other, tag) {
+  switch (tag) {
+    case boolTag:
+    case dateTag:
+      // Coerce dates and booleans to numbers, dates to milliseconds and booleans
+      // to `1` or `0` treating invalid dates coerced to `NaN` as not equal.
+      return +object == +other;
+
+    case errorTag:
+      return object.name == other.name && object.message == other.message;
+
+    case numberTag:
+      // Treat `NaN` vs. `NaN` as equal.
+      return (object != +object)
+        ? other != +other
+        : object == +other;
+
+    case regexpTag:
+    case stringTag:
+      // Coerce regexes to strings and treat strings primitives and string
+      // objects as equal. See https://es5.github.io/#x15.10.6.4 for more details.
+      return object == (other + '');
+  }
+  return false;
+}
+
+module.exports = equalByTag;
+
+},{}],37:[function(_dereq_,module,exports){
+var keys = _dereq_('../object/keys');
+
+/** Used for native method references. */
+var objectProto = Object.prototype;
+
+/** Used to check objects for own properties. */
+var hasOwnProperty = objectProto.hasOwnProperty;
+
+/**
+ * A specialized version of `baseIsEqualDeep` for objects with support for
+ * partial deep comparisons.
+ *
+ * @private
+ * @param {Object} object The object to compare.
+ * @param {Object} other The other object to compare.
+ * @param {Function} equalFunc The function to determine equivalents of values.
+ * @param {Function} [customizer] The function to customize comparing values.
+ * @param {boolean} [isLoose] Specify performing partial comparisons.
+ * @param {Array} [stackA] Tracks traversed `value` objects.
+ * @param {Array} [stackB] Tracks traversed `other` objects.
+ * @returns {boolean} Returns `true` if the objects are equivalent, else `false`.
+ */
+function equalObjects(object, other, equalFunc, customizer, isLoose, stackA, stackB) {
+  var objProps = keys(object),
+      objLength = objProps.length,
+      othProps = keys(other),
+      othLength = othProps.length;
+
+  if (objLength != othLength && !isLoose) {
+    return false;
+  }
+  var index = objLength;
+  while (index--) {
+    var key = objProps[index];
+    if (!(isLoose ? key in other : hasOwnProperty.call(other, key))) {
+      return false;
+    }
+  }
+  var skipCtor = isLoose;
+  while (++index < objLength) {
+    key = objProps[index];
+    var objValue = object[key],
+        othValue = other[key],
+        result = customizer ? customizer(isLoose ? othValue : objValue, isLoose? objValue : othValue, key) : undefined;
+
+    // Recursively compare objects (susceptible to call stack limits).
+    if (!(result === undefined ? equalFunc(objValue, othValue, customizer, isLoose, stackA, stackB) : result)) {
+      return false;
+    }
+    skipCtor || (skipCtor = key == 'constructor');
+  }
+  if (!skipCtor) {
+    var objCtor = object.constructor,
+        othCtor = other.constructor;
+
+    // Non `Object` object instances with different constructors are not equal.
+    if (objCtor != othCtor &&
+        ('constructor' in object && 'constructor' in other) &&
+        !(typeof objCtor == 'function' && objCtor instanceof objCtor &&
+          typeof othCtor == 'function' && othCtor instanceof othCtor)) {
+      return false;
+    }
+  }
+  return true;
+}
+
+module.exports = equalObjects;
+
+},{"../object/keys":60}],38:[function(_dereq_,module,exports){
 var baseProperty = _dereq_('./baseProperty');
 
 /**
@@ -1116,7 +2025,30 @@ var getLength = baseProperty('length');
 
 module.exports = getLength;
 
-},{"./baseProperty":12}],16:[function(_dereq_,module,exports){
+},{"./baseProperty":27}],39:[function(_dereq_,module,exports){
+var isStrictComparable = _dereq_('./isStrictComparable'),
+    pairs = _dereq_('../object/pairs');
+
+/**
+ * Gets the propery names, values, and compare flags of `object`.
+ *
+ * @private
+ * @param {Object} object The object to query.
+ * @returns {Array} Returns the match data of `object`.
+ */
+function getMatchData(object) {
+  var result = pairs(object),
+      length = result.length;
+
+  while (length--) {
+    result[length][2] = isStrictComparable(result[length][1]);
+  }
+  return result;
+}
+
+module.exports = getMatchData;
+
+},{"../object/pairs":62,"./isStrictComparable":47}],40:[function(_dereq_,module,exports){
 var isNative = _dereq_('../lang/isNative');
 
 /**
@@ -1134,7 +2066,7 @@ function getNative(object, key) {
 
 module.exports = getNative;
 
-},{"../lang/isNative":27}],17:[function(_dereq_,module,exports){
+},{"../lang/isNative":55}],41:[function(_dereq_,module,exports){
 var getLength = _dereq_('./getLength'),
     isLength = _dereq_('./isLength');
 
@@ -1151,7 +2083,7 @@ function isArrayLike(value) {
 
 module.exports = isArrayLike;
 
-},{"./getLength":15,"./isLength":20}],18:[function(_dereq_,module,exports){
+},{"./getLength":38,"./isLength":45}],42:[function(_dereq_,module,exports){
 /** Used to detect unsigned integer values. */
 var reIsUint = /^\d+$/;
 
@@ -1177,7 +2109,7 @@ function isIndex(value, length) {
 
 module.exports = isIndex;
 
-},{}],19:[function(_dereq_,module,exports){
+},{}],43:[function(_dereq_,module,exports){
 var isArrayLike = _dereq_('./isArrayLike'),
     isIndex = _dereq_('./isIndex'),
     isObject = _dereq_('../lang/isObject');
@@ -1207,7 +2139,37 @@ function isIterateeCall(value, index, object) {
 
 module.exports = isIterateeCall;
 
-},{"../lang/isObject":28,"./isArrayLike":17,"./isIndex":18}],20:[function(_dereq_,module,exports){
+},{"../lang/isObject":56,"./isArrayLike":41,"./isIndex":42}],44:[function(_dereq_,module,exports){
+var isArray = _dereq_('../lang/isArray'),
+    toObject = _dereq_('./toObject');
+
+/** Used to match property names within property paths. */
+var reIsDeepProp = /\.|\[(?:[^[\]]*|(["'])(?:(?!\1)[^\n\\]|\\.)*?\1)\]/,
+    reIsPlainProp = /^\w*$/;
+
+/**
+ * Checks if `value` is a property name and not a property path.
+ *
+ * @private
+ * @param {*} value The value to check.
+ * @param {Object} [object] The object to query keys on.
+ * @returns {boolean} Returns `true` if `value` is a property name, else `false`.
+ */
+function isKey(value, object) {
+  var type = typeof value;
+  if ((type == 'string' && reIsPlainProp.test(value)) || type == 'number') {
+    return true;
+  }
+  if (isArray(value)) {
+    return false;
+  }
+  var result = !reIsDeepProp.test(value);
+  return result || (object != null && value in toObject(object));
+}
+
+module.exports = isKey;
+
+},{"../lang/isArray":52,"./toObject":49}],45:[function(_dereq_,module,exports){
 /**
  * Used as the [maximum length](http://ecma-international.org/ecma-262/6.0/#sec-number.max_safe_integer)
  * of an array-like value.
@@ -1229,7 +2191,7 @@ function isLength(value) {
 
 module.exports = isLength;
 
-},{}],21:[function(_dereq_,module,exports){
+},{}],46:[function(_dereq_,module,exports){
 /**
  * Checks if `value` is object-like.
  *
@@ -1243,7 +2205,24 @@ function isObjectLike(value) {
 
 module.exports = isObjectLike;
 
-},{}],22:[function(_dereq_,module,exports){
+},{}],47:[function(_dereq_,module,exports){
+var isObject = _dereq_('../lang/isObject');
+
+/**
+ * Checks if `value` is suitable for strict equality comparisons, i.e. `===`.
+ *
+ * @private
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` if suitable for strict
+ *  equality comparisons, else `false`.
+ */
+function isStrictComparable(value) {
+  return value === value && !isObject(value);
+}
+
+module.exports = isStrictComparable;
+
+},{"../lang/isObject":56}],48:[function(_dereq_,module,exports){
 var isArguments = _dereq_('../lang/isArguments'),
     isArray = _dereq_('../lang/isArray'),
     isIndex = _dereq_('./isIndex'),
@@ -1286,7 +2265,53 @@ function shimKeys(object) {
 
 module.exports = shimKeys;
 
-},{"../lang/isArguments":23,"../lang/isArray":24,"../object/keysIn":32,"./isIndex":18,"./isLength":20}],23:[function(_dereq_,module,exports){
+},{"../lang/isArguments":51,"../lang/isArray":52,"../object/keysIn":61,"./isIndex":42,"./isLength":45}],49:[function(_dereq_,module,exports){
+var isObject = _dereq_('../lang/isObject');
+
+/**
+ * Converts `value` to an object if it's not one.
+ *
+ * @private
+ * @param {*} value The value to process.
+ * @returns {Object} Returns the object.
+ */
+function toObject(value) {
+  return isObject(value) ? value : Object(value);
+}
+
+module.exports = toObject;
+
+},{"../lang/isObject":56}],50:[function(_dereq_,module,exports){
+var baseToString = _dereq_('./baseToString'),
+    isArray = _dereq_('../lang/isArray');
+
+/** Used to match property names within property paths. */
+var rePropName = /[^.[\]]+|\[(?:(-?\d+(?:\.\d+)?)|(["'])((?:(?!\2)[^\n\\]|\\.)*?)\2)\]/g;
+
+/** Used to match backslashes in property paths. */
+var reEscapeChar = /\\(\\)?/g;
+
+/**
+ * Converts `value` to property path array if it's not one.
+ *
+ * @private
+ * @param {*} value The value to process.
+ * @returns {Array} Returns the property path array.
+ */
+function toPath(value) {
+  if (isArray(value)) {
+    return value;
+  }
+  var result = [];
+  baseToString(value).replace(rePropName, function(match, number, quote, string) {
+    result.push(quote ? string.replace(reEscapeChar, '$1') : (number || match));
+  });
+  return result;
+}
+
+module.exports = toPath;
+
+},{"../lang/isArray":52,"./baseToString":30}],51:[function(_dereq_,module,exports){
 var isArrayLike = _dereq_('../internal/isArrayLike'),
     isObjectLike = _dereq_('../internal/isObjectLike');
 
@@ -1322,7 +2347,7 @@ function isArguments(value) {
 
 module.exports = isArguments;
 
-},{"../internal/isArrayLike":17,"../internal/isObjectLike":21}],24:[function(_dereq_,module,exports){
+},{"../internal/isArrayLike":41,"../internal/isObjectLike":46}],52:[function(_dereq_,module,exports){
 var getNative = _dereq_('../internal/getNative'),
     isLength = _dereq_('../internal/isLength'),
     isObjectLike = _dereq_('../internal/isObjectLike');
@@ -1364,7 +2389,7 @@ var isArray = nativeIsArray || function(value) {
 
 module.exports = isArray;
 
-},{"../internal/getNative":16,"../internal/isLength":20,"../internal/isObjectLike":21}],25:[function(_dereq_,module,exports){
+},{"../internal/getNative":40,"../internal/isLength":45,"../internal/isObjectLike":46}],53:[function(_dereq_,module,exports){
 var isArguments = _dereq_('./isArguments'),
     isArray = _dereq_('./isArray'),
     isArrayLike = _dereq_('../internal/isArrayLike'),
@@ -1413,7 +2438,7 @@ function isEmpty(value) {
 
 module.exports = isEmpty;
 
-},{"../internal/isArrayLike":17,"../internal/isObjectLike":21,"../object/keys":31,"./isArguments":23,"./isArray":24,"./isFunction":26,"./isString":29}],26:[function(_dereq_,module,exports){
+},{"../internal/isArrayLike":41,"../internal/isObjectLike":46,"../object/keys":60,"./isArguments":51,"./isArray":52,"./isFunction":54,"./isString":57}],54:[function(_dereq_,module,exports){
 var isObject = _dereq_('./isObject');
 
 /** `Object#toString` result references. */
@@ -1453,7 +2478,7 @@ function isFunction(value) {
 
 module.exports = isFunction;
 
-},{"./isObject":28}],27:[function(_dereq_,module,exports){
+},{"./isObject":56}],55:[function(_dereq_,module,exports){
 var isFunction = _dereq_('./isFunction'),
     isObjectLike = _dereq_('../internal/isObjectLike');
 
@@ -1503,7 +2528,7 @@ function isNative(value) {
 
 module.exports = isNative;
 
-},{"../internal/isObjectLike":21,"./isFunction":26}],28:[function(_dereq_,module,exports){
+},{"../internal/isObjectLike":46,"./isFunction":54}],56:[function(_dereq_,module,exports){
 /**
  * Checks if `value` is the [language type](https://es5.github.io/#x8) of `Object`.
  * (e.g. arrays, functions, objects, regexes, `new Number(0)`, and `new String('')`)
@@ -1533,7 +2558,7 @@ function isObject(value) {
 
 module.exports = isObject;
 
-},{}],29:[function(_dereq_,module,exports){
+},{}],57:[function(_dereq_,module,exports){
 var isObjectLike = _dereq_('../internal/isObjectLike');
 
 /** `Object#toString` result references. */
@@ -1570,7 +2595,83 @@ function isString(value) {
 
 module.exports = isString;
 
-},{"../internal/isObjectLike":21}],30:[function(_dereq_,module,exports){
+},{"../internal/isObjectLike":46}],58:[function(_dereq_,module,exports){
+var isLength = _dereq_('../internal/isLength'),
+    isObjectLike = _dereq_('../internal/isObjectLike');
+
+/** `Object#toString` result references. */
+var argsTag = '[object Arguments]',
+    arrayTag = '[object Array]',
+    boolTag = '[object Boolean]',
+    dateTag = '[object Date]',
+    errorTag = '[object Error]',
+    funcTag = '[object Function]',
+    mapTag = '[object Map]',
+    numberTag = '[object Number]',
+    objectTag = '[object Object]',
+    regexpTag = '[object RegExp]',
+    setTag = '[object Set]',
+    stringTag = '[object String]',
+    weakMapTag = '[object WeakMap]';
+
+var arrayBufferTag = '[object ArrayBuffer]',
+    float32Tag = '[object Float32Array]',
+    float64Tag = '[object Float64Array]',
+    int8Tag = '[object Int8Array]',
+    int16Tag = '[object Int16Array]',
+    int32Tag = '[object Int32Array]',
+    uint8Tag = '[object Uint8Array]',
+    uint8ClampedTag = '[object Uint8ClampedArray]',
+    uint16Tag = '[object Uint16Array]',
+    uint32Tag = '[object Uint32Array]';
+
+/** Used to identify `toStringTag` values of typed arrays. */
+var typedArrayTags = {};
+typedArrayTags[float32Tag] = typedArrayTags[float64Tag] =
+typedArrayTags[int8Tag] = typedArrayTags[int16Tag] =
+typedArrayTags[int32Tag] = typedArrayTags[uint8Tag] =
+typedArrayTags[uint8ClampedTag] = typedArrayTags[uint16Tag] =
+typedArrayTags[uint32Tag] = true;
+typedArrayTags[argsTag] = typedArrayTags[arrayTag] =
+typedArrayTags[arrayBufferTag] = typedArrayTags[boolTag] =
+typedArrayTags[dateTag] = typedArrayTags[errorTag] =
+typedArrayTags[funcTag] = typedArrayTags[mapTag] =
+typedArrayTags[numberTag] = typedArrayTags[objectTag] =
+typedArrayTags[regexpTag] = typedArrayTags[setTag] =
+typedArrayTags[stringTag] = typedArrayTags[weakMapTag] = false;
+
+/** Used for native method references. */
+var objectProto = Object.prototype;
+
+/**
+ * Used to resolve the [`toStringTag`](http://ecma-international.org/ecma-262/6.0/#sec-object.prototype.tostring)
+ * of values.
+ */
+var objToString = objectProto.toString;
+
+/**
+ * Checks if `value` is classified as a typed array.
+ *
+ * @static
+ * @memberOf _
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is correctly classified, else `false`.
+ * @example
+ *
+ * _.isTypedArray(new Uint8Array);
+ * // => true
+ *
+ * _.isTypedArray([]);
+ * // => false
+ */
+function isTypedArray(value) {
+  return isObjectLike(value) && isLength(value.length) && !!typedArrayTags[objToString.call(value)];
+}
+
+module.exports = isTypedArray;
+
+},{"../internal/isLength":45,"../internal/isObjectLike":46}],59:[function(_dereq_,module,exports){
 var assignWith = _dereq_('../internal/assignWith'),
     baseAssign = _dereq_('../internal/baseAssign'),
     createAssigner = _dereq_('../internal/createAssigner');
@@ -1615,7 +2716,7 @@ var assign = createAssigner(function(object, source, customizer) {
 
 module.exports = assign;
 
-},{"../internal/assignWith":9,"../internal/baseAssign":10,"../internal/createAssigner":14}],31:[function(_dereq_,module,exports){
+},{"../internal/assignWith":13,"../internal/baseAssign":14,"../internal/createAssigner":32}],60:[function(_dereq_,module,exports){
 var getNative = _dereq_('../internal/getNative'),
     isArrayLike = _dereq_('../internal/isArrayLike'),
     isObject = _dereq_('../lang/isObject'),
@@ -1662,7 +2763,7 @@ var keys = !nativeKeys ? shimKeys : function(object) {
 
 module.exports = keys;
 
-},{"../internal/getNative":16,"../internal/isArrayLike":17,"../internal/shimKeys":22,"../lang/isObject":28}],32:[function(_dereq_,module,exports){
+},{"../internal/getNative":40,"../internal/isArrayLike":41,"../internal/shimKeys":48,"../lang/isObject":56}],61:[function(_dereq_,module,exports){
 var isArguments = _dereq_('../lang/isArguments'),
     isArray = _dereq_('../lang/isArray'),
     isIndex = _dereq_('../internal/isIndex'),
@@ -1728,7 +2829,42 @@ function keysIn(object) {
 
 module.exports = keysIn;
 
-},{"../internal/isIndex":18,"../internal/isLength":20,"../lang/isArguments":23,"../lang/isArray":24,"../lang/isObject":28}],33:[function(_dereq_,module,exports){
+},{"../internal/isIndex":42,"../internal/isLength":45,"../lang/isArguments":51,"../lang/isArray":52,"../lang/isObject":56}],62:[function(_dereq_,module,exports){
+var keys = _dereq_('./keys'),
+    toObject = _dereq_('../internal/toObject');
+
+/**
+ * Creates a two dimensional array of the key-value pairs for `object`,
+ * e.g. `[[key1, value1], [key2, value2]]`.
+ *
+ * @static
+ * @memberOf _
+ * @category Object
+ * @param {Object} object The object to query.
+ * @returns {Array} Returns the new array of key-value pairs.
+ * @example
+ *
+ * _.pairs({ 'barney': 36, 'fred': 40 });
+ * // => [['barney', 36], ['fred', 40]] (iteration order is not guaranteed)
+ */
+function pairs(object) {
+  object = toObject(object);
+
+  var index = -1,
+      props = keys(object),
+      length = props.length,
+      result = Array(length);
+
+  while (++index < length) {
+    var key = props[index];
+    result[index] = [key, object[key]];
+  }
+  return result;
+}
+
+module.exports = pairs;
+
+},{"../internal/toObject":49,"./keys":60}],63:[function(_dereq_,module,exports){
 /**
  * This method returns the first argument provided to it.
  *
@@ -1750,7 +2886,40 @@ function identity(value) {
 
 module.exports = identity;
 
-},{}],34:[function(_dereq_,module,exports){
+},{}],64:[function(_dereq_,module,exports){
+var baseProperty = _dereq_('../internal/baseProperty'),
+    basePropertyDeep = _dereq_('../internal/basePropertyDeep'),
+    isKey = _dereq_('../internal/isKey');
+
+/**
+ * Creates a function that returns the property value at `path` on a
+ * given object.
+ *
+ * @static
+ * @memberOf _
+ * @category Utility
+ * @param {Array|string} path The path of the property to get.
+ * @returns {Function} Returns the new function.
+ * @example
+ *
+ * var objects = [
+ *   { 'a': { 'b': { 'c': 2 } } },
+ *   { 'a': { 'b': { 'c': 1 } } }
+ * ];
+ *
+ * _.map(objects, _.property('a.b.c'));
+ * // => [2, 1]
+ *
+ * _.pluck(_.sortBy(objects, _.property(['a', 'b', 'c'])), 'a.b.c');
+ * // => [1, 2]
+ */
+function property(path) {
+  return isKey(path) ? baseProperty(path) : basePropertyDeep(path);
+}
+
+module.exports = property;
+
+},{"../internal/baseProperty":27,"../internal/basePropertyDeep":28,"../internal/isKey":44}],65:[function(_dereq_,module,exports){
 (function (process,global){
 /*!
  * @overview RSVP - a tiny implementation of Promises/A+.
