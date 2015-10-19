@@ -208,7 +208,7 @@ var Query = (function () {
     }
 
     /**
-     *
+     * Transform the query build into query string
      */
   }, {
     key: 'toParams',
