@@ -237,7 +237,8 @@ var Query = (function () {
       } else if ((0, _lodashLangIsObject2['default'])(val)) {
         // Map the object
         return (0, _lodashCollectionMap2['default'])(val, function (value, key) {
-          return _this._toParams((top ? key : prefix) + '[' + key + ']', value, false);
+          // return this._toParams(`${top ? key : prefix}[${key}]`, value, false);
+          return _this._toParams(top ? key : prefix + '[' + key + ']', value, false);
         }).join('&');
       } else {
         return encodeURIComponent(prefix) + '=' + encodeURIComponent(val);
