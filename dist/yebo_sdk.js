@@ -9,39 +9,39 @@ Object.defineProperty(exports, '__esModule', {
   value: true
 });
 
-var _libYebo_sdkRequest = _dereq_('./lib/yebo_sdk/request');
+var _libYebo_sdkCoreRequest = _dereq_('./lib/yebo_sdk/core/request');
 
 Object.defineProperty(exports, 'Request', {
   enumerable: true,
   get: function get() {
-    return _libYebo_sdkRequest.Request;
+    return _libYebo_sdkCoreRequest.Request;
   }
 });
 
-var _libYebo_sdkQuery = _dereq_('./lib/yebo_sdk/query');
+var _libYebo_sdkCoreQuery = _dereq_('./lib/yebo_sdk/core/query');
 
 Object.defineProperty(exports, 'Query', {
   enumerable: true,
   get: function get() {
-    return _libYebo_sdkQuery.Query;
+    return _libYebo_sdkCoreQuery.Query;
   }
 });
 
-var _libYebo_sdkStore = _dereq_('./lib/yebo_sdk/store');
+var _libYebo_sdkCoreStore = _dereq_('./lib/yebo_sdk/core/store');
 
 Object.defineProperty(exports, 'Store', {
   enumerable: true,
   get: function get() {
-    return _libYebo_sdkStore.Store;
+    return _libYebo_sdkCoreStore.Store;
   }
 });
 
-var _libYebo_sdkConfig = _dereq_('./lib/yebo_sdk/config');
+var _libYebo_sdkCoreConfig = _dereq_('./lib/yebo_sdk/core/config');
 
 Object.defineProperty(exports, 'Config', {
   enumerable: true,
   get: function get() {
-    return _libYebo_sdkConfig.Config;
+    return _libYebo_sdkCoreConfig.Config;
   }
 });
 
@@ -56,7 +56,7 @@ Object.defineProperty(exports, 'Products', {
   }
 });
 
-},{"./lib/yebo_sdk/config":2,"./lib/yebo_sdk/query":3,"./lib/yebo_sdk/query/products":4,"./lib/yebo_sdk/request":5,"./lib/yebo_sdk/store":6}],2:[function(_dereq_,module,exports){
+},{"./lib/yebo_sdk/core/config":2,"./lib/yebo_sdk/core/query":3,"./lib/yebo_sdk/core/request":4,"./lib/yebo_sdk/core/store":5,"./lib/yebo_sdk/query/products":6}],2:[function(_dereq_,module,exports){
 /**
  * Config Class
  * This class is reponsible to store all the configurations from the SDK
@@ -265,7 +265,233 @@ var Query = (function () {
 
 exports.Query = Query;
 
-},{"./store":6,"lodash/collection/map":9,"lodash/lang/isArray":52,"lodash/lang/isObject":56}],4:[function(_dereq_,module,exports){
+},{"./store":5,"lodash/collection/map":9,"lodash/lang/isArray":52,"lodash/lang/isObject":56}],4:[function(_dereq_,module,exports){
+// Variables
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+var _lodashObjectAssign = _dereq_('lodash/object/assign');
+
+var _lodashObjectAssign2 = _interopRequireDefault(_lodashObjectAssign);
+
+var _rsvp = _dereq_('rsvp');
+
+var _rsvp2 = _interopRequireDefault(_rsvp);
+
+/**
+ * Request class
+ * @example
+ * let myClass = new Request('http://google.com');
+ */
+
+var Request = (function () {
+  /**
+   * This method make a request
+   * @param {string[]} url The url that will be requested
+   * @param {string[]} method Method used to request
+   * @param {object} data The content that will be sended
+   * @param {object} header Request headers
+   * @return {RVSP.Promise} Request promise
+   */
+
+  function Request(url) {
+    var method = arguments.length <= 1 || arguments[1] === undefined ? 'GET' : arguments[1];
+
+    var _this = this;
+
+    var data = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
+    var header = arguments.length <= 3 || arguments[3] === undefined ? {} : arguments[3];
+
+    _classCallCheck(this, Request);
+
+    // Setting the class
+    var xhrClass = XMLHttpRequest || ActiveXObject;
+
+    // XHR Object
+    var xhr = new xhrClass('MSXML2.XMLHTTP.3.0');
+
+    // Define the headers
+    var headers = (0, _lodashObjectAssign2['default'])({
+      'X-Requested-With': 'XMLHttpRequest',
+      'Content-type': 'application/x-www-form-urlencoded'
+    }, header);
+
+    // Return a Promise
+    return new _rsvp2['default'].Promise(function (resolve, reject) {
+      // Open the URL
+      xhr.open(method, url, 1);
+
+      // Set the headers
+      for (var h in headers) {
+        xhr.setRequestHeader(h, headers[h]);
+      }
+
+      // Define the callback
+      xhr.onreadystatechange = function () {
+        // Checks if the ajax has ended
+        if (xhr.readyState > 3) {
+          // Check the request status
+          if (xhr.status === 200) resolve(_this.parseResponse(xhr), xhr);else reject(xhr);
+        }
+      };
+
+      // Send the data
+      xhr.send(data);
+    });
+  }
+
+  /**
+   * Parse the XHR response according to the type
+   * @param {XMLHttpRequest} xhr A request object
+   * @return {object/string} The response foratted
+   */
+
+  _createClass(Request, [{
+    key: 'parseResponse',
+    value: function parseResponse(xhr) {
+      return JSON.parse(xhr.responseText);
+    }
+  }]);
+
+  return Request;
+})();
+
+exports.Request = Request;
+
+},{"lodash/object/assign":59,"rsvp":65}],5:[function(_dereq_,module,exports){
+// Dependencies
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+var _request = _dereq_('./request');
+
+var _config = _dereq_('./config');
+
+var _rsvp = _dereq_('rsvp');
+
+var _rsvp2 = _interopRequireDefault(_rsvp);
+
+// import cacheJS from 'cacheJS';
+
+/**
+ * This class will be the bridge between the Yebo and the SDK
+ * Always using the class Request as a connection interface
+ */
+
+var Store = (function () {
+  function Store() {
+    _classCallCheck(this, Store);
+  }
+
+  _createClass(Store, null, [{
+    key: 'auth',
+
+    /**
+     * Authenticate the current sessions
+     */
+    value: function auth() {
+      // Define the cache expire time
+      var EXPIRE_TIME = 1800;
+
+      // Define the store url
+      var url = _config.Config.get('store:url', true);
+
+      // Define the API version
+      var apiVersion = _config.Config.get('store:api:version', true);
+
+      // Define the full fetch url
+      var fullURL = url + '/' + apiVersion;
+
+      // Return the an auth Promise
+      return new _rsvp2['default'].Promise(function (resolve, reject) {
+        // Get the cached key
+        var cachedKey = cacheJS.get('yebo:auth');
+
+        // Check if the auth key is cached
+        if (cachedKey !== null) {
+          // Resolve the promise
+          resolve(cachedKey);
+        } else {
+          // Get a new key
+          new _request.Request(fullURL).then(function (result) {
+            // Insert into the cache
+            cacheJS.set('yebo:auth', result.token, EXPIRE_TIME);
+
+            // resolve the promise
+            resolve(result.token);
+          })['catch'](reject);
+        }
+      });
+    }
+
+    /**
+     * Fetch any kind of data from Yebo
+     * @todo A way to able the user to config the store URL
+     * @todo Create a Result Object to make all the API returns the same
+     * @param {url} path The path that will be requested
+     * @param {object} data Data that will be sent to the URL
+     * @param {string} method Method HTTP that will be used
+     */
+  }, {
+    key: 'fetch',
+    value: function fetch(path) {
+      var _this = this;
+
+      var data = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+      var method = arguments.length <= 2 || arguments[2] === undefined ? 'GET' : arguments[2];
+
+      // Define the store url
+      var url = _config.Config.get('store:url', true);
+
+      // Define the API version
+      var apiVersion = _config.Config.get('store:api:version', true);
+
+      // Define the full fetch url
+      var fullPath = url + '/' + apiVersion + '/' + path;
+
+      // Return a fetch promise
+      return new _rsvp2['default'].Promise(function (resolve, reject) {
+        // Auth the connection
+        _this.auth().then(function (token) {
+          // Auth header
+          var authHeader = {
+            'Authorization': 'Bearer ' + token
+          };
+
+          // Make the request
+          new _request.Request(fullPath, method, data, authHeader).then(function (result) {
+            // resolve the promise
+            resolve(result);
+          })['catch'](reject);
+        });
+      });
+    }
+  }]);
+
+  return Store;
+})();
+
+exports.Store = Store;
+
+},{"./config":2,"./request":4,"rsvp":65}],6:[function(_dereq_,module,exports){
 // Utils
 'use strict';
 
@@ -297,11 +523,11 @@ var _lodashLangIsArray2 = _interopRequireDefault(_lodashLangIsArray);
 
 // Dependencies
 
-var _store = _dereq_('../store');
+var _coreStore = _dereq_('../core/store');
 
 // Import parent class
 
-var _query = _dereq_('../query');
+var _coreQuery = _dereq_('../core/query');
 
 /**
  * Product Query class
@@ -573,7 +799,7 @@ var Products = (function (_Query) {
       if (!execute) return params;
 
       // Return the Fetch!
-      return _store.Store.fetch(this.endPoint + '/aggs', params);
+      return _coreStore.Store.fetch(this.endPoint + '/aggs', params);
     }
 
     /**
@@ -616,237 +842,11 @@ var Products = (function (_Query) {
   }]);
 
   return Products;
-})(_query.Query);
+})(_coreQuery.Query);
 
 exports.Products = Products;
 
-},{"../query":3,"../store":6,"lodash/lang/isArray":52,"lodash/lang/isEmpty":53,"lodash/object/assign":59}],5:[function(_dereq_,module,exports){
-// Variables
-'use strict';
-
-Object.defineProperty(exports, '__esModule', {
-  value: true
-});
-
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-var _lodashObjectAssign = _dereq_('lodash/object/assign');
-
-var _lodashObjectAssign2 = _interopRequireDefault(_lodashObjectAssign);
-
-var _rsvp = _dereq_('rsvp');
-
-var _rsvp2 = _interopRequireDefault(_rsvp);
-
-/**
- * Request class
- * @example
- * let myClass = new Request('http://google.com');
- */
-
-var Request = (function () {
-  /**
-   * This method make a request
-   * @param {string[]} url The url that will be requested
-   * @param {string[]} method Method used to request
-   * @param {object} data The content that will be sended
-   * @param {object} header Request headers
-   * @return {RVSP.Promise} Request promise
-   */
-
-  function Request(url) {
-    var method = arguments.length <= 1 || arguments[1] === undefined ? 'GET' : arguments[1];
-
-    var _this = this;
-
-    var data = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
-    var header = arguments.length <= 3 || arguments[3] === undefined ? {} : arguments[3];
-
-    _classCallCheck(this, Request);
-
-    // Setting the class
-    var xhrClass = XMLHttpRequest || ActiveXObject;
-
-    // XHR Object
-    var xhr = new xhrClass('MSXML2.XMLHTTP.3.0');
-
-    // Define the headers
-    var headers = (0, _lodashObjectAssign2['default'])({
-      'X-Requested-With': 'XMLHttpRequest',
-      'Content-type': 'application/x-www-form-urlencoded'
-    }, header);
-
-    // Return a Promise
-    return new _rsvp2['default'].Promise(function (resolve, reject) {
-      // Open the URL
-      xhr.open(method, url, 1);
-
-      // Set the headers
-      for (var h in headers) {
-        xhr.setRequestHeader(h, headers[h]);
-      }
-
-      // Define the callback
-      xhr.onreadystatechange = function () {
-        // Checks if the ajax has ended
-        if (xhr.readyState > 3) {
-          // Check the request status
-          if (xhr.status === 200) resolve(_this.parseResponse(xhr), xhr);else reject(xhr);
-        }
-      };
-
-      // Send the data
-      xhr.send(data);
-    });
-  }
-
-  /**
-   * Parse the XHR response according to the type
-   * @param {XMLHttpRequest} xhr A request object
-   * @return {object/string} The response foratted
-   */
-
-  _createClass(Request, [{
-    key: 'parseResponse',
-    value: function parseResponse(xhr) {
-      return JSON.parse(xhr.responseText);
-    }
-  }]);
-
-  return Request;
-})();
-
-exports.Request = Request;
-
-},{"lodash/object/assign":59,"rsvp":65}],6:[function(_dereq_,module,exports){
-// Dependencies
-'use strict';
-
-Object.defineProperty(exports, '__esModule', {
-  value: true
-});
-
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-var _request = _dereq_('./request');
-
-var _config = _dereq_('./config');
-
-var _rsvp = _dereq_('rsvp');
-
-var _rsvp2 = _interopRequireDefault(_rsvp);
-
-// import cacheJS from 'cacheJS';
-
-/**
- * This class will be the bridge between the Yebo and the SDK
- * Always using the class Request as a connection interface
- */
-
-var Store = (function () {
-  function Store() {
-    _classCallCheck(this, Store);
-  }
-
-  _createClass(Store, null, [{
-    key: 'auth',
-
-    /**
-     * Authenticate the current sessions
-     */
-    value: function auth() {
-      // Define the cache expire time
-      var EXPIRE_TIME = 1800;
-
-      // Define the store url
-      var url = _config.Config.get('store:url', true);
-
-      // Define the API version
-      var apiVersion = _config.Config.get('store:api:version', true);
-
-      // Define the full fetch url
-      var fullURL = url + '/' + apiVersion;
-
-      // Return the an auth Promise
-      return new _rsvp2['default'].Promise(function (resolve, reject) {
-        // Get the cached key
-        var cachedKey = cacheJS.get('yebo:auth');
-
-        // Check if the auth key is cached
-        if (cachedKey !== null) {
-          // Resolve the promise
-          resolve(cachedKey);
-        } else {
-          // Get a new key
-          new _request.Request(fullURL).then(function (result) {
-            // Insert into the cache
-            cacheJS.set('yebo:auth', result.token, EXPIRE_TIME);
-
-            // resolve the promise
-            resolve(result.token);
-          })['catch'](reject);
-        }
-      });
-    }
-
-    /**
-     * Fetch any kind of data from Yebo
-     * @todo A way to able the user to config the store URL
-     * @todo Create a Result Object to make all the API returns the same
-     * @param {url} path The path that will be requested
-     * @param {object} data Data that will be sent to the URL
-     * @param {string} method Method HTTP that will be used
-     */
-  }, {
-    key: 'fetch',
-    value: function fetch(path) {
-      var _this = this;
-
-      var data = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
-      var method = arguments.length <= 2 || arguments[2] === undefined ? 'GET' : arguments[2];
-
-      // Define the store url
-      var url = _config.Config.get('store:url', true);
-
-      // Define the API version
-      var apiVersion = _config.Config.get('store:api:version', true);
-
-      // Define the full fetch url
-      var fullPath = url + '/' + apiVersion + '/' + path;
-
-      // Return a fetch promise
-      return new _rsvp2['default'].Promise(function (resolve, reject) {
-        // Auth the connection
-        _this.auth().then(function (token) {
-          // Auth header
-          var authHeader = {
-            'Authorization': 'Bearer ' + token
-          };
-
-          // Make the request
-          new _request.Request(fullPath, method, data, authHeader).then(function (result) {
-            // resolve the promise
-            resolve(result);
-          })['catch'](reject);
-        });
-      });
-    }
-  }]);
-
-  return Store;
-})();
-
-exports.Store = Store;
-
-},{"./config":2,"./request":5,"rsvp":65}],7:[function(_dereq_,module,exports){
+},{"../core/query":3,"../core/store":5,"lodash/lang/isArray":52,"lodash/lang/isEmpty":53,"lodash/object/assign":59}],7:[function(_dereq_,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
