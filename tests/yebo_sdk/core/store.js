@@ -1,9 +1,10 @@
 // Testing requests
-import { Store } from '../../index';
+// import { Store } from '../../index';
 import chai from 'chai';
 
 //
-var expect = chai.expect,
+var Store = YeboSDK.Store,
+    expect = chai.expect,
     should = chai.should();
 
 module.exports = function() {

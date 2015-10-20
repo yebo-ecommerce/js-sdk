@@ -29,7 +29,7 @@ gulp.task('buildTests', function() {
 });
 
 // Run the tests
-gulp.task('test', ['buildTests'], function() {
+gulp.task('test', ['build', 'buildTests'], function() {
   gulp.src(['tests/index.html'])
       .pipe(mochaPhantomJS());
 });
