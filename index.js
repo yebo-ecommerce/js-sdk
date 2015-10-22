@@ -1,3 +1,6 @@
+// Babel polyfill
+require("babel/polyfill");
+
 //
 export { Request } from './lib/yebo_sdk/core/request';
 export { Query } from './lib/yebo_sdk/core/query';
