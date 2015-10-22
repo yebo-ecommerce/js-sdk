@@ -6,3 +6,6 @@ export { Config } from './lib/yebo_sdk/core/config';
 
 // Queries
 export { Products } from './lib/yebo_sdk/query/products';
+
+// Main features
+export { Cart } from './lib/yebo_sdk/cart'
