@@ -1,6 +1,7 @@
 // Testing requests
 // import { Config } from '../../index';
 import chai from 'chai';
+import capitalize from 'lodash/string/capitalize';
 
 //
 var Config = YeboSDK.Config,
@@ -29,6 +30,21 @@ module.exports = function() {
       // Assertions
       expect(Config._store).to.have.property('newKey');
       expect(Config.get('newKey')).to.equal('Some important value');
+    });
+
+    it('should get and set a key using the shortcuts', () => {
+      // Each the Config.keys
+      for( var key of Config.keys ) {
+        // Format the key
+        let formattedKey = capitalize(key);
+
+        // Set the key
+        Config[`set${formattedKey}`]('anotherKey', 'D\'oh');
+
+        // Assertions
+        expect(Config._store).to.have.property('newKey');
+        expect(Config[`get${formattedKey}`]('anotherKey')).to.equal('D\'oh');
+      }
     });
   });
 };
