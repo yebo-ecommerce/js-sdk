@@ -139,10 +139,10 @@ var Cart = (function () {
       var qty = arguments.length <= 1 || arguments[1] === undefined ? 1 : arguments[1];
 
       // Generate the action options
-      var options = (0, _lodashObjectAssign2['default'])(this._requestProperties, { variant: variantID, qty: qty });
+      var options = { variant: variantID, qty: qty };
 
       // Send the request
-      return _coreStore.Store.fetch('cart/items/add', options, 'POST');
+      return this._cartRequest('cart/items/add', options, 'POST');
     }
 
     /**
@@ -180,17 +180,11 @@ var Cart = (function () {
   }, {
     key: '_remove',
     value: function _remove(options, qty) {
-      // Properties
-      var properties = this._requestProperties;
-
       // Check if the quantity was not defined
       if (qty !== undefined) options['qty'] = qty;
 
-      // Generate the action options
-      options = (0, _lodashObjectAssign2['default'])(properties, options);
-
       // Return the request
-      return _coreStore.Store.fetch('cart/items/remove', options, 'POST');
+      return this._cartRequest('cart/items/remove', options, 'POST');
     }
 
     /**
@@ -228,17 +222,35 @@ var Cart = (function () {
   }, {
     key: '_update',
     value: function _update(options, qty) {
-      // Properties
-      var properties = this._requestProperties;
-
       // Check if the quantity was not defined
       if (qty !== undefined) options['qty'] = qty;
 
-      // Generate the action options
-      options = (0, _lodashObjectAssign2['default'])(properties, options);
-
       // Return the request
-      return _coreStore.Store.fetch('cart/items/update', options, 'POST');
+      return this._cartRequest('cart/items/update', options, 'POST');
+    }
+
+    /**
+     * Responsible to execute all the cart requests
+     * It also set the instance variables
+     */
+  }, {
+    key: '_cartRequest',
+    value: function _cartRequest(path, options, method, prop) {
+      var _this = this;
+
+      // Return a promisse
+      return new _rsvp2['default'].Promise(function (resolve, reject) {
+        _coreStore.Store.fetch(path, (0, _lodashObjectAssign2['default'])(_this._requestProperties, options), method).then(function (res) {
+          // Store the order number
+          if (res.order.real) _this._number = res.order.number;
+
+          // Store the token
+          _this._token = res.order.number;
+
+          // Send it to the public Promise
+          if (prop !== undefined) resolve(res[prop]);else resolve(res);
+        })['catch'](reject);
+      });
     }
   }, {
     key: '_requestProperties',
@@ -259,8 +271,18 @@ var Cart = (function () {
   }, {
     key: 'items',
     get: function get() {
-      // Return a promisse
-      return _coreStore.Store.fetch('cart/items', this._requestProperties);
+      // Send the request
+      return this._cartRequest('cart/items', {}, 'GET');
+    }
+
+    /**
+     * Return the order information
+     */
+  }, {
+    key: 'order',
+    get: function get() {
+      // Send the request
+      return this._cartRequest('cart', {}, 'GET', 'order');
     }
   }]);
 
@@ -606,6 +628,15 @@ var Request = (function () {
       'Content-type': 'application/x-www-form-urlencoded'
     }, header);
 
+    // Check if the method is POST
+    if (method === 'POST') {
+      // Set the header
+      headers['Content-type'] = 'application/json';
+
+      // Compile the data
+      data = JSON.stringify(data);
+    }
+
     // Return a Promise
     return new _rsvp2['default'].Promise(function (resolve, reject) {
       // Open the URL
@@ -620,8 +651,11 @@ var Request = (function () {
       xhr.onreadystatechange = function () {
         // Checks if the ajax has ended
         if (xhr.readyState > 3) {
+          // Parse the response
+          var response = _this.parseResponse(xhr);
+
           // Check the request status
-          if (xhr.status === 200) resolve(_this.parseResponse(xhr), xhr);else reject(xhr);
+          if (response.error === true) reject(response, xhr);else resolve(response, xhr);
         }
       };
 
@@ -639,7 +673,7 @@ var Request = (function () {
   _createClass(Request, [{
     key: 'parseResponse',
     value: function parseResponse(xhr) {
-      return JSON.parse(xhr.responseText);
+      if (xhr.responseText === '') return {};else return JSON.parse(xhr.responseText);
     }
   }]);
 
