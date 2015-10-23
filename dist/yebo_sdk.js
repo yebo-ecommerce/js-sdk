@@ -139,7 +139,7 @@ var Cart = (function () {
       var qty = arguments.length <= 1 || arguments[1] === undefined ? 1 : arguments[1];
 
       // Generate the action options
-      var options = assing(this._requestProperties, { variant: variantID, qty: qty });
+      var options = (0, _lodashObjectAssign2['default'])(this._requestProperties, { variant: variantID, qty: qty });
 
       // Send the request
       return _coreStore.Store.fetch('cart/items/add', options, 'POST');
@@ -187,7 +187,7 @@ var Cart = (function () {
       if (qty !== undefined) options['qty'] = qty;
 
       // Generate the action options
-      options = assing(properties, options);
+      options = (0, _lodashObjectAssign2['default'])(properties, options);
 
       // Return the request
       return _coreStore.Store.fetch('cart/items/remove', options, 'POST');
@@ -235,7 +235,7 @@ var Cart = (function () {
       if (qty !== undefined) options['qty'] = qty;
 
       // Generate the action options
-      options = assing(properties, options);
+      options = (0, _lodashObjectAssign2['default'])(properties, options);
 
       // Return the request
       return _coreStore.Store.fetch('cart/items/update', options, 'POST');
