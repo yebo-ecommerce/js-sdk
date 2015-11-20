@@ -664,7 +664,7 @@ var Request = (function () {
           var response = _this.parseResponse(xhr);
 
           // Check the request status
-          if (response.error === true) reject(response, xhr);else resolve(response, xhr);
+          if (!response) resolve({}, xhr);else if (response.error === true) reject(response, xhr);else resolve(response, xhr);
         }
       };
 
