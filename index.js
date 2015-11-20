@@ -12,3 +12,4 @@ export { Products } from './lib/yebo_sdk/query/products';
 
 // Main features
 export { Cart } from './lib/yebo_sdk/cart'
+export { User } from './lib/yebo_sdk/user'
