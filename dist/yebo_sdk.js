@@ -126,7 +126,7 @@ var Cart = (function () {
     this._user = undefined;
 
     // Check if the cart is already initialized
-    if (identificator !== undefined) {
+    if (identificator !== undefined && identificator !== null) {
       if (identificator[0] === prefix) this._number = identificator;else this._token = identificator;
     }
   }
@@ -291,7 +291,7 @@ var Cart = (function () {
     key: 'order',
     get: function get() {
       // Send the request
-      return this._cartRequest('cart', {}, 'GET', 'order');
+      return this._cartRequest('cart', {}, 'POST', 'order');
     }
   }]);
 
