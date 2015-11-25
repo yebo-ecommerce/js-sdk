@@ -114,21 +114,15 @@ var Cart = (function () {
    * Initialize a new cart
    */
 
-  function Cart(identificator) {
+  function Cart(number, userToken) {
     _classCallCheck(this, Cart);
 
     // Define the order prefix
     var prefix = 'R';
 
     // Define basic infos for the cart
-    this._number = undefined;
-    this._token = undefined;
-    this._user = undefined;
-
-    // Check if the cart is already initialized
-    if (identificator !== undefined && identificator !== null) {
-      if (identificator[0] === prefix) this._number = identificator;else this._token = identificator;
-    }
+    this._number = number;
+    this._userToken = userToken;
   }
 
   /**
@@ -264,14 +258,17 @@ var Cart = (function () {
   }, {
     key: '_requestProperties',
     get: function get() {
+      // Request options
+      var options = {};
+
       // Try to use the order number
-      if (this._number !== undefined) return { number: this._number };
+      if (this._number !== undefined) options['number'] = this._number;
 
-      // Try to use the guestToken
-      if (this._token !== undefined) return { token: this._token };
+      // Try to use the order number
+      if (this._userToken !== undefined) options['user_token'] = this._userToken;
 
-      // Use nothing (this is a new cart)
-      return {};
+      // Return!
+      return options;
     }
 
     /**
