@@ -130,7 +130,17 @@ var Cart = (function () {
    */
 
   _createClass(Cart, [{
-    key: 'add',
+    key: 'empty',
+
+    /**
+     * Empty the cart
+     * This action removes all the items from the cart
+     * @return {Promise}
+     */
+    value: function empty() {
+      // Send the request
+      return this._cartRequest('cart/items/empty', {}, 'POST');
+    }
 
     /**
      * Add a variant to the cart
@@ -138,6 +148,8 @@ var Cart = (function () {
      * @param {Integer} qty The quantity of the variant that will be added
      * @return {Promise}
      */
+  }, {
+    key: 'add',
     value: function add(variantID) {
       var qty = arguments.length <= 1 || arguments[1] === undefined ? 1 : arguments[1];
 
@@ -526,32 +538,7 @@ var Query = (function () {
       var data = this.build();
 
       // Transform it to params
-      return this._toParams('', data, true);
-    }
-
-    /**
-     *
-     */
-  }, {
-    key: '_toParams',
-    value: function _toParams(prefix, val, top) {
-      var _this = this;
-
-      // Check data type
-      if ((0, _lodashLangIsArray2['default'])(val)) {
-        // Map the array
-        return (0, _lodashCollectionMap2['default'])(val, function (value, key) {
-          return _this._toParams((top ? key : prefix) + '[]', value, false);
-        }).join('&');
-      } else if ((0, _lodashLangIsObject2['default'])(val)) {
-        // Map the object
-        return (0, _lodashCollectionMap2['default'])(val, function (value, key) {
-          // return this._toParams(`${top ? key : prefix}[${key}]`, value, false);
-          return _this._toParams(top ? key : prefix + '[' + key + ']', value, false);
-        }).join('&');
-      } else {
-        return encodeURIComponent(prefix) + '=' + encodeURIComponent(val);
-      }
+      return _store.Store.toParam(data);
     }
 
     /**
@@ -710,6 +697,22 @@ var _rsvp = _dereq_('rsvp');
 
 var _rsvp2 = _interopRequireDefault(_rsvp);
 
+var _lodashLangIsEmpty = _dereq_('lodash/lang/isEmpty');
+
+var _lodashLangIsEmpty2 = _interopRequireDefault(_lodashLangIsEmpty);
+
+var _lodashLangIsArray = _dereq_('lodash/lang/isArray');
+
+var _lodashLangIsArray2 = _interopRequireDefault(_lodashLangIsArray);
+
+var _lodashLangIsObject = _dereq_('lodash/lang/isObject');
+
+var _lodashLangIsObject2 = _interopRequireDefault(_lodashLangIsObject);
+
+var _lodashCollectionMap = _dereq_('lodash/collection/map');
+
+var _lodashCollectionMap2 = _interopRequireDefault(_lodashCollectionMap);
+
 // import cacheJS from 'cacheJS';
 
 /**
@@ -785,6 +788,9 @@ var Store = (function () {
       // Define the API version
       var apiVersion = _config.Config.get('store:api:version', true);
 
+      // If the method is GET and the data is not empty, add the query strings
+      if (method === 'GET' && !(0, _lodashLangIsEmpty2['default'])(data)) path = path + '?' + this.toParam(data);
+
       // Define the full fetch url
       var fullPath = url + '/' + apiVersion + '/' + path;
 
@@ -805,6 +811,43 @@ var Store = (function () {
         });
       });
     }
+
+    /**
+     * Transform an object into query strings
+     * @param {object} data Data that will be converted
+     * @return {string} The data in query string
+     */
+  }, {
+    key: 'toParam',
+    value: function toParam(data) {
+      // Return the result of a squence of calls of the mehtod #_toParams
+      return this._toParams('', data, true);
+    }
+
+    /**
+     *
+     */
+  }, {
+    key: '_toParams',
+    value: function _toParams(prefix, val, top) {
+      var _this2 = this;
+
+      // Check data type
+      if ((0, _lodashLangIsArray2['default'])(val)) {
+        // Map the array
+        return (0, _lodashCollectionMap2['default'])(val, function (value, key) {
+          return _this2._toParams((top ? key : prefix) + '[]', value, false);
+        }).join('&');
+      } else if ((0, _lodashLangIsObject2['default'])(val)) {
+        // Map the object
+        return (0, _lodashCollectionMap2['default'])(val, function (value, key) {
+          // return this._toParams(`${top ? key : prefix}[${key}]`, value, false);
+          return _this2._toParams(top ? key : prefix + '[' + key + ']', value, false);
+        }).join('&');
+      } else {
+        return encodeURIComponent(prefix) + '=' + encodeURIComponent(val);
+      }
+    }
   }]);
 
   return Store;
@@ -812,7 +855,7 @@ var Store = (function () {
 
 exports.Store = Store;
 
-},{"./config":3,"./request":5,"rsvp":235}],7:[function(_dereq_,module,exports){
+},{"./config":3,"./request":5,"lodash/collection/map":178,"lodash/lang/isArray":221,"lodash/lang/isEmpty":222,"lodash/lang/isObject":225,"rsvp":235}],7:[function(_dereq_,module,exports){
 // Utils
 'use strict';
 
