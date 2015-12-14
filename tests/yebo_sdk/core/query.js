@@ -4,6 +4,7 @@ import chai from 'chai';
 
 //
 var Query = YeboSDK.Query,
+    Rule = YeboSDK.QueryRule,
     expect = chai.expect,
     should = chai.should();
 
@@ -43,7 +44,13 @@ module.exports = function() {
       let parentQuery = new Query();
 
       // Add some attributes
-      parentQuery._attrs = {
+      parentQuery._rules = {
+        string: 'Sample',
+        number: 123
+      };
+
+      // Add some options
+      parentQuery._options = {
         string: 'Sample',
         number: 123
       };
@@ -52,8 +59,67 @@ module.exports = function() {
       let query = new Query(parentQuery);
 
       // Assertions
-      expect(query._attrs.string).to.equal('Sample');
-      expect(query._attrs.number).to.equal(123);
+      expect(query._rules.string).to.equal('Sample');
+      expect(query._rules.number).to.equal(123);
+
+      expect(query._options.string).to.equal('Sample');
+      expect(query._options.number).to.equal(123);
+    });
+
+    it('should recieve query rules', () => {
+      // Create new products query
+      let query = new Query();
+
+      // Create some rules
+      let rules = [
+        new Rule('firstRule', ['firstValue', 'secondValue']),
+        new Rule('secondRule', ['thirdValue', 'fourthValue'])
+      ];
+
+      // Define some temporary rules
+      query._rules = {
+        single: null,
+        multiple: []
+      };
+
+      // Add the rules
+      query.addRules('single', rules);
+      query.addRules('multiple', rules);
+
+      // Assertions
+      expect(query._rules.single).to.be.an.instanceof(Rule);
+      expect(query._rules.single.values[0]).to.equal('firstValue');
+      expect(query._rules.single.values[1]).to.equal('secondValue');
+
+      expect(query._rules.multiple).to.be.an('array');
+
+      expect(query._rules.multiple[0]).to.be.an.instanceof(Rule);
+      expect(query._rules.multiple[0].values[0]).to.equal('firstValue');
+      expect(query._rules.multiple[0].values[1]).to.equal('secondValue');
+
+      expect(query._rules.multiple[1]).to.be.an.instanceof(Rule);
+      expect(query._rules.multiple[1].values[0]).to.equal('thirdValue');
+      expect(query._rules.multiple[1].values[1]).to.equal('fourthValue');
+    });
+
+    //
+    it('should recieve query options', () => {
+      // Create new products query
+      let query = new Query();
+
+      // Define some temporary rules
+      query._options = {
+        single: null,
+        multiple: null
+      };
+
+      // Add options
+      query.addOption('single', 'someSingleValue');
+      query.addOption('multiple', 'someMultipleValue');
+
+      // Assertions
+      expect(query._options.single).to.equal('someSingleValue');
+      expect(query._options.multiple).to.equal('someMultipleValue');
     });
   });
 };
