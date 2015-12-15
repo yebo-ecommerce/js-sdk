@@ -121,5 +121,73 @@ module.exports = function() {
       expect(query._options.single).to.equal('someSingleValue');
       expect(query._options.multiple).to.equal('someMultipleValue');
     });
+
+    //
+    it('should build the rules', () => {
+      // Create new products query
+      let query = new Query();
+
+      // Create some rules
+      let rules = [
+        new Rule('firstRule', []),
+        new Rule('secondRule', ['thirdValue', 'fourthValue'])
+      ];
+
+      // Define some temporary rules
+      query._options = {
+        single: null,
+        multiple: null
+      };
+
+      // Define some temporary rules
+      query._rules = {
+        single: null,
+        multiple: []
+      };
+
+      // Add options
+      query.addOption('single', 'someSingleValue');
+      query.addOption('multiple', 'someMultipleValue');
+
+      // Add the rules
+      query.addRules('single', rules);
+      query.addRules('multiple', rules);
+
+      // Build the query
+      let buildResult = query.build();
+
+      // Change some values
+      rules[0].values = ['firstValue', 'secondValue'];
+      query.addOption('single', undefined);
+
+      // Build it again
+      let buildResultChanged = query.build();
+
+      // Assertions for the first build
+      expect(buildResult.rules.single).to.equal(undefined);
+
+      expect(buildResult.rules.multiple[0].name).to.equal('secondRule');
+      expect(buildResult.rules.multiple[0].values[0]).to.equal('thirdValue');
+      expect(buildResult.rules.multiple[0].values[1]).to.equal('fourthValue');
+
+      expect(buildResult.options.single).to.equal('someSingleValue');
+      expect(buildResult.options.multiple).to.equal('someMultipleValue');
+
+      // Assertions for the second build
+      expect(buildResultChanged.rules.single.name).to.equal('firstRule');
+      expect(buildResultChanged.rules.single.values[0]).to.equal('firstValue');
+      expect(buildResultChanged.rules.single.values[1]).to.equal('secondValue');
+
+      expect(buildResultChanged.rules.multiple[0].name).to.equal('firstRule');
+      expect(buildResultChanged.rules.multiple[0].values[0]).to.equal('firstValue');
+      expect(buildResultChanged.rules.multiple[0].values[1]).to.equal('secondValue');
+
+      expect(buildResultChanged.rules.multiple[1].name).to.equal('secondRule');
+      expect(buildResultChanged.rules.multiple[1].values[0]).to.equal('thirdValue');
+      expect(buildResultChanged.rules.multiple[1].values[1]).to.equal('fourthValue');
+
+      expect(buildResultChanged.options.single).to.equal(undefined);
+      expect(buildResultChanged.options.multiple).to.equal('someMultipleValue');
+    });
   });
 };
