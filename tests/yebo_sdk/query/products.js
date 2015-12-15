@@ -54,7 +54,7 @@ module.exports = function() {
     });
 
     //
-    describe('options alias', () => {
+    describe('Options aliases', () => {
       // Define a general query
       let query = new Products();
 
@@ -65,6 +65,34 @@ module.exports = function() {
 
         // Assertions
         expect(query._options.search).to.equal('some text...');
+      });
+
+      //
+      it('should define the sortBy option', () => {
+        // Add the option
+        query.sortBy('price', 'desc');
+
+        // Assertions
+        expect(query._options.sort.field).to.equal('price');
+        expect(query._options.sort.order).to.equal('desc');
+      });
+
+      //
+      it('should define the perPage option', () => {
+        // Add the option
+        query.perPage(15);
+
+        // Assertions
+        expect(query._options.perPage).to.equal(15);
+      });
+
+      //
+      it('should define the page option', () => {
+        // Add the option
+        query.page(2);
+
+        // Assertions
+        expect(query._options.page).to.equal(2);
       });
     });
   });
