@@ -144,5 +144,17 @@ module.exports = function() {
       expect(buildResult.sort.order).to.equal('asc');
       expect(buildResult.page).to.equal(5);
     });
+
+    //
+    it('should generate the aggregations params', () => {
+      // Create new products query
+      let query = new Products();
+
+      // Generate the aggregations
+      let aggsResult = query.aggregations(10, false);
+
+      // Assertions
+      expect(aggsResult.price_interval).to.equal(10);
+    });
   });
 };
