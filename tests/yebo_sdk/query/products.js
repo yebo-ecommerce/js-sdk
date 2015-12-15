@@ -54,7 +54,18 @@ module.exports = function() {
     });
 
     //
-    it('', () => {
+    describe('options alias', () => {
+      // Define a general query
+      let query = new Products();
+
+      //
+      it('should define the search option', () => {
+        // Add the option
+        query.search('some text...');
+
+        // Assertions
+        expect(query._options.search).to.equal('some text...');
+      });
     });
   });
 };
