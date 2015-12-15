@@ -118,7 +118,6 @@ module.exports = function() {
       // Build the query
       let buildResult = query.build();
 
-      console.log(buildResult);
       // Assertions
       expect(buildResult.filters.and[0].name).to.equal('filter');
       expect(buildResult.filters.and[0].values[0]).to.equal('azul');
