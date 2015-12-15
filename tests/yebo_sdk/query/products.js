@@ -95,5 +95,55 @@ module.exports = function() {
         expect(query._options.page).to.equal(2);
       });
     });
+
+    //
+    it('should build the query', () => {
+      // Create new products query
+      let query = new Products();
+
+      // Generate the Rule
+      let rules = [
+        Rules.filter('cor', ['azul', 'amarelo']),
+        Rules.price(15, 25),
+        Rules.taxonomy(['marcas', 'sony'])
+      ];
+
+      // Add the rules using `and` condition
+      query.and(rules);
+
+      // Add some options
+      query.page(5);
+      query.sortBy('price');
+
+      // Build the query
+      let buildResult = query.build();
+
+      console.log(buildResult);
+      // Assertions
+      expect(buildResult.filters.and[0].name).to.equal('filter');
+      expect(buildResult.filters.and[0].values[0]).to.equal('azul');
+      expect(buildResult.filters.and[0].values[1]).to.equal('amarelo');
+      expect(buildResult.filters.and[0].field).to.equal('cor');
+      expect(buildResult.filters.and[0].type).to.equal('fixed');
+      expect(buildResult.filters.and[0].execution).to.equal('or');
+
+      expect(buildResult.filters.and[1].name).to.equal('price');
+      expect(buildResult.filters.and[1].values[0]).to.equal(15);
+      expect(buildResult.filters.and[1].values[1]).to.equal(25);
+      expect(buildResult.filters.and[1].field).to.equal(undefined);
+      expect(buildResult.filters.and[1].type).to.equal('range');
+      expect(buildResult.filters.and[1].execution).to.equal('and');
+
+      expect(buildResult.filters.and[2].name).to.equal('taxons');
+      expect(buildResult.filters.and[2].values[0]).to.equal('marcas');
+      expect(buildResult.filters.and[2].values[1]).to.equal('sony');
+      expect(buildResult.filters.and[2].field).to.equal('permalink');
+      expect(buildResult.filters.and[2].type).to.equal('fixed');
+      expect(buildResult.filters.and[2].execution).to.equal('and');
+
+      expect(buildResult.sort.field).to.equal('price');
+      expect(buildResult.sort.order).to.equal('asc');
+      expect(buildResult.page).to.equal(5);
+    });
   });
 };
