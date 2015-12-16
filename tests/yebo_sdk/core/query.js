@@ -136,7 +136,8 @@ module.exports = function() {
       // Define some temporary rules
       query._options = {
         single: null,
-        multiple: null
+        multiple: null,
+        notDefined: null
       };
 
       // Define some temporary rules
@@ -172,6 +173,7 @@ module.exports = function() {
 
       expect(buildResult.options.single).to.equal('someSingleValue');
       expect(buildResult.options.multiple).to.equal('someMultipleValue');
+      expect(buildResultChanged.options.notDefined).to.equal(undefined);
 
       // Assertions for the second build
       expect(buildResultChanged.rules.single.name).to.equal('firstRule');
@@ -188,6 +190,7 @@ module.exports = function() {
 
       expect(buildResultChanged.options.single).to.equal(undefined);
       expect(buildResultChanged.options.multiple).to.equal('someMultipleValue');
+      expect(buildResultChanged.options.notDefined).to.equal(undefined);
     });
   });
 };

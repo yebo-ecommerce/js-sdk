@@ -627,7 +627,7 @@ var Query = (function () {
         var option = this._options[optionName];
 
         // Check if its empty
-        if ((!(0, _lodashLangIsEmpty2['default'])(option) || option > 0) && option !== null) result.options[optionName] = option;
+        if ((!(0, _lodashLangIsEmpty2['default'])(option) || option > 0) && option !== null && option !== undefined) result.options[optionName] = option;
       }
 
       // Return nothing
