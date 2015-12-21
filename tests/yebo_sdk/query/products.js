@@ -4,244 +4,157 @@ import chai from 'chai';
 
 //
 var Products = YeboSDK.Products,
+    Rules = Products.Rules,
     expect = chai.expect,
     should = chai.should(),
     assert = chai.assert;
 
 module.exports = function() {
-  describe('Products', () => {
-    // IT template
-    // it('', (done) => {
-    //
-    // });
+  describe('Products Query', () => {
+    describe('Rules', () => {
+      it('taxonomy rule should be generated', () => {
+        // Generate the Rule
+        let rule = Rules.taxonomy(['marcas', 'sony']);
 
-    //
-    it('should format the filter', () => {
-      // Create new query
-      let query = new Products();
-
-      // Format
-      let formatted = query._format('color', ['blue', 'red']);
-
-      // Assertions
-      expect(formatted).to.have.property('name');
-      expect(formatted).to.have.property('values');
-      expect(formatted).to.have.property('field');
-      expect(formatted).to.have.property('type');
-      expect(formatted).to.have.property('execution');
-    });
-
-    //
-    it('should generate the filter', () => {
-      // Create new query
-      let query = new Products();
-
-      // Do the query
-      query
-        .filter('color', ['blue', 'red']);
-
-      // Assertions
-      expect(query._attrs.filter.or).to.have.length(1);
-    });
-
-    //
-    it('should generate two filters with `and` operator', () => {
-      // Create new query
-      let query = new Products();
-
-      // Do the query
-      query
-        .filter('color', ['blue', 'red'])
-        .and()
-        .filter('size', ['s', 'm', 'l']);
-
-      // Assertions
-      expect(query._attrs.filter.or).to.have.length(1);
-      expect(query._attrs.filter.and).to.have.length(1);
-    });
-
-    //
-    it('should generate a taxonomy filter', () => {
-      // Create new query
-      let query = new Products();
-
-      // Do the query
-      query
-        .taxonomy(['camisetas', 'promocao']);
-
-      // Assertions
-      expect(query._attrs.filter.or).to.have.length(1);
-
-      expect(query._attrs.filter.or[0].name).to.equal('taxonomy');
-      expect(query._attrs.filter.or[0].field).to.equal('permalink');
-
-      expect(query._attrs.filter.or[0]).to.have.property('values');
-      expect(query._attrs.filter.or[0]).to.have.property('type');
-      expect(query._attrs.filter.or[0]).to.have.property('execution');
-    });
-
-    //
-    it('should generate a price filter with two values', () => {
-      // Create new query
-      let query = new Products();
-
-      // Do the query
-      query
-        .price(0, 15);
-
-      // Assertions
-      expect(query._attrs.filter.or).to.have.length(1);
-
-      expect(query._attrs.filter.or[0].name).to.equal('price');
-      expect(query._attrs.filter.or[0].values).to.be.a('array');
-      expect(query._attrs.filter.or[0].values).to.have.length(2);
-
-      expect(query._attrs.filter.or[0].values[0]).to.equal(0);
-      expect(query._attrs.filter.or[0].values[1]).to.equal(15);
-    });
-
-    //
-    it('should generate a price filter with one value', () => {
-      // Create new query
-      let query = new Products();
-
-      // Do the query
-      query
-        .price(30);
-
-      // Assertions
-      expect(query._attrs.filter.or).to.have.length(1);
-
-      expect(query._attrs.filter.or[0].name).to.equal('price');
-      expect(query._attrs.filter.or[0].values).to.be.a('array');
-      expect(query._attrs.filter.or[0].values).to.have.length(1);
-
-      expect(query._attrs.filter.or[0].values[0]).to.equal(30);
-    });
-
-    //
-    it('should generate a sort', () => {
-      // Create new query
-      let query = new Products();
-
-      // Do the query
-      query
-        .sort('price', 'asc');
-
-      // Assertions
-      expect(query._attrs.sort).to.have.property('field');
-      expect(query._attrs.sort).to.have.property('order');
-    });
-
-    //
-    it('should generate a search', () => {
-      // Create new query
-      let query = new Products();
-
-      // Do the query
-      query
-        .search('product-name');
-
-      // Assertions
-      expect(query._attrs.search).to.equal('product-name');
-    });
-
-    //
-    it('should generate page', () => {
-      // Create new query
-      let query = new Products();
-
-      // Do the query
-      query
-        .page(1);
-
-      // Assertions
-      expect(query._attrs.page).to.equal(1);
-    });
-
-    //
-    it('should generate per page', () => {
-      // Create new query
-      let query = new Products();
-
-      // Do the query
-      query
-        .perPage(15);
-
-      // Assertions
-      expect(query._attrs.perPage).to.equal(15);
-    });
-
-    it('should build the query', () => {
-      // Create new query
-      let query = new Products();
-
-      // Do the query
-      query
-        .search('product-name')
-        .and()
-        .taxonomy(['camisetas', 'promocao'])
-        .and()
-        .filter('color', ['blue', 'red'])
-        .and()
-        .sort('price', 'asc')
-        .price(0, 30)
-        .page(1)
-        .perPage(15);
-
-      // Build it
-      let build = query.build();
-
-      // Assertions
-      expect(build).to.have.property('page');
-      expect(build).to.have.property('per_page');
-      expect(build).to.have.property('filters');
-      expect(build).to.have.property('name');
-    });
-
-    it('should execute a simple query', (done) => {
-      // Create new query
-      let query = new Products();
-
-      // Do the query
-      query
-        .perPage(15);
-
-      // Execute it
-      query.execute().then((result) => {
-      // Assertions
-        expect(result).to.be.a('object');
-        expect(result).to.have.property('products');
-
-        // Done!
-        done();
-      });
-    });
-
-    // This probably will work just in the http://vivreshop.azsale.com.br/ store
-    it('should get the aggregations for some query', (done) => {
-      // Create new query
-      let query = new Products();
-
-      // Do the query
-      query
-        .taxonomy(['marcas'])
-        .perPage(15);
-
-      // Get the aggs params
-      let aggsParams = query.aggregations(50, false);
-
-      // Assertions
-      expect(aggsParams).to.have.property('price_interval');
-
-      // Get the aggregations
-      query.aggregations().then((aggs) => {
         // Assertions
-        expect(aggs).to.have.property('price');
-
-        // Done!
-        done();
+        expect(rule.name).to.equal('taxons');
       });
+
+      it('price rule should be generated', () => {
+        // Generate the Rule
+        let rule = Rules.price(15, 25);
+
+        // Assertions
+        expect(rule.name).to.equal('price');
+      });
+
+      it('filter rule should be generated', () => {
+        // Generate the Rule
+        let rule = Rules.filter('cor', ['azul', 'amarelo']);
+
+        // Assertions
+        expect(rule.name).to.equal('filter');
+        expect(rule.subName).to.equal('cor');
+      });
+    });
+
+    //
+    it('should be created', () => {
+      // Create new products query
+      let query = new Products();
+
+      // Assertions
+      expect(query._rules.or).to.be.a('array');
+      expect(query._rules.and).to.be.a('array');
+
+      expect(query._options.search).to.equal('');
+      expect(query._options.sort).to.be.a('object');
+      expect(query._options.page).to.equal(1);
+      expect(query._options.perPage).to.equal(15);
+    });
+
+    //
+    describe('Options aliases', () => {
+      // Define a general query
+      let query = new Products();
+
+      //
+      it('should define the search option', () => {
+        // Add the option
+        query.search('some text...');
+
+        // Assertions
+        expect(query._options.search).to.equal('some text...');
+      });
+
+      //
+      it('should define the sortBy option', () => {
+        // Add the option
+        query.sortBy('price', 'desc');
+
+        // Assertions
+        expect(query._options.sort.field).to.equal('price');
+        expect(query._options.sort.order).to.equal('desc');
+      });
+
+      //
+      it('should define the perPage option', () => {
+        // Add the option
+        query.perPage(15);
+
+        // Assertions
+        expect(query._options.perPage).to.equal(15);
+      });
+
+      //
+      it('should define the page option', () => {
+        // Add the option
+        query.page(2);
+
+        // Assertions
+        expect(query._options.page).to.equal(2);
+      });
+    });
+
+    //
+    it('should build the query', () => {
+      // Create new products query
+      let query = new Products();
+
+      // Generate the Rule
+      let rules = [
+        Rules.filter('cor', ['azul', 'amarelo']),
+        Rules.price(15, 25),
+        Rules.taxonomy(['marcas', 'sony'])
+      ];
+
+      // Add the rules using `and` condition
+      query.and(rules);
+
+      // Add some options
+      query.page(5);
+      query.sortBy('price');
+
+      // Build the query
+      let buildResult = query.build();
+
+      // Assertions
+      expect(buildResult.filters.and[0].name).to.equal('filter');
+      expect(buildResult.filters.and[0].values[0]).to.equal('azul');
+      expect(buildResult.filters.and[0].values[1]).to.equal('amarelo');
+      expect(buildResult.filters.and[0].field).to.equal('cor');
+      expect(buildResult.filters.and[0].type).to.equal('fixed');
+      expect(buildResult.filters.and[0].execution).to.equal('or');
+
+      expect(buildResult.filters.and[1].name).to.equal('price');
+      expect(buildResult.filters.and[1].values[0]).to.equal(15);
+      expect(buildResult.filters.and[1].values[1]).to.equal(25);
+      expect(buildResult.filters.and[1].field).to.equal(undefined);
+      expect(buildResult.filters.and[1].type).to.equal('range');
+      expect(buildResult.filters.and[1].execution).to.equal('and');
+
+      expect(buildResult.filters.and[2].name).to.equal('taxons');
+      expect(buildResult.filters.and[2].values[0]).to.equal('marcas');
+      expect(buildResult.filters.and[2].values[1]).to.equal('sony');
+      expect(buildResult.filters.and[2].field).to.equal('permalink');
+      expect(buildResult.filters.and[2].type).to.equal('fixed');
+      expect(buildResult.filters.and[2].execution).to.equal('and');
+
+      expect(buildResult.sort.field).to.equal('price');
+      expect(buildResult.sort.order).to.equal('asc');
+      expect(buildResult.page).to.equal(5);
+    });
+
+    //
+    it('should generate the aggregations params', () => {
+      // Create new products query
+      let query = new Products();
+
+      // Generate the aggregations
+      let aggsResult = query.aggregations(10, false);
+
+      // Assertions
+      expect(aggsResult.price_interval).to.equal(10);
     });
   });
 };

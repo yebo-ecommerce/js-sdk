@@ -14,12 +14,13 @@ Config.set('store:url', 'http://diario.azsale.com.br/api');
 Config.set('store:api:version', 'v2');
 
 // Core
-require('./yebo_sdk/core/request.js')();
-require('./yebo_sdk/core/store.js')();
+// require('./yebo_sdk/core/request.js')();
+// require('./yebo_sdk/core/store.js')();
 
 // Query
+require('./yebo_sdk/core/query/rule.js')();
 require('./yebo_sdk/core/query.js')();
 require('./yebo_sdk/query/products.js')();
 
 //
-require('./yebo_sdk/cart.js')();
+// require('./yebo_sdk/cart.js')();
