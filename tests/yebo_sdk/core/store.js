@@ -8,24 +8,22 @@ var Store = YeboSDK.Store,
     should = chai.should();
 
 module.exports = function() {
-  describe('Store', () => {
-    // Setting the URL that will be used in this test
-    const url = 'http://vivreshop.azsale.com.br/api'
+  describe('Store', function() {
+    // Set no timeout
+    this.timeout(0);
 
-    // IT template
-    // it('', (done) => {
-    //
-    // });
+    // Setting the URL that will be used in this test
+    const url = 'http://diario.azsale.com.br/api'
 
     it('should be authenticated by Yebo', (done) => {
-      Store.auth(`${url}/v3`).then((token) => {
+      Store.auth(`${url}/v2`).then((token) => {
         // Done!
         done();
       });
     });
 
     it('should be authenticated by cache', (done) => {
-      Store.auth(`${url}/v3`).then((token) => {
+      Store.auth(`${url}/v2`).then((token) => {
         // Done!
         done();
       });

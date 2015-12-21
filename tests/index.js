@@ -10,7 +10,7 @@ var Config = YeboSDK.Config;
 
 // Set the config for the tests
 // Config.set('store:url', 'http://vivreshop.azsale.com.br/api');
-Config.set('store:url', 'http://vivreshop.yebo.me/api');
+Config.set('store:url', 'http://diario.azsale.com.br/api');
 Config.set('store:api:version', 'v2');
 
 // Core
@@ -20,3 +20,6 @@ require('./yebo_sdk/core/store.js')();
 // Query
 require('./yebo_sdk/core/query.js')();
 require('./yebo_sdk/query/products.js')();
+
+//
+require('./yebo_sdk/cart.js')();
