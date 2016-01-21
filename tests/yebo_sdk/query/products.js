@@ -163,10 +163,14 @@ module.exports = function() {
       // Assertions
       expect(params.root).to.equal('brands/current-brand');
 
+      expect(params.ranges[0]).to.have.property('from');
       expect(params.ranges[0].to).to.equal(49.99);
+
       expect(params.ranges[1].from).to.equal(50);
       expect(params.ranges[1].to).to.equal(99.99);
+
       expect(params.ranges[2].from).to.equal(100);
+      expect(params.ranges[2]).to.have.property('to');
     });
   });
 };
