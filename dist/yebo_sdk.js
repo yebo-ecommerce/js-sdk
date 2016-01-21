@@ -1419,8 +1419,14 @@ var Products = (function (_Query) {
       var ranges = arguments.length <= 1 || arguments[1] === undefined ? [] : arguments[1];
       var execute = arguments.length <= 2 || arguments[2] === undefined ? true : arguments[2];
 
+      // Aggregation params
+      var aggsParams = { ranges: ranges };
+
+      // Check if the root is defined
+      if (root !== undefined) aggsParams.root = root;
+
       // Create the aggs params
-      var params = (0, _lodashObjectAssign2['default'])({ root: root, ranges: ranges }, this.build());
+      var params = (0, _lodashObjectAssign2['default'])(aggsParams, this.build());
 
       // Check if its necessary to execute the aggs
       if (!execute) return params;
