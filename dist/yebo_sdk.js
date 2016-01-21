@@ -1422,6 +1422,20 @@ var Products = (function (_Query) {
       // Aggregation params
       var aggsParams = { ranges: ranges };
 
+      // Format the ranges
+      // Just to add the key to the object
+      // even if this key is `undefined`
+      for (var i = 0; i < aggsParams.ranges.length; i++) {
+        // Current range
+        var range = aggsParams.ranges[i];
+
+        // Check if its value is undefined
+        if (range.to === undefined) range.to = undefined;
+
+        // Check if its value is undefined
+        if (range.from === undefined) range.from = undefined;
+      }
+
       // Check if the root is defined
       if (root !== undefined) aggsParams.root = root;
 
