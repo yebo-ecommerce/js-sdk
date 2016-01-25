@@ -72,8 +72,8 @@ module.exports = function() {
 
       // Create some rules
       let rules = [
-        new Rule('firstRule', ['firstValue', 'secondValue']),
-        new Rule('secondRule', ['thirdValue', 'fourthValue'])
+        new Rule('firstRule', 'field', ['firstValue', 'secondValue']),
+        new Rule('secondRule', 'field', ['thirdValue', 'fourthValue'])
       ];
 
       // Define some temporary rules
@@ -129,8 +129,8 @@ module.exports = function() {
 
       // Create some rules
       let rules = [
-        new Rule('firstRule', []),
-        new Rule('secondRule', ['thirdValue', 'fourthValue'])
+        new Rule('firstRule', 'field', []),
+        new Rule('secondRule', 'field', ['thirdValue', 'fourthValue'])
       ];
 
       // Define some temporary rules

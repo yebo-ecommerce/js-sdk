@@ -706,65 +706,55 @@ var _lodashLangIsArray2 = _interopRequireDefault(_lodashLangIsArray);
 
 /**
  * Rule class
- *
  */
 
 var QueryRule = (function () {
   /**
-   * Creates a new rule to be used in some of the Yebo Queries
-   * @param [...any] args That will be always as the 1st argument the rule name
-   * the values(that are always an Array) could be on the 2nd or the
-   * 3rd position in the array. The 2nd argument can be the sub-name(property), and
-   * the last(3rd or 4th one) will be the internal condition(that is the rule
-   * between the values).
+   * Creates a new rule to be used in the Yebo Queries
+   *
+   * @param {string} name The query name
+   * @param {string} field The field that is going to be queried.
+   *                       In some cases the field is not necessary, in this case
+   *                       you can pass `undefined` or an empty string (`''`)
+   * @param {array} values Values used in the query
+   * @param {string} type Values type. Currenty support `fixed`, `range` and `filter`
+   * @param {string} condition The condition between the values. This can be `and` or `or`.
    *
    * @example
-   * // Rule with name and values
-   * let rule = new QueryRule('taxonomy', ['marcas']);
+   * // Rule for taxon.permalink
+   * let rule = new QueryRule('taxon', 'permalink', ['brands']);
    *
-   * // Rule with name, sub-name (sometimes property) and the values.
-   * let rule new QueryRule('taxonomy', 'id', ['1']);
+   * // Rule for taxon.id
+   * let rule new QueryRule('taxonomy', 'id', [1, 2, 3]);
    *
-   * // Rule with name, sub-name (sometimes property), the values and the internal condition.
-   * let rule new QueryRule('taxonomy', 'id', ['1'], 'or');
+   * // Rule for price (that does not have a `field`)
+   * let rule new QueryRule('price', undefined, [15.00, 30.00], 'range');
    *
-   * // Rule with name, values and the internal condition
-   * let rule new QueryRule('taxonomy', ['marcas'], 'or');
+   * // Rule for taxon.permalink with the condition or
+   * let rule new QueryRule('taxonomy', 'permalink', ['brands/nice-brand', 'brands/another-brand'], 'fixed', 'or');
    */
 
-  function QueryRule() {
+  function QueryRule(name, field) {
+    var values = arguments.length <= 2 || arguments[2] === undefined ? [] : arguments[2];
+    var type = arguments.length <= 3 || arguments[3] === undefined ? 'fixed' : arguments[3];
+    var condition = arguments.length <= 4 || arguments[4] === undefined ? 'and' : arguments[4];
+
     _classCallCheck(this, QueryRule);
 
-    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
-    }
-
     // Rule name
-    this.name = args[0];
+    this.name = name;
 
-    // Just to know what index are the values
-    var valuesIndex = undefined;
+    // Rule field
+    this.subName = field;
 
-    // Check if the second args is the rule values
-    if ((0, _lodashLangIsArray2['default'])(args[1])) {
-      // Rule values
-      this.values = args[1];
+    // Rule values
+    this.values = values;
 
-      // Set the index
-      valuesIndex = 1;
-    } else if ((0, _lodashLangIsArray2['default'])(args[2])) {
-      // Rule sub name
-      this.subName = args[1];
-
-      // Rule values
-      this.values = args[2];
-
-      // Set the index
-      valuesIndex = 2;
-    } else throw 'Rule values have to be an Array.';
+    // Rule type
+    this.type = type;
 
     // Set the internal conditional
-    if (args[valuesIndex + 1] === undefined) this.internalCond = 'and';else this.internalCond = args[valuesIndex + 1];
+    this.internalCond = condition;
 
     // Store the intial values to enable the user to reset them
     this._resetValues = this.values;
@@ -1367,9 +1357,8 @@ var Products = (function (_Query) {
       var result = {
         name: rule.name,
         values: rule.values,
-        field: rule.subName,
-        // @todo Maybe find a way to define it in the rule
-        type: rule.name === 'price' ? 'range' : 'fixed',
+        field: rule.subName === undefined ? '' : rule.subName,
+        type: rule.type,
         execution: rule.internalCond
       };
 
@@ -1451,7 +1440,7 @@ var Rules = (function () {
       var field = arguments.length <= 1 || arguments[1] === undefined ? 'permalink' : arguments[1];
       var cond = arguments.length <= 2 || arguments[2] === undefined ? 'and' : arguments[2];
 
-      return new _coreQueryRule.QueryRule('taxons', field, values, cond);
+      return new _coreQueryRule.QueryRule('taxons', field, values, 'fixed', cond);
     }
 
     /**
@@ -1471,7 +1460,7 @@ var Rules = (function () {
       if (values.length > 2) throw 'price range just accept two values';
 
       // Create a new Rule
-      return new _coreQueryRule.QueryRule('price', values);
+      return new _coreQueryRule.QueryRule('price', undefined, values, 'range');
     }
 
     /**
@@ -1486,7 +1475,7 @@ var Rules = (function () {
     value: function filter(name, values) {
       var cond = arguments.length <= 2 || arguments[2] === undefined ? 'or' : arguments[2];
 
-      return new _coreQueryRule.QueryRule('filter', name, values, cond);
+      return new _coreQueryRule.QueryRule(name, undefined, values, 'filter', cond);
     }
   }]);
 
