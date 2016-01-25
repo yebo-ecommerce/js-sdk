@@ -103,9 +103,9 @@ module.exports = function() {
 
       // Generate the Rule
       let rules = [
-        Rules.filter('cor', ['azul', 'amarelo']),
+        Rules.filter('cor', [undefined, 'azul', 'amarelo']),
         Rules.price(15, 25),
-        Rules.taxonomy(['marcas', 'sony'])
+        Rules.taxonomy(['marcas', undefined, 'sony'])
       ];
 
       // Add the rules using `and` condition
