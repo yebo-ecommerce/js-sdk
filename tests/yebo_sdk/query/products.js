@@ -33,8 +33,8 @@ module.exports = function() {
         let rule = Rules.filter('cor', ['azul', 'amarelo']);
 
         // Assertions
-        expect(rule.name).to.equal('filter');
-        expect(rule.subName).to.equal('cor');
+        expect(rule.name).to.equal('cor');
+        expect(rule.type).to.equal('filter');
       });
     });
 
@@ -103,9 +103,9 @@ module.exports = function() {
 
       // Generate the Rule
       let rules = [
-        Rules.filter('cor', ['azul', 'amarelo']),
+        Rules.filter('cor', [undefined, 'azul', 'amarelo']),
         Rules.price(15, 25),
-        Rules.taxonomy(['marcas', 'sony'])
+        Rules.taxonomy(['marcas', undefined, 'sony'])
       ];
 
       // Add the rules using `and` condition
@@ -119,17 +119,17 @@ module.exports = function() {
       let buildResult = query.build();
 
       // Assertions
-      expect(buildResult.filters.and[0].name).to.equal('filter');
+      expect(buildResult.filters.and[0].name).to.equal('cor');
       expect(buildResult.filters.and[0].values[0]).to.equal('azul');
       expect(buildResult.filters.and[0].values[1]).to.equal('amarelo');
-      expect(buildResult.filters.and[0].field).to.equal('cor');
-      expect(buildResult.filters.and[0].type).to.equal('fixed');
+      expect(buildResult.filters.and[0].field).to.equal('');
+      expect(buildResult.filters.and[0].type).to.equal('filter');
       expect(buildResult.filters.and[0].execution).to.equal('or');
 
       expect(buildResult.filters.and[1].name).to.equal('price');
       expect(buildResult.filters.and[1].values[0]).to.equal(15);
       expect(buildResult.filters.and[1].values[1]).to.equal(25);
-      expect(buildResult.filters.and[1].field).to.equal(undefined);
+      expect(buildResult.filters.and[1].field).to.equal('');
       expect(buildResult.filters.and[1].type).to.equal('range');
       expect(buildResult.filters.and[1].execution).to.equal('and');
 
@@ -150,11 +150,27 @@ module.exports = function() {
       // Create new products query
       let query = new Products();
 
+      // Set the price ranges
+      let ranges = [
+        { to: 49.99 },              // $0 to $49.99
+        { from: 50, to: 99.99 },    // $50 to $99.99
+        { from: 100 },              // $100 to undefined(infinity)
+      ];
+
       // Generate the aggregations
-      let aggsResult = query.aggregations(10, false);
+      let params = query.aggregations('brands/current-brand', ranges, false);
 
       // Assertions
-      expect(aggsResult.price_interval).to.equal(10);
+      expect(params.root).to.equal('brands/current-brand');
+
+      expect(params.ranges[0]).to.have.property('from');
+      expect(params.ranges[0].to).to.equal(49.99);
+
+      expect(params.ranges[1].from).to.equal(50);
+      expect(params.ranges[1].to).to.equal(99.99);
+
+      expect(params.ranges[2].from).to.equal(100);
+      expect(params.ranges[2]).to.have.property('to');
     });
   });
 };
