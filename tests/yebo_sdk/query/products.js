@@ -151,11 +151,27 @@ module.exports = function() {
       // Create new products query
       let query = new Products();
 
+      // Set the price ranges
+      let ranges = [
+        { to: 49.99 },              // $0 to $49.99
+        { from: 50, to: 99.99 },    // $50 to $99.99
+        { from: 100 },              // $100 to undefined(infinity)
+      ];
+
       // Generate the aggregations
-      let aggsResult = query.aggregations(10, false);
+      let params = query.aggregations('brands/current-brand', ranges, false);
 
       // Assertions
-      expect(aggsResult.price_interval).to.equal(10);
+      expect(params.root).to.equal('brands/current-brand');
+
+      expect(params.ranges[0]).to.have.property('from');
+      expect(params.ranges[0].to).to.equal(49.99);
+
+      expect(params.ranges[1].from).to.equal(50);
+      expect(params.ranges[1].to).to.equal(99.99);
+
+      expect(params.ranges[2].from).to.equal(100);
+      expect(params.ranges[2]).to.have.property('to');
     });
   });
 };

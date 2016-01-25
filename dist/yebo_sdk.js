@@ -1374,16 +1374,62 @@ var Products = (function (_Query) {
 
     /*
      * Get the number of products based on the query
-     * @param {integer} priceInterval The interval that will be used to generate tha price ranges
-     * @param {boolean} execute If its false the method return the params used to get the aggs
-     * @return {Object} The result of the aggregations
+     * @param {string} root The root taxon, this will be used to generate
+     *                      aggregations just for the root taxon children
+     * @param {array} ranges Array the price ranges that will be generated
+     * @param {boolean} execute If its false the method return the params
+     *                          used to get the aggs
+     * @return {object/promise} The result of the aggregations, or a promise
+     *                          of the aggregations execution
+     *
+     * @example
+     * // A query that were defined before
+     * // let query = ...;
+     *
+     * // Set the root taxon
+     * let root = 'brands/current-brand';
+     *
+     * // Set the price ranges
+     * let ranges = [
+     *   { to: 49.99 },              // $0 to $49.99
+     *   { from: 50, to: 99.99 },    // $50 to $99.99
+     *   { from: 100 },              // $100 to undefined(infinity)
+     * ];
+     *
+     * // If you just want to use the aggregation params
+     * let params = query.aggregations(root, ranges, false);
+     *
+     * // If want the result of the aggregations, just execute it
+     * quer.aggregations(root, ranges).then((aggregations) => {
+     *   console.log(aggregtions); // Here are all the aggregations
+     * });
      */
-    value: function aggregations() {
-      var priceInterval = arguments.length <= 0 || arguments[0] === undefined ? 50 : arguments[0];
-      var execute = arguments.length <= 1 || arguments[1] === undefined ? true : arguments[1];
+    value: function aggregations(root) {
+      var ranges = arguments.length <= 1 || arguments[1] === undefined ? [] : arguments[1];
+      var execute = arguments.length <= 2 || arguments[2] === undefined ? true : arguments[2];
+
+      // Aggregation params
+      var aggsParams = { ranges: ranges };
+
+      // Format the ranges
+      // Just to add the key to the object
+      // even if this key is `undefined`
+      for (var i = 0; i < aggsParams.ranges.length; i++) {
+        // Current range
+        var range = aggsParams.ranges[i];
+
+        // Check if its value is undefined
+        if (range.to === undefined) range.to = undefined;
+
+        // Check if its value is undefined
+        if (range.from === undefined) range.from = undefined;
+      }
+
+      // Check if the root is defined
+      if (root !== undefined) aggsParams.root = root;
 
       // Create the aggs params
-      var params = (0, _lodashObjectAssign2['default'])({ price_interval: priceInterval }, this.build());
+      var params = (0, _lodashObjectAssign2['default'])(aggsParams, this.build());
 
       // Check if its necessary to execute the aggs
       if (!execute) return params;
