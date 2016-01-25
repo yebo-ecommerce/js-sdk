@@ -1,0 +1,104 @@
+Version 0.1.0
+ - mod
+ - Merge remote-tracking branch 'origin/new_query_system'
+ - Merge branch 'master' of bitbucket.org:yebo-dev/sdk
+ - isEmpty is enough for the value validation
+ - Check if the option is undefined
+ - Products Query aggregations
+ - Compile the SDK
+ - Remove dump
+ - Build the products query
+ - Change the default internal condition for products#taxonomy rule
+ - Add a condition for numbers
+ - Add others options alias to the product query
+ - Create the search alias in the products search
+ - Remove dump
+ - Prevent the options to set itself as undefined
+ - Query build and buildRule
+ - or rules in the products query
+ - Getting started withe the query build mechanism
+ - Getting started with the cart tests (not completed)
+ - Update the store tests
+ - Change the sandbox URL
+ - docker compose cuz i can't docker
+ - Compile it!
+ - Empty cart method
+ - Move the method #toParam to the Store module, to use it in all the requests
+ - Compile it
+ - Recieve user token to get an order or to create a new one with this user
+ - Build SDK
+ - Merge branch 'master' of bitbucket.org:yebo-dev/sdk
+ - few things to load existing order
+ - Enable some requests to return nothing (status 201)
+ - User Class
+ - Simple way to interact with the SDK
+ - Compile it
+ - Change the way to identify errors in the request
+ - Create a general purpose cart requester
+ - Get cart items and the instance variables
+ - Get order information
+ - Parse the request error message
+ - Support POST requests
+ - Wrong name of the methods
+ - Update the methods update and remove items from the Cart
+ - Cart methods
+ - Include the polyfill
+ - Test the Config shortcuts
+ - Move the keys to inside of the class
+ - Add shortcuts to the Config
+ - Rename the config key
+ - Define some config keys
+ - Getting started with the Cart
+ - Compile SDK
+ - Change the way to run tests
+ - Move core classes to core/ folder
+ - Add comments
+ - Correct way to compile object params
+ - Merge origin/master into master
+ - Query#toParams()
+ - toParams method
+ - Missing semicolon
+ - Getting started with products aggs
+ - Remove '/' from the endpoint name
+ - Start using Config to store the URL and API_VERSION
+ - Add Config to SDK
+ - Execute Queries
+ - Compile the lib
+ - Remove unused development dependencies
+ - Change the main file
+ - Finally one nice way to compile the SDK
+ - Different ways to compile the SDK
+ - Use ES6 Modules to include dependencies
+ - Rename main file
+ - Build the SDK (Maybe remove this step)
+ - Use an external server to tests requests to Yebo
+ - Updates that make Store#fetch work better
+ - Store#fetch working
+ - Build method in the Query
+ - Build method in the Query
+ - Removing complied tests and docs from GIT
+ - Merge modulesSupport into master
+ - Supporting UMD
+ - Compile tests
+ - Getting started with the Store.fetch
+ - Store.auth
+ - Correct way to add external files to the project
+ - cacheJS lib
+ - Adding support to external libs
+ - Changing the broserify transformer
+ - Prototyping the Store basic methods
+ - Nice comments
+ - Getting started with Store Class
+ - Some docs in the Query Class
+ - Extend query feature
+ - Moving the query params to _attrs
+ - Moving TODO to another class
+ - Add Query abstract class
+ - Renaming Query to ProductQuery to accept more entities queries
+ - Testing all the features
+ - Updating docs
+ - Query builder
+ - No more tests dump
+ - Testing query format
+ - Kickoff
+
