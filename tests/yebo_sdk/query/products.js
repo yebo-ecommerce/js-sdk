@@ -117,7 +117,6 @@ module.exports = function() {
 
       // Build the query
       let buildResult = query.build();
-      console.log(buildResult.filters.and);
 
       // Assertions
       expect(buildResult.filters.and[0].name).to.equal('cor');
