@@ -33,8 +33,8 @@ module.exports = function() {
         let rule = Rules.filter('cor', ['azul', 'amarelo']);
 
         // Assertions
-        expect(rule.name).to.equal('filter');
-        expect(rule.subName).to.equal('cor');
+        expect(rule.name).to.equal('cor');
+        expect(rule.type).to.equal('filter');
       });
     });
 
@@ -117,19 +117,20 @@ module.exports = function() {
 
       // Build the query
       let buildResult = query.build();
+      console.log(buildResult.filters.and);
 
       // Assertions
-      expect(buildResult.filters.and[0].name).to.equal('filter');
+      expect(buildResult.filters.and[0].name).to.equal('cor');
       expect(buildResult.filters.and[0].values[0]).to.equal('azul');
       expect(buildResult.filters.and[0].values[1]).to.equal('amarelo');
-      expect(buildResult.filters.and[0].field).to.equal('cor');
-      expect(buildResult.filters.and[0].type).to.equal('fixed');
+      expect(buildResult.filters.and[0].field).to.equal('');
+      expect(buildResult.filters.and[0].type).to.equal('filter');
       expect(buildResult.filters.and[0].execution).to.equal('or');
 
       expect(buildResult.filters.and[1].name).to.equal('price');
       expect(buildResult.filters.and[1].values[0]).to.equal(15);
       expect(buildResult.filters.and[1].values[1]).to.equal(25);
-      expect(buildResult.filters.and[1].field).to.equal(undefined);
+      expect(buildResult.filters.and[1].field).to.equal('');
       expect(buildResult.filters.and[1].type).to.equal('range');
       expect(buildResult.filters.and[1].execution).to.equal('and');
 
