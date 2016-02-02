@@ -1,6 +1,6 @@
 {
   "name": "yebo_sdk",
-  "version": "0.0.0-alpha",
+  "version": "0.2.0",
   "description": "A bridge between the Yebo e-commerce and your website",
   "main": "index.js",
   "scripts": {
