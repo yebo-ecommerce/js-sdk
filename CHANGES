@@ -1,3 +1,24 @@
+Version 0.1.1:
+ - Bump bower version
+ - Bump version
+ - Merge branch 'develop' of bitbucket.org:yebo-dev/sdk into develop
+ - Merge hotfix/price-range into develop
+ - Compile it
+ - Add some undefined values to the rule
+ - Remove undefined values from the query values
+ - Remove dump
+ - Merged in feature/aggregations (pull request #1)
+ - Merged in bugfix/filters (pull request #2)
+ - Compile it
+ - Adapt the Products Rules to the new QueryRule format
+ - Start saving the rule type
+ - New QueryRule
+ - Compile it
+ - Add the missing key ('to' or 'from') to the range objects
+ - Check if the taxon root is defined
+ - Compile the SDK
+ - Change the aggregations method to accept price ranges and a taxon (root)
+
 Version 0.1.0
  - mod
  - Merge remote-tracking branch 'origin/new_query_system'
