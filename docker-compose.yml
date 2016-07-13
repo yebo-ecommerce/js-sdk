@@ -2,5 +2,3 @@
 yebo_sdk:
   build: .
   command: bash
-  volumes:
-    - .:/yebo_sdk

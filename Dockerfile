@@ -29,5 +29,8 @@ RUN mkdir /$APP_HOME
 # Define workdir
 WORKDIR /$APP_HOME
 
+ADD package.json $APP_HOME
+RUN npm install
+
 # Add files
 ADD . /$APP_HOME
