@@ -1582,7 +1582,7 @@ var User = (function () {
       };
 
       // Check if the orderToken is defined
-      if (orderToken !== undefined) options['order'] = orderToken;
+      if (orderToken !== undefined) options['order_token'] = orderToken;
 
       // Return a promise
       return new _rsvp2['default'].Promise(function (resolve, reject) {
