@@ -1,0 +1,36 @@
+{
+  "name": "yebo",
+  "version": "0.0.0",
+  "description": "A bridge between the Yebo e-commerce and your website",
+  "main": "dist/yebo.umd.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@bitbucket.org/yebo-dev/new-sdk.git"
+  },
+  "keywords": [
+    "yebo",
+    "sdk",
+    "ecommerce",
+    "api"
+  ],
+  "author": "Yebo E-Commerce",
+  "contributors": [
+    {
+      "name": "Gabriel Corado"
+    },
+    {
+      "name": "Gabriela Caldeira Diogo"
+    }
+  ],
+  "license": "ISC",
+  "homepage": "https://bitbucket.org/yebo-dev/new-sdk#readme",
+  "devDependencies": {
+    "babel-preset-es2015-rollup": "^1.2.0",
+    "rollup": "^0.34.7",
+    "rollup-plugin-alias": "^1.2.0",
+    "rollup-plugin-babel": "^2.6.1"
+  }
+}
