@@ -10,11 +10,10 @@ const fs = require('fs'),
       rollup = require('rollup'),
       // uglify = require('uglify'),
       babel = require('rollup-plugin-babel'),
-      aliasPlugin = require('rollup-plugin-alias');
+      babelrc = require('babelrc-rollup').default;
 
 // Contants
-const alias = require('./alias'),
-      version = process.env.VERSION || require('../package.json').version;
+const version = process.env.VERSION || require('../package.json').version;
 
 // Banner
 const banner = [
@@ -34,8 +33,7 @@ rollup.rollup({
   // Basic definitions
   entry: 'src/index.js',
   plugins: [
-    babel(),
-    aliasPlugin(alias)
+    babel(babelrc())
   ]
 }).then((bundle) => {
   // Create the CommonJS version
