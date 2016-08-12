@@ -2,8 +2,8 @@
  * Method responsible for seeking taxons
  * @param {Array[Number]} ids
  * @param {String} ranges A list of slugs
- * @param {INTEGER} page Current search page
- * @param {Interger} perPage Number of taxons per page
+ * @param {Integer} page Current search page
+ * @param {Integer} perPage Number of taxons per page
  * @param {Integer} taxonomyId Just back taxons that belong to specified taxonomy
  * @return
  */
