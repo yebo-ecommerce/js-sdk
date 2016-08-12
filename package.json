@@ -2,7 +2,7 @@
   "name": "yebo",
   "version": "0.0.0",
   "description": "A bridge between the Yebo e-commerce and your website",
-  "main": "index.js",
+  "main": "dist/yebo.umd.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -18,9 +18,18 @@
   ],
   "author": "Yebo E-Commerce",
   "contributors": [
-    { "name": "Gabriel Corado" },
-    { "name": "Gabriela Caldeira Diogo" }
+    {
+      "name": "Gabriel Corado"
+    },
+    {
+      "name": "Gabriela Caldeira Diogo"
+    }
   ],
   "license": "ISC",
-  "homepage": "https://bitbucket.org/yebo-dev/new-sdk#readme"
+  "homepage": "https://bitbucket.org/yebo-dev/new-sdk#readme",
+  "devDependencies": {
+    "rollup": "^0.34.7",
+    "rollup-plugin-alias": "^1.2.0",
+    "rollup-plugin-babel": "^2.6.1"
+  }
 }
