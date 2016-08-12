@@ -7,7 +7,7 @@
  * @param {String} userToken User token to validate the Order
  * @return
  */
-export const pdstCart = function (token, number, last, create, userToken) {
+export const createCart = function (token, number, last, create, userToken) {
   // ...
 }
 
@@ -33,7 +33,7 @@ export const getCartItems = function (token, number, last, create, userToken) {
  * @param {String} userToken User token to validate the Order
  * @return
  */
-export const pdstCartItemsEmpty = function (token, number, last, create, userToken) {
+export const emptyCartItems = function (token, number, last, create, userToken) {
   // ...
 }
 
@@ -48,7 +48,7 @@ export const pdstCartItemsEmpty = function (token, number, last, create, userTok
  * @param {Integer} qty Quantity of products to be added
  * @return
  */
-export const pdstCartItemsAdd = function (token, number, last, create, userToken, variant, qty) {
+export const addCartItems = function (token, number, last, create, userToken, variant, qty) {
   // ...
 }
 
@@ -63,7 +63,7 @@ export const pdstCartItemsAdd = function (token, number, last, create, userToken
  * @param {Integer} qty Quantity of products to be added
  * @return
  */
-export const pdstCartItemsRemove = function (token, number, last, create, userToken, variant, qty) {
+export const removeCartItems = function (token, number, last, create, userToken, variant, qty) {
   // ...
 }
 
@@ -78,6 +78,6 @@ export const pdstCartItemsRemove = function (token, number, last, create, userTo
  * @param {Integer} qty Quantity of products to be added
  * @return
  */
-export const pdstCartItemsUpdate = function (token, number, last, create, userToken, variant, qty) {
+export const updateCartItems = function (token, number, last, create, userToken, lineItem, qty) {
   // ...
 }
