@@ -1,6 +1,7 @@
 // Dependencies
 const path = require('path');
 
-// Export the aliases
+// Exports helpers
 module.exports = {
-};
+  chai: require('chai')
+}

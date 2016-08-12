@@ -1,5 +1,10 @@
 {
   "presets": [
-    "es2015-rollup"
+    "es2015"
+  ],
+  "plugins": [
+    ["module-alias", [
+      { "src": "./src/", "expose": "src" }
+    ]]
   ]
 }
