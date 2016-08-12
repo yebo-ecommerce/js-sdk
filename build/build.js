@@ -20,7 +20,12 @@ const alias = require('./alias'),
 const banner = [
   '/**',
   ' * Yebo SDK v' + version,
-  ' * (c) 2016-' + new Date().getFullYear() + ' Yebo E-commerce'
+  ' * This library is the bridge between the Yebo E-commerce API',
+  ' * and JavaScript applications',
+  ' *',
+  ' * @author <Yebo E-commerce>',
+  ' * @contributors <Gabriel Corado, Gabriela Caldeira Diogo>',
+  ' * @copyright (2016-' + new Date().getFullYear() + ') Yebo E-commerce',
   ' */'
 ].join("\n");
 
@@ -29,15 +34,25 @@ rollup.rollup({
   // Basic definitions
   entry: 'src/index.js',
   plugins: [
-    babel({loose: 'all'}),
+    babel(),
     aliasPlugin(alias)
   ]
 }).then((bundle) => {
-  // Create the UMD version
-  return write('dist/yebo.umd.js', bundle.generate({
-    format: 'umd',
+  // Create the CommonJS version
+  write('dist/yebo.common.js', bundle.generate({
+    format: 'cjs',
     banner: banner
   }).code);
+
+  // Create the UMD version
+  write('dist/yebo.umd.js', bundle.generate({
+    format: 'umd',
+    moduleName: 'yebo',
+    banner: banner
+  }).code);
+}).catch((err) => {
+  // Error!
+  console.log(err);
 });
 
 // Write function
@@ -56,4 +71,9 @@ const write = function(dest, code) {
       resolve();
     });
   });
+}
+
+// Get the file size
+const getSize = function(code) {
+  return (code.length / 1024).toFixed(2) + 'kb';
 }
