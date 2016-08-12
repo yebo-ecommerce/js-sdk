@@ -28,6 +28,7 @@
   "license": "ISC",
   "homepage": "https://bitbucket.org/yebo-dev/new-sdk#readme",
   "devDependencies": {
+    "babel-preset-es2015-rollup": "^1.2.0",
     "rollup": "^0.34.7",
     "rollup-plugin-alias": "^1.2.0",
     "rollup-plugin-babel": "^2.6.1"
