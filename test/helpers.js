@@ -1,7 +1,8 @@
 // Dependencies
-const path = require('path');
+const path = require('path'),
+      chai = require('chai');
 
 // Exports helpers
 module.exports = {
-  chai: require('chai')
+  expect: chai.expect
 }
