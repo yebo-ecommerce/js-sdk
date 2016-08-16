@@ -2,7 +2,7 @@
 const h = require('./../../helpers');
 
 // Include the product module
-import * as m from 'src/modules/orders';
+import * as m from 'src/modules/cart';
 
 // Products Module!
 describe('Products module', () => {
