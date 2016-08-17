@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "description": "A bridge between the Yebo e-commerce and your website",
   "main": "dist/yebo.umd.js",
+  "jsnext:main": "src/index.js",
   "scripts": {
     "test": "./node_modules/.bin/mocha --recursive --compilers js:babel-register",
     "build": "node build/build.js"
@@ -37,6 +38,13 @@
     "chai": "^3.5.0",
     "mocha": "^3.0.2",
     "rollup": "^0.34.7",
-    "rollup-plugin-babel": "^2.6.1"
+    "rollup-plugin-babel": "^2.6.1",
+    "rollup-plugin-commonjs": "^3.3.1",
+    "rollup-plugin-node-resolve": "^2.0.0"
+  },
+  "dependencies": {
+    "axios": "^0.13.1",
+    "lodash": "^4.15.0",
+    "lodash-es": "^4.15.0"
   }
 }

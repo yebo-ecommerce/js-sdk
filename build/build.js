@@ -9,6 +9,8 @@ const fs = require('fs'),
       // zlib = require('zlib'),
       rollup = require('rollup'),
       // uglify = require('uglify'),
+      nodeResolve = require('rollup-plugin-node-resolve'),
+      commonjs = require('rollup-plugin-commonjs'),
       babel = require('rollup-plugin-babel'),
       babelrc = require('babelrc-rollup').default;
 
@@ -41,7 +43,21 @@ rollup.rollup({
     format: 'cjs',
     banner: banner
   }).code);
+}).catch((err) => {
+  // Error!
+  console.log(err);
+});
 
+// UMD Version
+rollup.rollup({
+  // Basic definitions
+  entry: 'src/index.js',
+  plugins: [
+    nodeResolve({ browser: true, jsnext: true }),
+    commonjs(),
+    babel(babelrc())
+  ]
+}).then((bundle) => {
   // Create the UMD version
   write('dist/yebo.umd.js', bundle.generate({
     format: 'umd',
