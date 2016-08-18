@@ -4,6 +4,9 @@
  * @TODO Better support to the others HTTP verbs
  */
 
+// Dependencies
+import { fetch } from './request';
+
 /**
  * Yebo Configurations
  */
@@ -48,7 +51,7 @@ export const buildRequest = function(method, path, data, name, version, auth, to
     headers: headers,
     content_type: method === 'GET' ? 'application/x-www-form-urlencoded' : 'application/json'
   };
-} 
+}
 
 /**
  * Build the request that will get the authentication token
@@ -70,6 +73,16 @@ export const buildAuthentication = function(name, version, token) {
  */
 export const buildParams = function(value) {
   return _recBuildParams('', value, true, '?').slice(0, -1);
+}
+
+/**
+ * Execute the generated request
+ *
+ * @param {Object} req Generated request
+ * @return {Promise} The HTTP request Promise
+ */
+export const executeRequest = function(req) {
+  return fetch(req.method, req.url, req.data, req.contentType, req.headers);
 }
 
 /**
