@@ -1,5 +1,6 @@
 /**
  *
+ *
  * @TODO Better support to the others HTTP verbs
  */
 
@@ -29,9 +30,11 @@ export const buildRequest = function(method, path, data, name, version, auth, to
     qs = buildParams(data);
 
   // Request Headers
-  let headers = {
-    'Authentication': `Bearer ${auth}`
-  };
+  let headers = {};
+
+  // Check if the authentication token is passed
+  if( auth !== undefined )
+    headers['Authentication'] = `Bearer ${auth}`
 
   // Check if a token is passed to be used
   if( token !== undefined )
@@ -46,6 +49,18 @@ export const buildRequest = function(method, path, data, name, version, auth, to
     content_type: method === 'GET' ? 'application/x-www-form-urlencoded' : 'application/json'
   };
 } 
+
+/**
+ * Build the request that will get the authentication token
+ *
+ * @param {String} name Store name
+ * @param {String} version The API version
+ * @param {String} token The API token
+ * @return {Object} Request that will return the authentication token
+ */
+export const buildAuthentication = function(name, version, token) {
+  return buildRequest('GET', '/', {}, name, version, undefined, token);
+};
 
 /**
  * Based on an array generate
@@ -86,8 +101,3 @@ const _recBuildParams = function(prefix, value, top, acc) {
   // Return the accumlator
   return acc;
 }
-
-/**
- *
- */
-// export const buildAuthentication = ;

@@ -13,7 +13,6 @@ describe('API core', () => {
 
     // Generate the QueryString
     let qs = m.buildParams(params);
-    // console.log(qs);
 
     // Assertions
     // helpers.expect(qs);
@@ -39,5 +38,19 @@ describe('API core', () => {
     h.expect(getReq.url).to.equal(`${postReq.url}${m.buildParams(data)}`);
     h.expect(postReq.data).to.equal(data);
     h.expect(getReq.headers).to.deep.equal(postReq.headers);
+
+    h.expect(getReq.url).to.match(/^https:\/\//);
+    h.expect(postReq.url).to.match(/^https:\/\//);
+  });
+
+  //
+  it('should build the authentication request', () => {
+    // Request
+    let req = m.buildAuthentication('test', 'v2');
+
+    // Assertions
+    h.expect(req.method).to.equal('GET');
+    h.expect(req.headers).to.not.have.ownProperty('Authorization');
+    h.expect(req.url).to.match(/\/$/);
   });
 });
