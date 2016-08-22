@@ -17,6 +17,14 @@ export const getOrders = function (token, complete, incomplete, page = 1, perPag
  * @param {Boolean} incomplete Returns only if the Order is incomplete
  * @return
  */
-export const getOrdersNumber = function (token, number, complete, incomplete) {
-  // ...
+export const getOrderNumber = function (token, number, complete = false, incomplete = false) {
+  //
+  if (complete === true && incomplete === true)
+    throw 'A order could not be complete and incomplete at same time.'
+
+  // Build the request.
+  let req = buildRequest('GET', `/orders/${number}`, { token: token, complete: complete, incomplete: incomplete });
+
+  // Return the execution
+  return excuteRequest(req);
 }
