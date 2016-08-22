@@ -8,7 +8,7 @@ import {buildRequest, executeRequest} from './../../core/api'
  */
 export const getProducts = function (search) {
   // Build the request.
-  let req = buildRequest('GET', '/products', search);
+  let req = buildRequest('GET', '/products', { search: search });
 
   // Return the execution
   return excuteRequest(req);
@@ -22,7 +22,11 @@ export const getProducts = function (search) {
  * @return
  */
 export const getProductsAggs = function (root, ranges, search) {
-  // ...
+  // Build the request.
+  let req = buildRequest('GET', '/products/aggs', { root: root, ranges: ranges, search: search });
+
+  // Return the execution
+  return excuteRequest(req);
 }
 
 /**
@@ -31,5 +35,9 @@ export const getProductsAggs = function (root, ranges, search) {
  * @return
  */
 export const getProductsId = function (id) {
-  // ...
+  // Build the request.
+  let req = buildRequest('GET', `/product/${id}`, {});
+
+  // Return the execution
+  return excuteRequest(req);
 }
