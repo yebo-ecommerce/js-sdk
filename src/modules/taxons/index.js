@@ -8,7 +8,11 @@
  * @return
  */
 export const getTaxons = function (ids, taxons, taxonomyId, page = 1, perPage = 25) {
-  // ...
+  // Build the request.
+  let req = buildRequest('GET', '/taxons', { ids: ids, taxons: taxons, taxonomy_id: taxonomyId });
+
+  // Return the execution
+  return excuteRequest(req);
 }
 
 /**
@@ -16,7 +20,11 @@ export const getTaxons = function (ids, taxons, taxonomyId, page = 1, perPage = 
  * @return
  */
 export const getTaxonId = function () {
-  // ...
+  // Build the request.
+  let req = buildRequest('GET', `/taxon/${id}`, {});
+
+  // Return the execution
+  return excuteRequest(req);
 }
 
 /**
@@ -26,7 +34,11 @@ export const getTaxonId = function () {
  * @return
  */
 export const getTaxonomies = function (page = 1, perPage = 25) {
-  // ...
+  // Build the request.
+  let req = buildRequest('GET', '/taxonomies', {});
+
+  // Return the execution
+  return excuteRequest(req);
 }
 
 /**
@@ -35,5 +47,9 @@ export const getTaxonomies = function (page = 1, perPage = 25) {
  * @return
  */
 export const getTaxonomyId = function () {
-  // ...
+  // Build the request.
+  let req = buildRequest('GET', `/taxonomy/${id}`, {});
+
+  // Return the execution
+  return excuteRequest(req);
 }
