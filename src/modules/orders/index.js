@@ -6,7 +6,15 @@
  * @return
  */
 export const getOrders = function (token, complete, incomplete, page = 1, perPage = 25) {
-  // ...
+  //
+  if (complete === true && incomplete === true)
+    throw 'A order could not be complete and incomplete at same time.'
+
+  // Build the request.
+  let req = buildRequest('GET', `/orders`, { token: token, complete: complete, incomplete: incomplete, page: page, per_page: perPage  });
+
+  // Return the execution
+  return excuteRequest(req);
 }
 
 /**
