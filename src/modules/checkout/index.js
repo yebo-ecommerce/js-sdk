@@ -77,13 +77,13 @@ export const getOrderShipments = function (number, userToken, calculate) {
  * Defines a delivery method for a package
  * @param {String} number Order's number
  * @param {String} userToken User token to validate the Order
- * @param {Integer} package ID Package
+ * @param {Integer} pkg ID Package
  * @param {Integer} rate delivery ID to the package
  * @return
  */
-export const setOrderShipment = function (number, userToken, package, rate) {
+export const setOrderShipment = function (number, userToken, pkg, rate) {
   // Build the request.
-  let req = buildRequest('POST', `/shipments/${number}/${kind}`, { user_token: userToken, rate: rate });
+  let req = buildRequest('POST', `/shipments/${number}/${kind}`, { user_token: userToken, rate: rate, package: pkg });
 
   // Return the execution
   return excuteRequest(req);
