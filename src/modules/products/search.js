@@ -1,7 +1,6 @@
 /**
  * Create type search
  * @param {Object} search Parameters used in the search for products
- * @return {Object} The search of API
  */
 export const Search = function() {
   // Query will live here
@@ -11,7 +10,7 @@ export const Search = function() {
 /**
  * Will search products by name
  * @param {String} name Search by product name
- * @return {Object} The name
+ * @return {Search} Current Search
  */
 Search.prototype.byName = function(name) {
   // Set to query the name search
@@ -23,12 +22,25 @@ Search.prototype.byName = function(name) {
 
 /**
  * Will search pages
- *@param {}
- *@return {Object}
+ * @param {Number} page Page number of the product listing
+ * @return {Search} Current Search
  */
-Search.prototype.page = function(number) {
-  // Set to query the name search
-  this.query.page = number;
+Search.prototype.page = function(page) {
+  // Set to query the number search
+  this.query.page = page;
+
+  //
+  return this;
+}
+
+/**
+ * Will search perPage
+ * @param {Number} Quantity of products per page
+ * @return {Search} Current Search
+ */
+Search.prototype.perPage = function(perPage) {
+  // Set to query the number search
+  this.query.per_page = perPage;
 
   //
   return this;
@@ -37,10 +49,10 @@ Search.prototype.page = function(number) {
 /**
  * Will search for Filters
  * @param {Array[Object]} and Filters that relates 'and'
- * @return {Object} The API formatted filters
+ * @return {Search} Current Search
  */
 Search.prototype.and = function(filters) {
-  // Set to query the name search
+  // Set to query the filters search
   this.query.and = filters;
 
   //
@@ -49,8 +61,7 @@ Search.prototype.and = function(filters) {
 
 /**
  * Create Search
- *@param
- *@return
+ * @return {Search} Current Search
  */
 export const createSearch = function() {
   // Initial state
