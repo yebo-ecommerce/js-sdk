@@ -8,19 +8,6 @@ export const Search = function() {
 };
 
 /**
- * Will search products by name
- * @param {String} name Search by product name
- * @return {Search} Current Search
- */
-Search.prototype.byName = function(name) {
-  // Set to query the name search
-  this.query.name = name;
-
-  //
-  return this;
-}
-
-/**
  * Will search pages
  * @param {Number} page Page number of the product listing
  * @return {Search} Current Search
@@ -28,6 +15,19 @@ Search.prototype.byName = function(name) {
 Search.prototype.page = function(page) {
   // Set to query the number search
   this.query.page = page;
+
+  //
+  return this;
+}
+
+/**
+ * Will search products by name
+ * @param {String} name Search by product name
+ * @return {Search} Current Search
+ */
+Search.prototype.byName = function(name) {
+  // Set to query the name search
+  this.query.name = name;
 
   //
   return this;
@@ -45,6 +45,14 @@ Search.prototype.perPage = function(perPage) {
   //
   return this;
 }
+/**
+ * Create Search
+ * @return {Search} Current Search
+ */
+export const createSearch = function() {
+  // Initial state
+  return new Search();
+}
 
 /**
  * Will search for Filters
@@ -57,15 +65,6 @@ Search.prototype.and = function(filters) {
 
   //
   return this;
-}
-
-/**
- * Create Search
- * @return {Search} Current Search
- */
-export const createSearch = function() {
-  // Initial state
-  return new Search();
 }
 
 //
