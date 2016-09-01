@@ -5,9 +5,9 @@ const h = require('./../../helpers');
 import * as m from 'src/modules/cart';
 
 // Products Module!
-describe('Products module', () => {
+describe('Cart module', () => {
   // createCart
-  it('should return validation cart', () => {
+  it('should return valid cart', () => {
     // ...
   });
 
