@@ -29,8 +29,8 @@ describe('API core', () => {
     let authToken = '';
 
     // Requests
-    let getReq = m.buildRequest('GET', '/products', data, 'test', 'v2', authToken), 
-        postReq = m.buildRequest('POST', '/products', data, 'test', 'v2', authToken); 
+    let getReq = m.buildRequest('GET', '/products', data, 'test', 'v2', authToken),
+        postReq = m.buildRequest('POST', '/products', data, 'test', 'v2', authToken);
 
     // Assertions
     h.expect(getReq.method).to.not.equal(postReq.method);
