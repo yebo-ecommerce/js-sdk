@@ -29,13 +29,3 @@ export const fetch = function(method, url, data, contentType, headers) {
     data:data
   });
 }
-
-/**
- *
- */
-export const get = function() {}
-
-/**
- *
- */
-export const post = function() {}
