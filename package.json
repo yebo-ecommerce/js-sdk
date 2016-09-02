@@ -1,5 +1,5 @@
 {
-  "name": "yebo",
+  "name": "yebo_sdk",
   "version": "1.0.0-beta",
   "description": "A bridge between the Yebo e-commerce and your website",
   "main": "dist/yebo.umd.js",
