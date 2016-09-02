@@ -1,6 +1,6 @@
 {
-  "name": "yebo",
-  "version": "0.0.0",
+  "name": "yebo_sdk",
+  "version": "1.0.0-beta",
   "description": "A bridge between the Yebo e-commerce and your website",
   "main": "dist/yebo.umd.js",
   "jsnext:main": "src/index.js",
