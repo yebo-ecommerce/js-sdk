@@ -7,10 +7,8 @@
 // Dependencies
 import { fetch } from './request';
 
-/**
- * Yebo Configurations
- */
-export const yeboDomain = 'yebo-api.com.br/api';
+// Configurations
+import { get } from './config';
 
 /**
  * Generate the options to make a request
@@ -18,13 +16,13 @@ export const yeboDomain = 'yebo-api.com.br/api';
  * @param {String} method The HTTP method (mainly GET or POST)
  * @param {String} url The url that will be used as base
  * @param {Object} data Data passed in the request
+ * @param {String} auth The API token (previsouly queried)
  * @param {String} name Store name
  * @param {String} version The API version
- * @param {String} auth The API token (previsouly queried)
  * @param {String} token The API token
  * @return {Object} Base configuration for the request
  */
-export const buildRequest = function(method, path, data, name, version, auth, token) {
+export const buildRequest = function(method, path, data, auth, name = get('store'), version = get('version'), token = get('token')) {
   // Query String
   let qs = '';
 
@@ -46,7 +44,7 @@ export const buildRequest = function(method, path, data, name, version, auth, to
   // Return the request options
   return {
     method: method,
-    url: `https://${name}.${yeboDomain}/${version}${path}${qs}`,
+    url: `${get('protocol')}://${name}.${get('apiURL')}/${version}${path}${qs}`,
     data: method === 'GET' ? {} : data,
     headers: headers,
     content_type: method === 'GET' ? 'application/x-www-form-urlencoded' : 'application/json'
