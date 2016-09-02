@@ -1,4 +1,4 @@
-# Yebo SDK (1.0)
+# Yebo SDK (1.0) [![Build Status](https://travis-ci.org/yebo-ecommerce/js-sdk.svg?branch=develop)](https://travis-ci.org/yebo-ecommerce/js-sdk)
 This library is the easiest way to connect with [Yebo API](http://yebo.com.br/), it intends to be more functional as possible.
 
 **IMPORTANT: If you were using the older versions(v0) this is a complete rewrite of the library.**
