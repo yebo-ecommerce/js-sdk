@@ -12,8 +12,23 @@ Its planned to create a simple guide website (like [Vue.js](http://vuejs.org/gui
 First, install the NPM package with `npm i --save yebo_sdk`, after install you could follow two ways (depending in your project structure):
 
 * If you're using ES6 transpilers(like Babel) you could just import the SDK functions and starts using it:
-  * Example: `import { getProducts } from 'yebo_sdk'`;
+  * Example: `import { getProducts, executeRequest } from 'yebo_sdk'`;
 * If your project is simple ES5 there are two files in the `dist/` folder that you will add to your project.
+
+The module functions will return a built `request`, so you just need to execute it. Don't worry, also there is a method to call it:
+```javascript
+// Import
+import { getProducts, executeRequest } from 'yebo_sdk';
+
+// Getting products
+let productsReq = getProducts({});
+
+// And then execute it
+executeRequest(products).then((res) => {
+  // Print the response
+  console.log(res);
+});
+```
 
 ## Architecture
 This library is divided in two parts the **core** and the **modules**:
