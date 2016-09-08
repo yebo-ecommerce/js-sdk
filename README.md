@@ -24,7 +24,7 @@ import { getProducts, executeRequest } from 'yebo_sdk';
 let productsReq = getProducts({});
 
 // And then execute it
-executeRequest(products).then((res) => {
+executeRequest(productsReq).then((res) => {
   // Print the response
   console.log(res);
 });
