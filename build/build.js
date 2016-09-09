@@ -53,8 +53,8 @@ rollup.rollup({
   // Basic definitions
   entry: 'src/index.js',
   plugins: [
-    nodeResolve({ browser: true, jsnext: true }),
-    commonjs(),
+    nodeResolve({ main: true, browser: true, jsnext: true }),
+    commonjs({ include: 'node_modules/**' }),
     babel(babelrc())
   ]
 }).then((bundle) => {
