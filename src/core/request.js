@@ -6,7 +6,7 @@
  */
 
 // Dependencies
-import axios from 'axios';
+import axios from 'axios/dist/axios';
 
 /**
  * General purpose fetch, could be used by anyone
