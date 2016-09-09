@@ -27,5 +27,5 @@ export const fetch = function(method, url, data, contentType, headers) {
     crossOrigin: true,
     headers: headers,
     data:data
-  });
+  }).then(req => req.data);
 }
