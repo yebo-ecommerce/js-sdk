@@ -8,7 +8,6 @@ import * as m from 'src/modules/products';
 describe('Products module', () => {
   // getProducts
   it('should return a products list', () => {
-    // ...
     // m.getProducts();
   });
 

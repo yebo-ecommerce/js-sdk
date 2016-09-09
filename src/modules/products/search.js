@@ -1,6 +1,5 @@
 /**
  * Create type search
- * @param {Object} search Parameters used in the search for products
  */
 export const Search = function() {
   // Query will live here
@@ -8,7 +7,7 @@ export const Search = function() {
 };
 
 /**
- * Will search pages
+ * Will search page
  * @param {Number} page Page number of the product listing
  * @return {Search} Current Search
  */
