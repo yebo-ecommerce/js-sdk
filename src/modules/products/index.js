@@ -11,7 +11,7 @@ export const getProducts = function (search) {
   let req = buildRequest('GET', '/products', { search: search });
 
   // Return the execution
-  return excuteRequest(req);
+  return executeRequest(req);
 }
 
 /**
@@ -26,7 +26,7 @@ export const getProductsAggs = function (root, ranges, search) {
   let req = buildRequest('GET', '/products/aggs', { root: root, ranges: ranges, search: search });
 
   // Return the execution
-  return excuteRequest(req);
+  return executeRequest(req);
 }
 
 /**
@@ -39,5 +39,5 @@ export const getProductsId = function (id) {
   let req = buildRequest('GET', `/product/${id}`, {});
 
   // Return the execution
-  return excuteRequest(req);
+  return executeRequest(req);
 }
