@@ -2,13 +2,23 @@
 import {buildRequest, executeRequest} from './../../core/api'
 
 /**
+ * Build Request Get Products
+ * @param {Object} search Parameters used in the products search
+ * @return {Object} request
+ */
+export const buildGetProducts = function (search) {
+  // Build Get Products
+  return buildRequest('GET', '/products', { search: search });
+}
+
+/**
  * List of Products
  * @param {Object} search Parameters used in the products search
  * @return
  */
 export const getProducts = function (search) {
   // Build the request.
-  let req = buildRequest('GET', '/products', { search: search });
+  let req = buildGetProducts(search);
 
   // Return the execution
   return executeRequest(req);
