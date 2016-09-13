@@ -1,5 +1,11 @@
+// Helper
+const h = require('./../../helpers');
+
 // Include the search module
 import * as m from 'src/modules/products/search';
+
+// Include filters
+import { createFilter } from 'src/modules/products/filters';
 
 // Search Page!
 describe('Search Module', () => {
@@ -8,7 +14,7 @@ describe('Search Module', () => {
     //
     let newSearch = m.createSearch();
 
-    return.expect(search)
+    h.expect(newSearch).to.have.property('query')
   });
 
   //
@@ -35,5 +41,25 @@ describe('Search Module', () => {
     h.expect(search.query).to.have.property('name');
   });
 
-  // it()
+  it('should search perPage', () => {
+    //
+    let search = m.createSearch();
+
+    // Set perPage
+    search.perPage(78);
+
+    //
+    h.expect(search.query).to.have.property('per_page');
+  });
+
+  it('should search for filters', () => {
+    //
+    let search = m.createSearch();
+
+    // Set and
+    search.and([createFilter('cor', 'field', 'fixed', ['azul'])]);
+
+    //
+    h.expect(search.query).to.have.property('and');
+  });
 });

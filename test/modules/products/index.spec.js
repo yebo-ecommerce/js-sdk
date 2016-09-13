@@ -20,5 +20,4 @@ describe('Products module', () => {
   it('should return a information', () => {
     // ...
   });
-
 });
