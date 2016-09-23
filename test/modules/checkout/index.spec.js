@@ -9,7 +9,7 @@ describe('Products module', () => {
   // getOrderAddress
   it('should return a address', () => {
     //
-    let  = m.getOrderAddress()
+    let  = m.getOrderAddress('','','')
     //
     h.expect().to.have.property('number');
     h.expect().to.have.property('userToken');
@@ -19,7 +19,7 @@ describe('Products module', () => {
   // createOrderAddress
   it('should return a Create the address of the Order', () => {
     //
-    let  = m.createOrderAddress()
+    let  = m.createOrderAddress('','','')
     //
     h.expect().to.have.property('number');
     h.expect().to.have.property('userToken');
@@ -29,7 +29,7 @@ describe('Products module', () => {
   // removeOrderAddress
   it('should return a Remove the address of the Order', () => {
     //
-    let  = m.removeOrderAddress()
+    let  = m.removeOrderAddress('','','')
     //
     h.expect().to.have.property('number');
     h.expect().to.have.property('userToken');
@@ -39,7 +39,7 @@ describe('Products module', () => {
   // updateOrderAddress
   it('should return a Update the address of the Order', () => {
     //
-    let  = m.updateOrderAddress()
+    let  = m.updateOrderAddress('','','')
     //
     h.expect().to.have.property('number');
     h.expect().to.have.property('userToken');
@@ -49,7 +49,7 @@ describe('Products module', () => {
   // getOrderShipments
   it('should return a delivery methods for Order', () => {
     //
-    let  = m.getOrderShipments()
+    let  = m.getOrderShipments('','',)
     //
     h.expect().to.have.property('number');
     h.expect().to.have.property('userToken');
@@ -60,38 +60,32 @@ describe('Products module', () => {
   // setOrderShipment
   it('should return a delivery method for a package', () => {
     //
-    let  = m.getOrderPay()
+    let  = m.setOrderShipment('','', ,)
     //
     h.expect().to.have.property('number');
     h.expect().to.have.property('userToken');
-    h.expect().to.have.property('kind');
+    h.expect().to.have.property('pkg');
+    h.expect().to.have.property('rate');
   });
 
   // getOrderPay
   it('should return a payment methods for Order', () => {
     //
-    let  = m.()
+    let  = m.getOrderPay('','',)
     //
-    h.expect().to.have.property('');
-    h.expect().to.have.property('');
-    h.expect().to.have.property('');
-    h.expect().to.have.property('');
-    h.expect().to.have.property('');
-    h.expect().to.have.property('');
-    h.expect().to.have.property('');
+    h.expect().to.have.property('number');
+    h.expect().to.have.property('userToken');
+    h.expect().to.have.property('subscription');
   });
 
   // orderPay
   it('should return a Making the payment', () => {
     //
-    let  = m.()
+    let  = m.orderPay('','', ,'')
     //
-    h.expect().to.have.property('');
-    h.expect().to.have.property('');
-    h.expect().to.have.property('');
-    h.expect().to.have.property('');
-    h.expect().to.have.property('');
-    h.expect().to.have.property('');
-    h.expect().to.have.property('');
+    h.expect().to.have.property('number');
+    h.expect().to.have.property('userToken');
+    h.expect().to.have.property('methodId');
+    h.expect().to.have.property('source');
   });
 });
