@@ -29,7 +29,7 @@ We are always looking for improvements in this library and your contribuition is
 # Development
 You will need the Node.js version 6+, this library does not have any native dependency.
 
-## After cloned the repo you will need to install the dependencies with `npm install`
+After cloned the repo you will need to install the dependencies with `npm install`
 
 ## Important NPM scripts:
 * `npm test` - Test the library
