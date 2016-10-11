@@ -27,7 +27,7 @@
       "name": "Gabriela Caldeira Diogo"
     }
   ],
-  "license": "ISC",
+  "license": "MIT",
   "homepage": "https://bitbucket.org/yebo-dev/new-sdk#readme",
   "devDependencies": {
     "babel-plugin-module-alias": "^1.6.0",
