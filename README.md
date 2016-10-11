@@ -56,12 +56,5 @@ the API resources(like: products, orders, etc...).
 * `Plugins`
   * Plugins will, probably, live in different repositories.
 
-## Development
-This library does not have any native dependency, so its possible to just clone, install the
-dependencies(with `npm install`) and starts developing.
-
-**Important scripts:**
-
-* `npm install`
-* `npm test` - Test the library
-* `npm build` - Generate the `dist/` folder with the compiled files.
+# Contribution
+Please make sure to read the [Contributing Guide](CONTRIBUTING.md) before making a pull request.
