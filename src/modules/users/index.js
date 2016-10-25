@@ -1,3 +1,16 @@
+// Dependencies
+import { buildRequest, executeRequest } from './../../core/api'
+
+/**
+ * User Registration
+ * Same params as `registerUser`
+ * @return {Object} Request
+ */
+export const buildRegisterUser = function (email, password, passwordConfirmation) {
+  // Build the request.
+  return buildRequest('POST', '/user', { email: email, password: password, password_confirmation: passwordConfirmation });
+}
+
 /**
  * User Registration
  * @param {String} email User Email
@@ -7,10 +20,20 @@
  */
 export const registerUser = function (email, password, passwordConfirmation) {
   // Build the request.
-  let req = buildRequest('POST', '/user', { email: email, password: password, password_confirmation: passwordConfirmation });
+  let req = buildRegisterUser(email, password, passwordConfirmation);
 
   // Return the execution
   return excuteRequest(req);
+}
+
+/**
+ * User Login
+ * Same params as `loginUser`
+ * @return {Object} Request
+ */
+export const buildLoginUser = function (email, password) {
+  // Build the request.
+  return buildRequest('POST', '/user/login', { email: email, password: password });
 }
 
 /**
@@ -21,10 +44,20 @@ export const registerUser = function (email, password, passwordConfirmation) {
  */
 export const loginUser = function (email, password) {
   // Build the request.
-  let req = buildRequest('POST', '/user/login', { email: email, password: password });
+  let req = buildLoginUser(email, password);
 
   // Return the execution
   return excuteRequest(req);
+}
+
+/**
+ * Calls password change
+ * Same params as `requireResetUser`
+ * @return {Object} Request
+ */
+export const buildRequireResetUser = function (email, storeUrl) {
+  // Build the request.
+  return buildRequest('POST', '/user/reset', { email: email, store_url: storeUrl });
 }
 
 /**
@@ -33,12 +66,22 @@ export const loginUser = function (email, password) {
  * @param {String} storeUrl The URL of recovery that will be sent by email
  * @return
  */
-export const resetUser = function (email, storeUrl) {
+export const requireResetUser = function (email, storeUrl) {
   // Build the request.
-  let req = buildRequest('POST', '/user/reset', { email: email, store_url: storeUrl });
+  let req = buildRequireResetUser(email, storeUrl);
 
   // Return the execution
   return excuteRequest(req);
+}
+
+/**
+ * Change User Password
+ * Same params as `userReset`
+ * @return {Object} Request
+ */
+export const buildResetUser = function (token, email, password, passwordConfirmation) {
+  // Build the request.
+  return buildRequest('POST', '/user/reset/reset', { token: token, email: email, password: password, password_confirmation: passwordConfirmation });
 }
 
 /**
@@ -49,9 +92,9 @@ export const resetUser = function (email, storeUrl) {
  * @param {String} passwordConfirmation User Password confirmation
  * @return
  */
-export const resetUserReset = function (token, email, password, passwordConfirmation) {
+export const resetUser = function (token, email, password, passwordConfirmation) {
   // Build the request.
-  let req = buildRequest('POST', '/user/reset/reset', { token: token, email: email, password: password, password_confirmation: passwordConfirmation });
+  let req = buildResetUser(token, email, password, passwordConfirmation);
 
   // Return the execution
   return excuteRequest(req);
