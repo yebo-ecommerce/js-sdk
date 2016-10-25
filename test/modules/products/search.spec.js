@@ -1,4 +1,4 @@
-fa// Helper
+// Helper
 const h = require('./../../helpers');
 
 // Include the search module
@@ -9,7 +9,7 @@ import { createFilter } from 'src/modules/products/filters';
 
 // Search Page!
 describe('Search Module', () => {
-//
+  //
   it('should create search', () => {
     //
     let newSearch = m.createSearch();
