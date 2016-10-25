@@ -1,3 +1,16 @@
+// Dependencies
+import { buildRequest, executeRequest } from './../../core/api'
+
+/**
+ * Method responsible for seeking taxons
+ * Same params as `getTaxons`
+ * @return {Object} Request
+ */
+export const buildGetTaxons = function (ids, taxons, taxonomyId, page = 1, perPage = 25) {
+  // Build the request.
+  return buildRequest('GET', '/taxons', { ids: ids, taxons: taxons, taxonomy_id: taxonomyId, page: page, per_page: perPage });
+}
+
 /**
  * Method responsible for seeking taxons
  * @param {Array[Number]} ids
@@ -9,10 +22,20 @@
  */
 export const getTaxons = function (ids, taxons, taxonomyId, page = 1, perPage = 25) {
   // Build the request.
-  let req = buildRequest('GET', '/taxons', { ids: ids, taxons: taxons, taxonomy_id: taxonomyId, page: page, per_page: perPage });
+  let req = buildGetTaxons(ids, taxons, taxonomyId, page, perPage);
 
   // Return the execution
   return excuteRequest(req);
+}
+
+/**
+ * Returns information from a single taxon
+ * Same params as `getTaxonId`
+ * @return {Object} Request
+ */
+export const buildGetTaxonId = function () {
+  // Build the request.
+  return buildRequest('GET', `/taxon/${id}`, {});
 }
 
 /**
@@ -21,10 +44,20 @@ export const getTaxons = function (ids, taxons, taxonomyId, page = 1, perPage = 
  */
 export const getTaxonId = function () {
   // Build the request.
-  let req = buildRequest('GET', `/taxon/${id}`, {});
+  let req = buildGetTaxonId();
 
   // Return the execution
   return excuteRequest(req);
+}
+
+/**
+ * Method responsible for seeking taxonomies
+ * Same params as `getTaxonomies`
+ * @return {Object} Request
+ */
+export const buildGetTaxonomies = function (page = 1, perPage = 25) {
+  // Build the request.
+  return buildRequest('GET', '/taxonomies', { page: page, per_page: perPage });
 }
 
 /**
@@ -35,7 +68,7 @@ export const getTaxonId = function () {
  */
 export const getTaxonomies = function (page = 1, perPage = 25) {
   // Build the request.
-  let req = buildRequest('GET', '/taxonomies', { page: page, per_page: perPage });
+  let req = buildGetTaxonomies(page, perPage);
 
   // Return the execution
   return excuteRequest(req);
@@ -43,12 +76,21 @@ export const getTaxonomies = function (page = 1, perPage = 25) {
 
 /**
  * Returns information from a single taxonomy
- * @param
+ * Same params as `getTaxonomyId`
+ * @return {Object} Request
+ */
+export const buildGetTaxonomyId = function () {
+  // Build the request.
+  return buildRequest('GET', `/taxonomy/${id}`, {});
+}
+
+/**
+ * Returns information from a single taxonomy
  * @return
  */
 export const getTaxonomyId = function () {
   // Build the request.
-  let req = buildRequest('GET', `/taxonomy/${id}`, {});
+  let req = buildGetTaxonomyId();
 
   // Return the execution
   return excuteRequest(req);
