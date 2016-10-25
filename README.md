@@ -15,6 +15,15 @@ First, install the NPM package with `npm i --save yebo_sdk`, after install you c
   * Example: `import { getProducts } from 'yebo_sdk'`;
 * If your project is simple ES5 there are two files in the `dist/` folder that you will add to your project.
 
+After installing, you need to configure the SDK to your store. This is made by setting your store to the SDK:
+```javascript
+import { set } from 'yebo-sdk';
+set('store', 'store-name');
+// or...
+yebo.set('store', 'store-name');
+```
+
+## Architecture
 The module functions exports to types of methods: a `build` and a `execution`, the first is followed by the prefix `buildGetProducts`, and the second does not have any prefix `getProducts`.
 The difference between them is that the `build` will just generate an Object with the request options, while the second will generate these options and execute the request.
 ```javascript
@@ -27,15 +36,13 @@ getProducts({}).then((res) => {
   console.log(res);
 });
 ```
+### This library is divided in two parts the **core** and the **modules**:
 
-## Architecture
-This library is divided in two parts the **core** and the **modules**:
-
-### Core
+#### Core
 Common funcitons and (literally) the connection with Yebo, with this part is possible to make any
 interaction with the API.
 
-### Modules
+#### Modules
 These part is more developer friendly, its idea is to provide a transparent and easy way to access
 the API resources(like: products, orders, etc...).
 
