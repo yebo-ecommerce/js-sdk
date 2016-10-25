@@ -1,3 +1,6 @@
+// Dependencies
+import { buildRequest } from './../../core/api'
+
 /**
  * Returns the address
  * @param {String} number Order's number
