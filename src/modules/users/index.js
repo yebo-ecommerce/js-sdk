@@ -8,7 +8,7 @@ import { buildRequest, executeRequest } from './../../core/api'
  */
 export const buildRegisterUser = function (email, password, passwordConfirmation) {
   // Build the request.
-  return buildRequest('POST', '/user', { email: email, password: password, password_confirmation: passwordConfirmation });
+  return buildRequest('POST', '/users', { email: email, password: password, password_confirmation: passwordConfirmation });
 }
 
 /**
@@ -33,7 +33,7 @@ export const registerUser = function (email, password, passwordConfirmation) {
  */
 export const buildLoginUser = function (email, password) {
   // Build the request.
-  return buildRequest('POST', '/user/login', { user: email, password: password });
+  return buildRequest('POST', '/users/login', { user: email, password: password });
 }
 
 /**
@@ -57,7 +57,7 @@ export const loginUser = function (email, password) {
  */
 export const buildRequireResetUser = function (email, storeUrl) {
   // Build the request.
-  return buildRequest('POST', '/user/reset', { email: email, store_url: storeUrl });
+  return buildRequest('POST', '/users/reset', { email: email, store_url: storeUrl });
 }
 
 /**
@@ -81,7 +81,7 @@ export const requireResetUser = function (email, storeUrl) {
  */
 export const buildResetUser = function (token, email, password, passwordConfirmation) {
   // Build the request.
-  return buildRequest('POST', '/user/reset/reset', { token: token, email: email, password: password, password_confirmation: passwordConfirmation });
+  return buildRequest('POST', '/users/reset/reset', { token: token, email: email, password: password, password_confirmation: passwordConfirmation });
 }
 
 /**
