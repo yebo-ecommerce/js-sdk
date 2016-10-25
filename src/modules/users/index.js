@@ -23,7 +23,7 @@ export const registerUser = function (email, password, passwordConfirmation) {
   let req = buildRegisterUser(email, password, passwordConfirmation);
 
   // Return the execution
-  return excuteRequest(req);
+  return executeRequest(req);
 }
 
 /**
@@ -47,7 +47,7 @@ export const loginUser = function (email, password) {
   let req = buildLoginUser(email, password);
 
   // Return the execution
-  return excuteRequest(req);
+  return executeRequest(req);
 }
 
 /**
@@ -71,7 +71,7 @@ export const requireResetUser = function (email, storeUrl) {
   let req = buildRequireResetUser(email, storeUrl);
 
   // Return the execution
-  return excuteRequest(req);
+  return executeRequest(req);
 }
 
 /**
@@ -97,5 +97,5 @@ export const resetUser = function (token, email, password, passwordConfirmation)
   let req = buildResetUser(token, email, password, passwordConfirmation);
 
   // Return the execution
-  return excuteRequest(req);
+  return executeRequest(req);
 }
