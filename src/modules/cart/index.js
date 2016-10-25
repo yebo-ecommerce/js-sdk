@@ -1,5 +1,15 @@
 // Dependencies
-import {buildRequest} from './../../core/api'
+import { buildRequest } from './../../core/api'
+
+/**
+ * Create/Validate carts
+ * Same params as `createCart`
+ * @return {Object} Request
+ */
+export const buildCreateCart = function (token, number, last, create, userToken) {
+  // Build the request.
+  return buildRequest('POST', `/cart/${number}`, { token: token , last: last, create: create, user_token: userToken });
+}
 
 /**
  * Create / Validates carts
@@ -12,10 +22,20 @@ import {buildRequest} from './../../core/api'
  */
 export const createCart = function (token, number, last, create, userToken) {
   // Build the request.
-  return buildRequest('POST', `/cart/${number}`, { token: token , last: last, create: create, user_token: userToken });
+  let req = buildCreateCart(token, number, last, create, userToken);
 
   // // Return the execution
-  // return executeRequest(req);
+  return executeRequest(req);
+}
+
+/**
+ * Return all items from the cart.
+ * Same params as `getCartItems`
+ * @return {Object} Request
+ */
+export const buildGetCartItems = function (token, number, last, create, userToken) {
+  // Build the request.
+  return buildRequest('GET', `/cart_items/${number}`, { token: token , last: last, create: create, user_token: userToken });
 }
 
 /**
@@ -29,10 +49,10 @@ export const createCart = function (token, number, last, create, userToken) {
  */
 export const getCartItems = function (token, number, last, create, userToken) {
   // Build the request.
-  return buildRequest('GET', `/cart_items/${number}`, { token: token , last: last, create: create, user_token: userToken });
+  let req = buildGetCartItems(token, number, last, create, userToken);
 
   // Return the execution
-  // return executeRequest(req);
+  return executeRequest(req);
 }
 
 /**
@@ -54,6 +74,16 @@ export const emptyCartItems = function (token, number, last, create, userToken) 
 
 /**
  * Returns all items cart
+ * Same params as `addCartItems`
+ * @return {Object} Request
+ */
+export const buildAddCartItems = function (token, number, last, create, userToken, variant, qty) {
+  // Build the request.
+  return buildRequest('POST', `/cart_items/${number}`, { token: token , last: last, create: create, user_token: userToken, variant: variant, qty: qty});
+}
+
+/**
+ * Returns all items cart
  * @param {String} token Token Order
  * @param {String} number Number (reference) of the Order
  * @param {Boolean} last If an order is not found, search for the last not complete
@@ -65,10 +95,10 @@ export const emptyCartItems = function (token, number, last, create, userToken) 
  */
 export const addCartItems = function (token, number, last, create, userToken, variant, qty) {
   // Build the request.
-  return buildRequest('POST', `/cart_items/${number}`, { token: token , last: last, create: create, user_token: userToken, variant: variant, qty: qty});
+  let req = buildAddCartItems(token, number, last, create, userToken, variant, qty);
 
   // Return the execution
-  // return executeRequest(req);
+  return executeRequest(req);
 }
 
 /**
@@ -91,7 +121,18 @@ export const removeCartItems = function (token, number, last, create, userToken,
 }
 
 /**
+ * Update cart items
  * Returns all items cart
+ * Same params as `addCartItems`
+ * @return {Object} Request
+ */
+export const buildUpdateCartItems = function (token, number, last, create, userToken, lineItem, qty) {
+  // Build the request.
+  return buildRequest('POST', `/cart_items/${number}`, { token: token , last: last, create: create, user_token: userToken, lineItem: lineItem, qty: qty});
+}
+
+/**
+ * Update cart items
  * @param {String} token Token Order
  * @param {String} number Number (reference) of the Order
  * @param {Boolean} last If an order is not found, search for the last not complete
@@ -103,8 +144,8 @@ export const removeCartItems = function (token, number, last, create, userToken,
  */
 export const updateCartItems = function (token, number, last, create, userToken, lineItem, qty) {
   // Build the request.
-  return buildRequest('POST', `/cart_items/${number}`, { token: token , last: last, create: create, user_token: userToken, lineItem: lineItem, qty: qty});
+  let req = buildUpdateCartItems(token, number, last, create, userToken, lineItem, qty);
 
   // Return the execution
-  // return executeRequest(req);
+  return executeRequest(req);
 }
