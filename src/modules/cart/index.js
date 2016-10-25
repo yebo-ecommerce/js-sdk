@@ -1,5 +1,5 @@
 // Dependencies
-import { buildRequest } from './../../core/api'
+import { buildRequest, executeRequest } from './../../core/api'
 
 /**
  * Create/Validate carts
