@@ -32,12 +32,13 @@ You will need the Node.js version 6+, this library does not have any native depe
 After cloned the repo you will need to install the dependencies with `npm install`
 
 ## Important NPM scripts:
-* `npm test` - Test the library
-* `npm build` - Generate the `dist/` folder with the compiled files.
+* `npm run test` - Test the library
+* `npm run build` - Generate the `dist/` folder with the compiled files.
 
 ## If you want to use docker:
 * `docker run --rm -v $(PWD):/sdk -w /sdk node npm install` - To install the dependencies
-* `docker run --rm -v $(PWD):/sdk -w /sdk node npm test` - To to run the tests
+* `docker run --rm -v $(PWD):/sdk -w /sdk node npm run test` - To run the tests
+* `docker run --rm -v $(PWD):/sdk -w /sdk node npm run build` - To compile the SDK
 
 # Attribution
 This Contributing Guide is based on the Contribution Guide of [Vue.js](https://github.com/vuejs/vue/) that can be found [here](https://github.com/vuejs/vue/blob/dev/.github/CONTRIBUTING.md).
