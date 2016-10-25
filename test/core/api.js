@@ -9,7 +9,7 @@ describe('API core', () => {
   //
   it('should generate the params', () => {
     //
-    let params = {search: 'Hello', prop: {detail: 'Thats a test', values: [1, 2, 3]}}
+    let params = {search: 'Hello', prop: {detail: 'Thats a test', values: [1, 2, 3], diff: null}}
 
     // Generate the QueryString
     let qs = m.buildParams(params);
