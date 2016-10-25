@@ -3,6 +3,16 @@ import { buildRequest } from './../../core/api'
 
 /**
  * Returns the address
+ * Same params as `getOrderAddress`
+ * @return {Object} Request
+ */
+export const buildGetOrderAddress = function (number, userToken, kind) {
+  // Build the request.
+  return buildRequest('GET', `/address/${number}/${kind}`, { user_token: userToken });
+}
+
+/**
+ * Returns the address
  * @param {String} number Order's number
  * @param {String} userToken User token to validate the Order
  * @param {String} kind Address Type
@@ -10,10 +20,21 @@ import { buildRequest } from './../../core/api'
  */
 export const getOrderAddress = function (number, userToken, kind) {
   // Build the request.
-  let req = buildRequest('GET', `/address/${number}/${kind}`, { user_token: userToken });
+  let req = buildGetOrderAddress(number, userToken, kind);
 
   // Return the execution
   return excuteRequest(req);
+}
+
+
+/**
+ * Create the address of the Order
+ * Same params as `createOrderAddress`
+ * @return {Object} Request
+ */
+export const buildCreateOrderAddress = function (number, userToken, kind) {
+  // Build the request.
+  return buildRequest('POST', `/address/${number}/${kind}`, { user_token: userToken });
 }
 
 /**
@@ -25,10 +46,20 @@ export const getOrderAddress = function (number, userToken, kind) {
  */
 export const createOrderAddress = function (number, userToken, kind) {
   // Build the request.
-  let req = buildRequest('POST', `/address/${number}/${kind}`, { user_token: userToken });
+  let req = buildCreateOrderAddress(number, userToken, kind);
 
   // Return the execution
   return excuteRequest(req);
+}
+
+/**
+ * Remove the address of the Order
+ * Same params as `removeOrderAddress`
+ * @return {Object} Request
+ */
+export const buildRemoveOrderAddress = function (number, userToken, kind) {
+  // Build the request.
+  return buildRequest('POST', `/address/${number}/${kind}`, { user_token: userToken });
 }
 
 /**
@@ -40,10 +71,20 @@ export const createOrderAddress = function (number, userToken, kind) {
  */
 export const removeOrderAddress = function (number, userToken, kind) {
   // Build the request.
-  let req = buildRequest('POST', `/address/${number}/${kind}`, { user_token: userToken });
+  let req = buildRemoveAddress(number, userToken, kind);
 
   // Return the execution
   return excuteRequest(req);
+}
+
+/**
+ * Update the address of the Order
+ * Same params as `updateOrderAddress`
+ * @return {Object} Request
+ */
+export const buildUpdateOrderAddress = function (number, userToken, kind) {
+  // Build the request.
+  return buildRequest('POST', `/address/${number}/${kind}`, { user_token: userToken });
 }
 
 /**
@@ -55,10 +96,20 @@ export const removeOrderAddress = function (number, userToken, kind) {
  */
 export const updateOrderAddress = function (number, userToken, kind) {
   // Build the request.
-  let req = buildRequest('POST', `/address/${number}/${kind}`, { user_token: userToken });
+  let req = buildUpdateOrderAddress(number, userToken, kind);
 
   // Return the execution
   return excuteRequest(req);
+}
+
+/**
+ * Returns / estimated delivery methods for Order
+ * Same params as `getOrderShipments`
+ * @return {Object} Request
+ */
+export const buildGetOrderShipments = function (number, userToken, calculate) {
+  // Build the request.
+  return buildRequest('POST', `/shipments/${number}/${kind}`, { user_token: userToken, calculate: calculate });
 }
 
 /**
@@ -70,10 +121,20 @@ export const updateOrderAddress = function (number, userToken, kind) {
  */
 export const getOrderShipments = function (number, userToken, calculate) {
   // Build the request.
-  let req = buildRequest('POST', `/shipments/${number}/${kind}`, { user_token: userToken, calculate: calculate });
+  let req = buildGetOrderShipments(number, userToken, calculate);
 
   // Return the execution
   return excuteRequest(req);
+}
+
+/**
+ * Defines a delivery method for a package
+ * Same params as `setOrderShipment`
+ * @return {Object} Request
+ */
+export const buildSetOrderShipment = function (number, userToken, pkg, rate) {
+  // Build the request.
+  return buildRequest('POST', `/shipments/${number}/${kind}`, { user_token: userToken, rate: rate, package: pkg });
 }
 
 /**
@@ -86,10 +147,20 @@ export const getOrderShipments = function (number, userToken, calculate) {
  */
 export const setOrderShipment = function (number, userToken, pkg, rate) {
   // Build the request.
-  let req = buildRequest('POST', `/shipments/${number}/${kind}`, { user_token: userToken, rate: rate, package: pkg });
+  let req = buildSetOrderShipment(number, userToken, pkg, rate);
 
   // Return the execution
   return excuteRequest(req);
+}
+
+/**
+ * Returns payment methods for Order
+ * Same params as `getOrderPayments`
+ * @return {Object} Request
+ */
+export const buildGetOrderPayments = function (number, userToken, subscription) {
+  // Build the request.
+  return buildRequest('GET', `/pay/${number}`, { user_token: userToken, subscription: subscription });
 }
 
 /**
@@ -99,11 +170,22 @@ export const setOrderShipment = function (number, userToken, pkg, rate) {
  * @param {Boolean} subscription Return type recurrence payment methods
  * @return
  */
-export const getOrderPay = function (number, userToken, subscription) {
+export const getOrderPayments = function (number, userToken, subscription) {
   // Build the request.
-  let req = buildRequest('GET', `/pay/${number}`, { user_token: userToken, subscription: subscription });
+  let req = buildGetOrderPayments(number, userToken, subscription);
 
   // Return the execution
+  return excuteRequest(req);
+}
+
+/**
+ * Making the payment
+ * Same params as `orderPay`
+ * @return {Object} Request
+ */
+export const buildOrderPay = function (number, userToken, methodId, source) {
+  // Build the request.
+  return buildRequest('POST', `/pay/${number}`, { user_token: userToken, method_id: methodId, source: source });
 }
 
 /**
@@ -116,7 +198,8 @@ export const getOrderPay = function (number, userToken, subscription) {
  */
 export const orderPay = function (number, userToken, methodId, source) {
   // Build the request.
-  let req = buildRequest('POST', `/pay/${number}`, { user_token: userToken, method_id: methodId, source: source });
+  let req = buildOrderPay(number, userToken, methodId, source);
 
   // Return the execution
+  return excuteRequest(req);
 }
