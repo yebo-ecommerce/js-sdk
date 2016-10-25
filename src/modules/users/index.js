@@ -33,7 +33,7 @@ export const registerUser = function (email, password, passwordConfirmation) {
  */
 export const buildLoginUser = function (email, password) {
   // Build the request.
-  return buildRequest('POST', '/user/login', { email: email, password: password });
+  return buildRequest('POST', '/user/login', { user: email, password: password });
 }
 
 /**
