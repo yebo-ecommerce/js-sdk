@@ -8,7 +8,7 @@ import { buildRequest, executeRequest } from './../../core/api'
  */
 export const buildRegisterUser = function (email, password, passwordConfirmation) {
   // Build the request.
-  return buildRequest('POST', '/users', { email: email, password: password, password_confirmation: passwordConfirmation });
+  return buildRequest('POST', '/users', { user: { email: email, password: password, password_confirmation: passwordConfirmation } });
 }
 
 /**
