@@ -25,7 +25,7 @@ export const getTaxons = function (ids, taxons, taxonomyId, page = 1, perPage = 
   let req = buildGetTaxons(ids, taxons, taxonomyId, page, perPage);
 
   // Return the execution
-  return excuteRequest(req);
+  return executeRequest(req);
 }
 
 /**
@@ -47,7 +47,7 @@ export const getTaxonId = function () {
   let req = buildGetTaxonId();
 
   // Return the execution
-  return excuteRequest(req);
+  return executeRequest(req);
 }
 
 /**
@@ -71,7 +71,7 @@ export const getTaxonomies = function (page = 1, perPage = 25) {
   let req = buildGetTaxonomies(page, perPage);
 
   // Return the execution
-  return excuteRequest(req);
+  return executeRequest(req);
 }
 
 /**
@@ -93,5 +93,5 @@ export const getTaxonomyId = function () {
   let req = buildGetTaxonomyId();
 
   // Return the execution
-  return excuteRequest(req);
+  return executeRequest(req);
 }

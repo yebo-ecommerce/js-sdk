@@ -3,7 +3,6 @@ services:
   # App name
   sdk:
     image: node
-    command: npm run build
     working_dir: /sdk
     volumes:
       - ./:/sdk
