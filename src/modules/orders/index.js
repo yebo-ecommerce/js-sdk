@@ -27,7 +27,7 @@ export const getOrders = function (token, complete, incomplete, page = 1, perPag
   let req = buildGetOrder(token, complete, incomplete, page, perPage);
 
   // Return the execution
-  return excuteRequest(req);
+  return executeRequest(req);
 }
 
 /**
@@ -57,5 +57,5 @@ export const getOrderNumber = function (token, number, complete = true, incomple
   let req = buildGetOrderNumber(token, number, complete, incomplete);
 
   // Return the execution
-  return excuteRequest(req);
+  return executeRequest(req);
 }

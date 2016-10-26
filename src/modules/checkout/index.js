@@ -24,7 +24,7 @@ export const getOrderAddress = function (number, userToken, kind) {
   let req = buildGetOrderAddress(number, userToken, kind);
 
   // Return the execution
-  return excuteRequest(req);
+  return executeRequest(req);
 }
 
 
@@ -50,7 +50,7 @@ export const createOrderAddress = function (number, userToken, kind) {
   let req = buildCreateOrderAddress(number, userToken, kind);
 
   // Return the execution
-  return excuteRequest(req);
+  return executeRequest(req);
 }
 
 /**
@@ -75,7 +75,7 @@ export const removeOrderAddress = function (number, userToken, kind) {
   let req = buildRemoveAddress(number, userToken, kind);
 
   // Return the execution
-  return excuteRequest(req);
+  return executeRequest(req);
 }
 
 /**
@@ -100,7 +100,7 @@ export const updateOrderAddress = function (number, userToken, kind) {
   let req = buildUpdateOrderAddress(number, userToken, kind);
 
   // Return the execution
-  return excuteRequest(req);
+  return executeRequest(req);
 }
 
 /**
@@ -125,7 +125,7 @@ export const getOrderShipments = function (number, userToken, calculate) {
   let req = buildGetOrderShipments(number, userToken, calculate);
 
   // Return the execution
-  return excuteRequest(req);
+  return executeRequest(req);
 }
 
 /**
@@ -151,7 +151,7 @@ export const setOrderShipment = function (number, userToken, pkg, rate) {
   let req = buildSetOrderShipment(number, userToken, pkg, rate);
 
   // Return the execution
-  return excuteRequest(req);
+  return executeRequest(req);
 }
 
 /**
@@ -176,7 +176,7 @@ export const getOrderPayments = function (number, userToken, subscription) {
   let req = buildGetOrderPayments(number, userToken, subscription);
 
   // Return the execution
-  return excuteRequest(req);
+  return executeRequest(req);
 }
 
 /**
@@ -202,5 +202,5 @@ export const orderPay = function (number, userToken, methodId, source) {
   let req = buildOrderPay(number, userToken, methodId, source);
 
   // Return the execution
-  return excuteRequest(req);
+  return executeRequest(req);
 }

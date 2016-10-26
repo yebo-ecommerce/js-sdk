@@ -40,5 +40,10 @@ After cloned the repo you will need to install the dependencies with `npm instal
 * `docker run --rm -v $(PWD):/sdk -w /sdk node npm run test` - To run the tests
 * `docker run --rm -v $(PWD):/sdk -w /sdk node npm run build` - To compile the SDK
 
+## Or docker composer:
+* `docker-compose run --rm sdk npm install` - To install the dependencies
+* `docker-compose run --rm sdk npm run test` - To run the tests
+* `docker-compose run --rm sdk npm run build` - To compile the SDK
+
 # Attribution
 This Contributing Guide is based on the Contribution Guide of [Vue.js](https://github.com/vuejs/vue/) that can be found [here](https://github.com/vuejs/vue/blob/dev/.github/CONTRIBUTING.md).

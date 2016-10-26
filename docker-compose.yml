@@ -1,0 +1,15 @@
+version: '2'
+services:
+  # App name
+  sdk:
+    image: node
+    working_dir: /sdk
+    volumes:
+      - ./:/sdk
+      - node_modules:/sdk/node_modules
+      - bower_components:/sdk/bower_components
+volumes:
+  node_modules:
+    driver: local
+  bower_components:
+    driver: local
