@@ -22,7 +22,7 @@ import { get } from './config';
  * @param {String} token The API token
  * @return {Object} Base configuration for the request
  */
-export const buildRequest = function(method, path, data, auth, name = get('store'), version = get('version'), token = get('token')) {
+export const buildRequest = function(method, path, data, auth = get('auth'), name = get('store'), version = get('version'), token = get('token')) {
   // Query String
   let qs = '';
 
