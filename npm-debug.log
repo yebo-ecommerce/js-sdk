@@ -1,0 +1,45 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/usr/local/bin/node', '/usr/local/bin/npm', 'run', 'build' ]
+2 info using npm@3.10.3
+3 info using node@v6.7.0
+4 verbose run-script [ 'prebuild', 'build', 'postbuild' ]
+5 info lifecycle yebo_sdk@0.2.1~prebuild: yebo_sdk@0.2.1
+6 silly lifecycle yebo_sdk@0.2.1~prebuild: no script for prebuild, continuing
+7 info lifecycle yebo_sdk@0.2.1~build: yebo_sdk@0.2.1
+8 verbose lifecycle yebo_sdk@0.2.1~build: unsafe-perm in lifecycle true
+9 verbose lifecycle yebo_sdk@0.2.1~build: PATH: /usr/local/lib/node_modules/npm/bin/node-gyp-bin:/yebo_sdk/node_modules/.bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+10 verbose lifecycle yebo_sdk@0.2.1~build: CWD: /yebo_sdk
+11 silly lifecycle yebo_sdk@0.2.1~build: Args: [ '-c', './node_modules/gulp/bin/gulp.js build' ]
+12 silly lifecycle yebo_sdk@0.2.1~build: Returned: code: 1  signal: null
+13 info lifecycle yebo_sdk@0.2.1~build: Failed to exec build script
+14 verbose stack Error: yebo_sdk@0.2.1 build: `./node_modules/gulp/bin/gulp.js build`
+14 verbose stack Exit status 1
+14 verbose stack     at EventEmitter.<anonymous> (/usr/local/lib/node_modules/npm/lib/utils/lifecycle.js:242:16)
+14 verbose stack     at emitTwo (events.js:106:13)
+14 verbose stack     at EventEmitter.emit (events.js:191:7)
+14 verbose stack     at ChildProcess.<anonymous> (/usr/local/lib/node_modules/npm/lib/utils/spawn.js:40:14)
+14 verbose stack     at emitTwo (events.js:106:13)
+14 verbose stack     at ChildProcess.emit (events.js:191:7)
+14 verbose stack     at maybeClose (internal/child_process.js:877:16)
+14 verbose stack     at Process.ChildProcess._handle.onexit (internal/child_process.js:226:5)
+15 verbose pkgid yebo_sdk@0.2.1
+16 verbose cwd /yebo_sdk
+17 error Linux 4.8.4-1-ARCH
+18 error argv "/usr/local/bin/node" "/usr/local/bin/npm" "run" "build"
+19 error node v6.7.0
+20 error npm  v3.10.3
+21 error code ELIFECYCLE
+22 error yebo_sdk@0.2.1 build: `./node_modules/gulp/bin/gulp.js build`
+22 error Exit status 1
+23 error Failed at the yebo_sdk@0.2.1 build script './node_modules/gulp/bin/gulp.js build'.
+23 error Make sure you have the latest version of node.js and npm installed.
+23 error If you do, this is most likely a problem with the yebo_sdk package,
+23 error not with npm itself.
+23 error Tell the author that this fails on your system:
+23 error     ./node_modules/gulp/bin/gulp.js build
+23 error You can get information on how to open an issue for this project with:
+23 error     npm bugs yebo_sdk
+23 error Or if that isn't available, you can get their info via:
+23 error     npm owner ls yebo_sdk
+23 error There is likely additional logging output above.
+24 verbose exit [ 1, true ]

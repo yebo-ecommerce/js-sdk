@@ -1,4 +1,15 @@
-# App name
-yebo_sdk:
-  build: .
-  command: bash
+version: '2'
+services:
+  # App name
+  yebo_sdk:
+    build: .
+    command: bash
+    volumes:
+      - ./:/yebo_sdk
+      - node_modules:/yebo_sdk/node_modules
+      - bower_components:/yebo_sdk/bower_components
+volumes:
+  node_modules:
+    driver: local
+  bower_components:
+    driver: local
