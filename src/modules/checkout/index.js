@@ -9,7 +9,7 @@ import { buildRequest, executeRequest } from './../../core/api'
  */
 export const buildGetOrderAddress = function (number, userToken, kind) {
   // Build the request.
-  return buildRequest('GET', `/address/${number}/${kind}`, { user_token: userToken });
+  return buildRequest('GET', `/checkout/address/${number}/${kind}`, { user_token: userToken });
 }
 
 /**
@@ -35,7 +35,7 @@ export const getOrderAddress = function (number, userToken, kind) {
  */
 export const buildCreateOrderAddress = function (number, userToken, kind) {
   // Build the request.
-  return buildRequest('POST', `/address/${number}/${kind}`, { user_token: userToken });
+  return buildRequest('POST', `/checkout/address/${number}/${kind}`, { user_token: userToken });
 }
 
 /**
@@ -60,7 +60,7 @@ export const createOrderAddress = function (number, userToken, kind) {
  */
 export const buildRemoveOrderAddress = function (number, userToken, kind) {
   // Build the request.
-  return buildRequest('POST', `/address/${number}/${kind}`, { user_token: userToken });
+  return buildRequest('POST', `/checkout/address/${number}/${kind}`, { user_token: userToken });
 }
 
 /**
@@ -85,7 +85,7 @@ export const removeOrderAddress = function (number, userToken, kind) {
  */
 export const buildUpdateOrderAddress = function (number, userToken, kind) {
   // Build the request.
-  return buildRequest('POST', `/address/${number}/${kind}`, { user_token: userToken });
+  return buildRequest('POST', `/checkout/address/${number}/${kind}`, { user_token: userToken });
 }
 
 /**
@@ -110,7 +110,7 @@ export const updateOrderAddress = function (number, userToken, kind) {
  */
 export const buildGetOrderShipments = function (number, userToken, calculate) {
   // Build the request.
-  return buildRequest('POST', `/shipments/${number}/${kind}`, { user_token: userToken, calculate: calculate });
+  return buildRequest('POST', `/checkout/shipments/${number}/${kind}`, { user_token: userToken, calculate: calculate });
 }
 
 /**
@@ -135,7 +135,7 @@ export const getOrderShipments = function (number, userToken, calculate) {
  */
 export const buildSetOrderShipment = function (number, userToken, pkg, rate) {
   // Build the request.
-  return buildRequest('POST', `/shipments/${number}/${kind}`, { user_token: userToken, rate: rate, package: pkg });
+  return buildRequest('POST', `/checkout/shipments/${number}/${kind}`, { user_token: userToken, rate: rate, package: pkg });
 }
 
 /**
@@ -161,7 +161,7 @@ export const setOrderShipment = function (number, userToken, pkg, rate) {
  */
 export const buildGetOrderPayments = function (number, userToken, subscription) {
   // Build the request.
-  return buildRequest('GET', `/pay/${number}`, { user_token: userToken, subscription: subscription });
+  return buildRequest('GET', `/checkout/${number}/payments`, { user_token: userToken, subscription: subscription });
 }
 
 /**
@@ -186,7 +186,7 @@ export const getOrderPayments = function (number, userToken, subscription) {
  */
 export const buildOrderPay = function (number, userToken, methodId, source) {
   // Build the request.
-  return buildRequest('POST', `/pay/${number}`, { user_token: userToken, method_id: methodId, source: source });
+  return buildRequest('POST', `/checkout/${number}/payments`, { user_token: userToken, method_id: methodId, source: source });
 }
 
 /**
