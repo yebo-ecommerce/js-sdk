@@ -35,7 +35,7 @@ export const buildRequest = function(method, path, data, auth = get('auth'), nam
 
   // Check if the authentication token is passed
   if( auth !== undefined )
-    headers['Authentication'] = `Bearer ${auth}`
+    headers['Authorization'] = `Bearer ${auth}`
 
   // Check if a token is passed to be used
   if( token !== undefined )
@@ -62,6 +62,18 @@ export const buildRequest = function(method, path, data, auth = get('auth'), nam
 export const buildAuthentication = function(name, version, token) {
   return buildRequest('GET', '/', {}, name, version, undefined, token);
 };
+
+/**
+ * Execute the Authentication
+ *
+ * @param {String} name Store name
+ * @param {String} version The API version
+ * @param {String} token The API token
+ * @return {Promise} Result of the authentication
+ */
+export const authenticate = function(name, version, token) {
+  return executeRequest(buildAuthentication(name, version, token));
+}
 
 /**
  * Based on an array generate
