@@ -12,6 +12,8 @@ export * from './modules/cart/index';
 export * from './modules/checkout/index';
 export * from './modules/orders/index';
 export * from './modules/products/index';
+export * from './modules/products/search';
+export * from './modules/products/filters';
 export * from './modules/taxons/index';
 export * from './modules/users/index';
 

@@ -3,7 +3,7 @@
  */
 export const Search = function() {
   // Query will live here
-  this.query = { };
+  this.query = {};
 };
 
 /**
@@ -58,12 +58,55 @@ export const createSearch = function() {
  * @param {Array[Object]} and Filters that relates 'and'
  * @return {Search} Current Search
  */
-Search.prototype.and = function(filters) {
+Search.prototype.and = function(...filters) {
+  //
+  if (this.query.and === undefined)
+    this.query.and = []
+
   // Set to query the filters search
-  this.query.and = filters;
+  if (filters[0] instanceof Array)
+    this.query.and.push(filters);
+  else
+    this.query.and.push(...filters);
 
   //
   return this;
+}
+
+/**
+ * Build the search
+ * @return {Object} The internal query
+ */
+Search.prototype.build = function() {
+  // Result
+  let res = {};
+
+  //
+  if (this.query.page !== undefined)
+    res.page = this.query.page;
+
+  //
+  if (this.query.name !== undefined)
+    res.name = this.query.name;
+
+  //
+  if (this.query.perPage !== undefined)
+    res.per_page = this.query.perPage;
+
+  //
+  if (this.query.and !== undefined || this.query.or !== undefined)
+    res.filters = {};
+
+  //
+  if (this.query.and !== undefined)
+    res.filters.and = this.query.and;
+
+  //
+  if (this.query.or !== undefined)
+    res.filters.or = this.query.or;
+
+  // Returning
+  return res;
 }
 
 //

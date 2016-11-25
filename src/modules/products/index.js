@@ -7,8 +7,14 @@ import {buildRequest, executeRequest} from './../../core/api'
  * @return {Object} request
  */
 export const buildGetProducts = function (search) {
+  //
+  if (search.build instanceof Function) {
+    // Build it
+    search = search.build()
+  }
+
   // Build Get Products
-  return buildRequest('GET', '/products', { search: search });
+  return buildRequest('GET', '/products', search);
 }
 
 /**
