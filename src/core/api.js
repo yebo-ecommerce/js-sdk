@@ -60,7 +60,7 @@ export const buildRequest = function(method, path, data, auth = get('auth'), nam
  * @return {Object} Request that will return the authentication token
  */
 export const buildAuthentication = function(name, version, token) {
-  return buildRequest('GET', '/', {}, name, version, undefined, token);
+  return buildRequest('GET', '/', {}, undefined, name, version, token);
 };
 
 /**
