@@ -10,7 +10,11 @@
 const config = {
   apiURL: 'yebo-api.com.br/api',
   version: 'v2',
-  protocol: 'https'
+  protocol: 'https',
+  store: undefined,
+  token: undefined,
+  authToken: undefined,
+  expireAt: undefined
 };
 
 /**

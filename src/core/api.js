@@ -8,13 +8,13 @@
 import { fetch } from './request';
 
 // Configurations
-import { get } from './config';
+import { get, set } from './config';
 
 /**
  * Generate the options to make a request
  *
  * @param {String} method The HTTP method (mainly GET or POST)
- * @param {String} url The url that will be used as base
+ * @param {String} path The path that will be used as base
  * @param {Object} data Data passed in the request
  * @param {String} auth The API token (previsouly queried)
  * @param {String} name Store name
@@ -22,7 +22,7 @@ import { get } from './config';
  * @param {String} token The API token
  * @return {Object} Base configuration for the request
  */
-export const buildRequest = function(method, path, data, auth = get('auth'), name = get('store'), version = get('version'), token = get('token')) {
+export const buildRequest = function(method, path, data, auth = get('auth'), store = get('store'), version = get('version'), token = get('token')) {
   // Query String
   let qs = '';
 
@@ -33,9 +33,7 @@ export const buildRequest = function(method, path, data, auth = get('auth'), nam
   // Request Headers
   let headers = {};
 
-  // Check if the authentication token is passed
-  if( auth !== undefined )
-    headers['Authorization'] = `Bearer ${auth}`
+
 
   // Check if a token is passed to be used
   if( token !== undefined )
@@ -43,8 +41,9 @@ export const buildRequest = function(method, path, data, auth = get('auth'), nam
 
   // Return the request options
   return {
+    name: path.split('/').join('-').substring(1),
     method: method,
-    url: `${get('protocol')}://${name}.${get('apiURL')}/${version}${path}${qs}`,
+    url: `${get('protocol')}://${store}.${get('apiURL')}/${version}${path}${qs}`,
     data: method === 'GET' ? {} : data,
     headers: headers,
     content_type: method === 'GET' ? 'application/x-www-form-urlencoded' : 'application/json'
@@ -71,7 +70,7 @@ export const buildAuthentication = function(name, version, token) {
  * @param {String} token The API token
  * @return {Promise} Result of the authentication
  */
-export const authenticate = function(name, version, token) {
+export const authenticate = function(name = get('store'), version = get('version'), token = get('token')) {
   return executeRequest(buildAuthentication(name, version, token));
 }
 
@@ -86,13 +85,36 @@ export const buildParams = function(value) {
 }
 
 /**
- * Execute the generated request
+ * Execute the generated requestç
  *
  * @param {Object} req Generated request
  * @return {Promise} The HTTP request Promise
  */
 export const executeRequest = function(req) {
-  return fetch(req.method, req.url, req.data, req.contentType, req.headers);
+  const resolver = (res, rej) => {
+    // Check if the authentication token is passed
+    req.headers['Authorization'] = `Bearer ${get('authToken')}`
+
+    //
+    fetch(req.method, req.url, req.data, req.contentType, req.headers).then(res).catch(rej);
+  }
+  return new Promise((resolve, reject) => {
+    //
+    if (req.name !== '' && get('expireAt') > Date.now()) {
+      // authenticate
+      authenticate().then((res) => {
+        // res.token
+        set('authToken', res.token)
+
+        // res.expire_at
+        set('expireAt', res.expire_at)
+        // resolver reolve and reject
+        resolver(resolve, reject)
+      })
+    } else {
+      resolver(resolve, reject)
+    }
+  })
 }
 
 /**
