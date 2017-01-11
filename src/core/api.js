@@ -105,7 +105,6 @@ export const executeRequest = function(req) {
       authenticate().then((res) => {
         // res.token
         set('authToken', res.token)
-
         // res.expire_at
         set('expireAt', res.expire_at)
         // resolver reolve and reject
