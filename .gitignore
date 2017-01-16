@@ -4,7 +4,3 @@ npm-debug.log
 
 # MacOS
 .DS_Store
-
-# Compiled
-dist/yebo.common.js
-dist/yebo.umd.js
