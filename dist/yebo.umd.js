@@ -1716,7 +1716,7 @@ var executeRequest = function executeRequest(req) {
   };
   return new Promise(function (resolve, reject) {
     //
-    if (req.name !== '' && get$1('expireAt') > Date.now()) {
+    if (req.name !== '' && (get$1('expireAt') === undefined || get$1('expireAt') > Date.now())) {
       // authenticate
       authenticate().then(function (res) {
         // res.token

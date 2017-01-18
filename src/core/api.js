@@ -100,7 +100,7 @@ export const executeRequest = function(req) {
   }
   return new Promise((resolve, reject) => {
     //
-    if (req.name !== '' && get('expireAt') > Date.now()) {
+    if (req.name !== '' && ( get('expireAt') === undefined || get('expireAt') > Date.now() )) {
       // authenticate
       authenticate().then((res) => {
         // res.token
